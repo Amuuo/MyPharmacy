@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using PharmacyApi;
+using PharmacyApi.Data;
 using PharmacyApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);

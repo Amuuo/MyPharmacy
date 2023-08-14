@@ -1,18 +1,15 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Web.Resource;
 using PharmacyApi.Models;
 using PharmacyApi.Services;
 
 namespace PharmacyApi.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
-    [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+    //[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
     public class PharmacyController : ControllerBase
     {
-        
         private readonly ILogger<PharmacyController> _logger;
         private readonly IPharmacyService _pharmacyService;
 
@@ -23,27 +20,27 @@ namespace PharmacyApi.Controllers
             _pharmacyService = pharmacyService;
         }
 
-        //[HttpGet(Name = "GetPharmacies")]
         [HttpGet]
         [Route("all")]
-        public IEnumerable<Pharmacy> GetPharmacies()
-        {
-            throw new NotImplementedException();
-        }
+        public IEnumerable<Pharmacy> GetPharmacies() => _pharmacyService.GetPharmacies();
+
 
         [HttpGet]
         [Route("{id}")]
-        public Pharmacy GetPharmacyById(int id)
+        public async Task<IActionResult> GetPharmacyById(int id)
         {
-            throw new NotImplementedException();
+            var pharmacy = await _pharmacyService.GetPharmacyById(id);
+
+            return pharmacy is not null ? Ok(pharmacy) : StatusCode(404, $"No pharmacy found with id {id}");
         }
 
         [HttpPost]
         [Route("update/{id}")]
-        public void UpdatePharmacyById(int id, Pharmacy pharmacy)
+        public async Task<IActionResult> UpdatePharmacyById(int id, Pharmacy pharmacy)
         {
-            throw new NotImplementedException();
+            var updatedPharmacy = await _pharmacyService.UpdatePharmacyById(id, pharmacy);
+
+            return updatedPharmacy is not null ? Ok(pharmacy) : StatusCode(404, $"No pharmacy found with id {id}");
         }
-        
     }
 }

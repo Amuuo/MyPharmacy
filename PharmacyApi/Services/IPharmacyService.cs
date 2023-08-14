@@ -5,7 +5,7 @@ namespace PharmacyApi.Services
     public interface IPharmacyService
     {
         IEnumerable<Pharmacy> GetPharmacies();
-        Pharmacy GetPharmacyById(int id);
-        void UpdatePharmacyById(int id, Pharmacy pharmacy);
+        Task<Pharmacy?> GetPharmacyById(int id);
+        Task<Pharmacy?> UpdatePharmacyById(int id, Pharmacy updatedPharmacy);
     }
 }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "JYs2QgFJZBG/10vYB5xhQ4eeby++RhbwKHpmhy4ubkLMHMVsoz8fXA/qYNC1E9/rzv7FyQCHxMS8IRAZvtLaQA==",
+  "dgSpecHash": "QAQI5elOy+7hdYVJkmz3AXJ/F0YOFKvUYFOfxNc4wt3iGkDmlHVlVOf6zCFlvllHXHp+cqw+U3flPRg+c1DBew==",
   "success": true,
   "projectFilePath": "C:\\Projects\\PharmacyApi\\PharmacyApi\\PharmacyApi.csproj",
   "expectedPackageFiles": [
@@ -25,6 +25,7 @@
     "C:\\Users\\Adam\\.nuget\\packages\\microsoft.entityframeworkcore.design\\7.0.10\\microsoft.entityframeworkcore.design.7.0.10.nupkg.sha512",
     "C:\\Users\\Adam\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\7.0.10\\microsoft.entityframeworkcore.relational.7.0.10.nupkg.sha512",
     "C:\\Users\\Adam\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\7.0.10\\microsoft.entityframeworkcore.sqlserver.7.0.10.nupkg.sha512",
+    "C:\\Users\\Adam\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\7.0.10\\microsoft.entityframeworkcore.tools.7.0.10.nupkg.sha512",
     "C:\\Users\\Adam\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\Adam\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\7.0.0\\microsoft.extensions.caching.abstractions.7.0.0.nupkg.sha512",
     "C:\\Users\\Adam\\.nuget\\packages\\microsoft.extensions.caching.memory\\7.0.0\\microsoft.extensions.caching.memory.7.0.0.nupkg.sha512",

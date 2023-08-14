@@ -26,57 +26,28 @@ namespace PharmacyApi.Controllers
 
         [HttpGet]
         [Route("all")]
-        public IActionResult GetAll()
-        {
-            try
-            {
-                return Ok(_pharmacyService.GetAll());
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occured while getting all pharmacies");
-                return StatusCode(500, $"An error occured while processing the request {ex.Message}");
-            }
-        }
-
-
+        public IActionResult GetAll() => Ok(_pharmacyService.GetAll());
+        
         [HttpGet]
         [Route("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            try
-            {
-                var pharmacy = await _pharmacyService.GetById(id);
+            var pharmacy = await _pharmacyService.GetById(id);
 
-                return pharmacy is not null
-                    ? Ok(pharmacy)
-                    : StatusCode(404, $"No pharmacy found with id {id}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occured while getting pharmacy with id {id}", id);
-                return StatusCode(500, $"An error occured while processing the request. {ex.Message}");
-            }
+            return pharmacy is not null
+                ? Ok(pharmacy)
+                : StatusCode(404, $"No pharmacy found with id {id}");
         }
 
         [HttpPost]
         [Route("update/{id}")]
         public async Task<IActionResult> UpdateById(int id, Pharmacy pharmacy)
         {
-            try
-            {
-                var updatedPharmacy
-                    = await _pharmacyService.UpdateById(id, pharmacy);
+            var updatedPharmacy = await _pharmacyService.UpdateById(id, pharmacy);
 
-                return updatedPharmacy is not null
-                    ? Ok(updatedPharmacy)
-                    : StatusCode(404, $"No pharmacy found with id {id}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occured while updating pharmacy {@pharmacy} with id {id}", pharmacy, id);
-                return StatusCode(500, $"An error occured while processing the request {ex.Message}");
-            }
+            return updatedPharmacy is not null
+                ? Ok(updatedPharmacy)
+                : StatusCode(404, $"No pharmacy found with id {id}");
         }
     }
 }

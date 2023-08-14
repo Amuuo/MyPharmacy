@@ -23,7 +23,7 @@ namespace PharmacyApi.Services
         
         public IEnumerable<Pharmacy> GetAll()
         {
-            var pharmacies = _pharmacyDbContext.Pharmacies.ToList(); 
+            var pharmacies = _pharmacyDbContext.Pharmacies.ToList();
 
             _logger.LogDebug("Retrieved all pharmacies {@pharmacies}", pharmacies);
 
@@ -49,7 +49,8 @@ namespace PharmacyApi.Services
                 
             await _pharmacyDbContext.SaveChangesAsync();
 
-            _logger.LogDebug("Updated pharmacy record: {@pharmacy}", pharmacyToUpdate);
+            _logger.LogDebug("Updated pharmacy record: {@pharmacy} with changes from request {@updateContent}", 
+                             pharmacyToUpdate, updatedPharmacy);
             
             return pharmacyToUpdate;
         }

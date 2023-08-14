@@ -36,6 +36,7 @@ builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 
 var app = builder.Build();
 
+app.UseMiddleware<RequestExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

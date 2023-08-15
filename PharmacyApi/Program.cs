@@ -18,23 +18,39 @@ Log.Logger = new LoggerConfiguration()
 
 builder.Host.UseSerilog();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+//var provider = builder.Services.BuildServiceProvider();
+//var config = provider.GetRequiredService<IConfiguration>();
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+//    var frontendURL = config.GetValue<string>("frontend_url");
+//});
+
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
 builder.Services.AddDbContext<PharmacyDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 
 var app = builder.Build();
+
+//app.UseStaticFiles();
+//app.UseRouting();
+
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller}/{action=Index}/{id?}");
+
+//app.MapFallbackToFile("index.html");
 
 app.UseMiddleware<RequestExceptionMiddleware>();
 
@@ -46,7 +62,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
+//app.UseAuthentication();
 
 app.UseAuthorization();
 

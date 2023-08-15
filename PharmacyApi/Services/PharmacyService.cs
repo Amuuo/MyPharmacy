@@ -40,7 +40,7 @@ namespace PharmacyApi.Services
             var pharmacyToUpdate = await SearchById(id);
             if (pharmacyToUpdate is null) return null;
             
-            foreach(var property in typeof(Pharmacy).GetProperties())
+            foreach (var property in typeof(Pharmacy).GetProperties())
             {
                 var newValue = property.GetValue(updatedPharmacy);
                 if (newValue is not null) property.SetValue(pharmacyToUpdate, newValue);

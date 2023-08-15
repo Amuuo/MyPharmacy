@@ -1,11 +1,11 @@
 ﻿using PharmacyApi.Models;
 
-namespace PharmacyApi.Services
+namespace PharmacyApi.Services;
+
+public interface IPharmacyService
 {
-    public interface IPharmacyService
-    {
-        IEnumerable<Pharmacy> GetAll();
-        Task<Pharmacy?> GetById(int id);
-        Task<Pharmacy?> UpdateById(int id, Pharmacy updatedPharmacy);
-    }
+    IEnumerable<Pharmacy> GetAll();
+    Task<Pharmacy?> GetById(int id);
+    Task<Pharmacy?> UpdateById(int id, Pharmacy updatedPharmacy);
 }
+

@@ -1,42 +1,42 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 
-namespace PharmacyApi.Middleware
+namespace PharmacyApi.Middleware;
+
+public class RequestExceptionMiddleware
 {
-    public class RequestExceptionMiddleware
+    #region Members and Constructor
+
+    private readonly RequestDelegate _next;
+    private readonly ILogger<RequestExceptionMiddleware> _logger;
+
+    public RequestExceptionMiddleware(RequestDelegate next, 
+                                      ILogger<RequestExceptionMiddleware> logger)
     {
-        #region Members and Constructor
+        _next = next;
+        _logger = logger;
+    }
 
-        private readonly RequestDelegate _next;
-        private readonly ILogger<RequestExceptionMiddleware> _logger;
+    #endregion
 
-        public RequestExceptionMiddleware(RequestDelegate next, 
-                                          ILogger<RequestExceptionMiddleware> logger)
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
         {
-            _next = next;
-            _logger = logger;
+            await _next(context);
         }
-
-        #endregion
-
-        public async Task InvokeAsync(HttpContext context)
+        catch (Exception ex)
         {
-            try
-            {
-                await _next(context);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Something went wrong when handling the request {@request}", 
-                                 context.Request.GetDisplayUrl());
-                
-                await HandleExceptionAsync(context);
-            }
-        }
-
-        private static Task HandleExceptionAsync(HttpContext context)
-        {
-            context.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            return context.Response.WriteAsync("An unexpected error occured");
+            _logger.LogError(ex, "Something went wrong when handling the request {@request}", 
+                             context.Request.GetDisplayUrl());
+            
+            await HandleExceptionAsync(context);
         }
     }
+
+    private static Task HandleExceptionAsync(HttpContext context)
+    {
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        return context.Response.WriteAsync("An unexpected error occured");
+    }
 }
+

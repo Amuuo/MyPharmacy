@@ -39,7 +39,7 @@ public class PharmacyController : ControllerBase
             : StatusCode(404, $"No pharmacy found with id {id}");
     }
 
-    [HttpPost]
+    [HttpPut]
     [Route("update/{id}")]
     public async Task<IActionResult> UpdateById(int id, Pharmacy pharmacy)
     {

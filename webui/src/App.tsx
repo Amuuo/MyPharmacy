@@ -1,40 +1,27 @@
-import { Component } from 'react';
+import { useEffect } from 'react';
 import PharmacyList from './components/PharmacyList';
+import { useStore } from 'effector-react';
+import { pharmaciesStore, loadingStore, fetchPharmacies } from './stores/pharmacyStore';
+import { editPharmacy } from './services/pharmacyService';
 
 
-type AppState = {
-    pharmacies: Pharmacy[];
-    loading: boolean;
-};
+export default function App() {
+    
+    const pharmacies = useStore(pharmaciesStore);
+    const loading = useStore(loadingStore);
 
-export default class App extends Component<{}, AppState> {
-    static displayName = App.name;
+    useEffect(() => {
+        fetchPharmacies();
+    }, []);
+ 
+    let contents = loading
+        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
+        : <PharmacyList pharmacies={pharmacies} onEdit={editPharmacy}/>;
 
-    constructor(props: AppState) {
-        super(props);
-        this.state = { pharmacies: [], loading: true };
-    }
-
-    componentDidMount() {
-        this.populatePharmacyData();
-    }
-
-    render() {
-        let contents = this.state.loading
-            ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-            : <PharmacyList pharmacies={this.state.pharmacies}/>;
-
-        return (
-            <div>
-                <h1 id="tabelLabel">Pharmacy List</h1>                
-                {contents}
-            </div>
-        );
-    }
-
-    async populatePharmacyData() {
-        const response = await fetch('api/pharmacy/all');
-        const data = await response.json() as Pharmacy[];
-        this.setState({ pharmacies: data, loading: false });
-    }
+    return (
+        <div>
+            <h1 id="tabelLabel">MyPharmacy</h1>                
+            {contents}
+        </div>
+    );        
 }

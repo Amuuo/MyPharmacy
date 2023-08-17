@@ -5,14 +5,8 @@ import './PharmacyList.scss';
 type PharmacyListProps = {
     pharmacies: Pharmacy[];
     onEdit: (pharmacy: Pharmacy) => void;
-    onHover: () => void;
 };
 
-const [hovering, setHovering] = useState(false);
-
-const onHover = () => {    
-    setHovering(!hovering);
-}
 
 const PharmacyList: React.FC<PharmacyListProps> = ({ pharmacies, onEdit }) => (
         
@@ -30,10 +24,9 @@ const PharmacyList: React.FC<PharmacyListProps> = ({ pharmacies, onEdit }) => (
             </tr>
         </thead>
         <tbody>
-            {pharmacies.map(pharmacy => <PharmacyRow pharmacy={pharmacy} onEdit={onEdit} onHover={onHover}/>)}
+            {pharmacies.map(pharmacy => <PharmacyRow pharmacy={pharmacy} onEdit={onEdit}/>)}
         </tbody>
-    </table>
-    {}
+    </table>    
 );
 
 export default PharmacyList;

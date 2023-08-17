@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import _ from 'lodash';
 
 type PharmacyRowProps = {
     pharmacy: Pharmacy;
     onEdit: (pharmacy: Pharmacy) => void;
-    onHover: () => void;
 };
 
-const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy, onEdit, onHover }) => {
+const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy, onEdit }) => {
     
     const [editingField, setEditingField] = useState<string | null>(null);
     const [currentPharmacy, setCurrentPharmacy] = useState(pharmacy);
@@ -34,29 +33,27 @@ const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy, onEdit, onHover }) 
         }
         setEditingField(null);
     };
+    
 
-    const handleMouseEnter = () => {
-        onHover()
-    }
-
-    const pharmacyFields: Array<keyof Pharmacy> = ['name', 'address', 'city', 'state', 'zip', 'prescriptionsFilled'];
+    const pharmacyFields: Array<keyof Pharmacy> = ['name', 'address', 'city', 'state', 'zip', 'prescriptionsFilled', 'updatedDate', 'createdDate'];
 
     return (
-        <tr key={pharmacy.id} onMouseEnter={}>
+        <tr key={pharmacy.id}>
             {pharmacyFields.map((field) => (
                 <td key={field} onClick={() => handleFieldClick(field)} className="editable-cell">
                     {editingField === field 
                         ? (<input type="text" 
-                                  value={currentPharmacy[field] as any} 
-                                  onChange={(e) => handleChange(e, field)}                                   
-                                  onBlur={() => handleBlur(field)}
+                                    value={currentPharmacy[field] as any} 
+                                    onChange={(e) => handleChange(e, field)}                                   
+                                    onBlur={() => handleBlur(field)}
                         />)
-                     : currentPharmacy[field] instanceof Date ? currentPharmacy[field].toLocaleString() : currentPharmacy[field]
+                     : currentPharmacy[field] instanceof Date 
+                        ? currentPharmacy[field].toLocaleString() 
+                        : currentPharmacy[field]
                     }
                 </td>
             ))}
-            <td>{new Date(pharmacy.updatedDate).toLocaleString('en-US')}</td>
-            <td>{new Date(pharmacy.createdDate).toLocaleDateString()}</td>
+            
             {editingField && (
                 <td className="save-button-cell">
                     <button onClick={handleSaveClick}>Save</button>

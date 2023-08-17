@@ -20,7 +20,7 @@ export default function App() {
 
     return (
         <div>
-            <h1 id="tabelLabel">MyPharmacy</h1>                
+            <h1 id="tabelLabel">MyPharmacy™</h1>                
             {contents}
         </div>
     );        

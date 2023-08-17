@@ -1,81 +1,69 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import _ from 'lodash';
 
 type PharmacyRowProps = {
-    pharmacy: Pharmacy
+    pharmacy: Pharmacy;
     onEdit: (pharmacy: Pharmacy) => void;
-}
+    onHover: () => void;
+};
 
-const PharmacyRow : React.FC<PharmacyRowProps> = ({ pharmacy, onEdit }) => {
-
-    const [editing, setEditing] = useState(false);
-    const [editablePharmacy, setEditablePharmacy] = useState(pharmacy);
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>, 
-                          field: keyof Pharmacy) => {
-        setEditablePharmacy({...editablePharmacy, [field]: event.target.value });
-    }
-
-    const handleEditClick = () => setEditing(true);
+const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy, onEdit, onHover }) => {
     
+    const [editingField, setEditingField] = useState<string | null>(null);
+    const [currentPharmacy, setCurrentPharmacy] = useState(pharmacy);
+
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>, field: keyof Pharmacy) => {
+        setCurrentPharmacy({ ...currentPharmacy, [field]: event.target.value });
+    };
+
+    const handleFieldClick = (field: string) => {
+        setEditingField(field);
+    };
+
     const handleSaveClick = () => {
-        setEditing(false);
-        onEdit(editablePharmacy);
-    }
+        if (currentPharmacy !== pharmacy) {
+            onEdit(currentPharmacy);
+        }
+        setEditingField(null);
+    };
     
+    const handleBlur = (field: keyof Pharmacy) => {
+        if (currentPharmacy[field] !== pharmacy[field]) {
+            onEdit(currentPharmacy);
+        }
+        setEditingField(null);
+    };
+
+    const handleMouseEnter = () => {
+        onHover()
+    }
+
+    const pharmacyFields: Array<keyof Pharmacy> = ['name', 'address', 'city', 'state', 'zip', 'prescriptionsFilled'];
+
     return (
-        <tr key={pharmacy.id}>
-            <td>
-                {editing 
-                    ? <input type="text" 
-                              value={editablePharmacy.name} 
-                              onChange={e => handleChange(e, 'name')}/> 
-                    : pharmacy.name }
-            </td>
-            <td>
-                {editing 
-                    ? <input type="text" 
-                              value={editablePharmacy.address} 
-                              onChange={e => handleChange(e, 'address')}/> 
-                    : pharmacy.address }
-            </td>
-            <td>
-                {editing 
-                    ? <input type="text" 
-                              value={editablePharmacy.city} 
-                              onChange={e => handleChange(e, 'city')}/>
-                    : pharmacy.city }
-            </td>
-            <td>
-                {editing 
-                    ? <input type="text" 
-                              value={editablePharmacy.state} 
-                              onChange={e => handleChange(e, 'state')}/> 
-                    : pharmacy.state }
-            </td>
-            <td>
-                {editing 
-                    ? <input type="text" 
-                              value={editablePharmacy.zip} 
-                              onChange={e => handleChange(e, 'zip')}/> 
-                    : pharmacy.zip }
-            </td>
-            <td style={{ textAlign: 'right' }}>
-                {editing 
-                    ? <input type="text" 
-                              value={editablePharmacy.prescriptionsFilled} 
-                              onChange={e => handleChange(e, 'prescriptionsFilled')}/>
-                    : pharmacy.prescriptionsFilled }
-            </td>
+        <tr key={pharmacy.id} onMouseEnter={}>
+            {pharmacyFields.map((field) => (
+                <td key={field} onClick={() => handleFieldClick(field)} className="editable-cell">
+                    {editingField === field 
+                        ? (<input type="text" 
+                                  value={currentPharmacy[field] as any} 
+                                  onChange={(e) => handleChange(e, field)}                                   
+                                  onBlur={() => handleBlur(field)}
+                        />)
+                     : currentPharmacy[field] instanceof Date ? currentPharmacy[field].toLocaleString() : currentPharmacy[field]
+                    }
+                </td>
+            ))}
             <td>{new Date(pharmacy.updatedDate).toLocaleString('en-US')}</td>
             <td>{new Date(pharmacy.createdDate).toLocaleDateString()}</td>
-            <td>
-                {editing 
-                    ? <button onClick={handleSaveClick}>Save</button> 
-                    : <button onClick={handleEditClick}>Edit</button> 
-                }
-            </td>
+            {editingField && (
+                <td className="save-button-cell">
+                    <button onClick={handleSaveClick}>Save</button>
+                </td>
+            )}
         </tr>
-    )
-}
+    );
+};
 
 export default PharmacyRow;

@@ -1,0 +1,99 @@
+@keyframes fade-in { 
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 100;
+    }
+}
+
+
+table {
+    background-color: rgb(110, 143, 215);
+    border: 2px double rgb(217, 217, 217);
+    box-shadow: 2px 2px 15px black;
+    max-width: 1250px;
+    will-change: opacity, transform;
+    animation: fade-in 0.5s ease; 
+    z-index: 2; 
+    white-space: nowrap;   
+}
+
+input[type="text"] {
+    box-sizing: border-box;
+    width: 50%;    
+    font-size: 1rem;    
+}
+
+
+thead {
+    box-sizing: content-box;
+    background-color: rgb(62, 62, 62);     
+    color: rgb(151, 190, 237);   
+    text-transform: uppercase;
+}
+
+tbody {
+    background: rgb(98,93,196);
+    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
+}
+
+th {        
+    text-align: center;
+    padding: 0.5rem 1rem;
+}
+
+tr {
+    transition: transform 0.2s ease;
+    max-height: 30px;
+    // &:not(thead tr):hover {
+    //     transform: scale(1.01);
+    //     background-color: rgba(147, 181, 212, 0.232);
+    // }
+}
+
+tr:not(thead tr):hover {
+    // transform: scale(1.01);
+    background-color: rgba(147, 181, 212, 0.232);
+}
+
+td {
+    padding: 0.75rem;
+    transition: width 0.3s ease, transform 0.2s ease;    
+    // max-height: 30px;
+
+    &:not(td > input) {
+        padding: 0.3rem 0.8rem;        
+    }
+    
+
+    &:has(input) {
+        padding: 0;
+        margin: 0;       
+        width: 20%; 
+    }
+
+    input {
+        width: 100% !important;
+    }
+}
+
+// td:not(thead td):hover {
+//     transform: scale(1.05);
+// }
+
+td:hover {
+    background-color: rgba(133, 182, 228, 0.5);    
+}
+
+.editable-cell {
+    cursor: pointer;
+}
+
+.save-button-cell {
+    margin: 0;
+    padding: 0;
+    max-height: 20px;
+    font-size: 12px;
+}

@@ -1,4 +1,5 @@
 import { createEffect, createStore, createEvent } from 'effector';
+import _ from 'lodash';
 
 // const pharmacyStore = createStore<Pharmacy[]>([]);
 export const updatePharmacy = createEvent<Pharmacy>();

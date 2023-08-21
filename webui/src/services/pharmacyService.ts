@@ -1,3 +1,4 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { updatePharmacy } from '../stores/pharmacyStore';
 
 export async function editPharmacy(pharmacy: Pharmacy) {
@@ -16,3 +17,12 @@ export async function editPharmacy(pharmacy: Pharmacy) {
         console.error("Error updating pharmacy", error);
     }               
 }
+
+export const fetchPharmaciesAsync = createAsyncThunk(
+    'pharmacy/fetchPharmacies', 
+    async () => {
+        const response = await fetch('api/pharmacy/all');
+        if (response.ok)
+            return response.json() as unknown as Pharmacy[];
+  });
+  

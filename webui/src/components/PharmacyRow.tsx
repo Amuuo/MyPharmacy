@@ -1,6 +1,7 @@
-import { useRef, useEffect } from "react";
-import { editCurrentPharmacy, setEditingField, updatePharmacy } from "../redux/pharmacySlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useRef, useEffect, useState } from "react";
+import { updatePharmacy } from "../redux/store";
+import { useDispatch } from "react-redux";
+import { Pharmacy } from "../models/pharmacy";
 
 type PharmacyRowProps = {
     pharmacy: Pharmacy;    
@@ -10,9 +11,8 @@ type PharmacyRowProps = {
 const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy }) => {
     
     const dispatch = useDispatch();
-
-    const editingField = useSelector((state: any) => state.pharmacy.editingField);
-    const currentPharmacy = useSelector((state: any) => state.pharmacy.current);
+    const [editingField, setEditingField] = useState<string | null>(null);
+    const [currentPharmacy, setCurrentPharmacy] = useState(pharmacy);
     const inputRef = useRef<HTMLInputElement>(null);
     
     useEffect(() => {
@@ -20,26 +20,22 @@ const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy }) => {
             inputRef.current.focus();
             inputRef.current.select();
         }
-    }, [editingField]);    
+    }, [editingField]);  
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>, 
-                          field: keyof Pharmacy) => {
-        const updatedPharmacy = { ...currentPharmacy, [field]: event.target.value };
-        dispatch(editCurrentPharmacy(updatedPharmacy));
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>, field: keyof Pharmacy) => {
+        setCurrentPharmacy({ ...currentPharmacy, [field]: event.target.value });
     };
 
     const handleFieldClick = (field: keyof Pharmacy) => {
-        if (currentPharmacy) {
-            dispatch(editCurrentPharmacy(pharmacy));
-            dispatch(setEditingField(field));    
-        }
-    }
+        setEditingField(field);
+    };
     
     const handleBlur = (field: keyof Pharmacy) => {
         if (currentPharmacy[field] !== pharmacy[field]) {
             dispatch(updatePharmacy(currentPharmacy));
         }
-        dispatch(setEditingField(null));
+        setEditingField(null);
     };
     
 
@@ -55,7 +51,7 @@ const PharmacyRow: React.FC<PharmacyRowProps> = ({ pharmacy }) => {
                                   value={currentPharmacy[field] as any} 
                                   onChange={(e) => handleChange(e, field)}                                   
                                   onBlur={() => handleBlur(field)}/>                                
-                        : String(pharmacy[field])
+                        : String(currentPharmacy[field])
                     }
                 </td>
             ))}            

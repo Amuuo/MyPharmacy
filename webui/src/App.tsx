@@ -1,19 +1,16 @@
 import { useEffect } from 'react';
 import PharmacyList from './components/PharmacyList';
-import { useStore } from 'effector-react';
-import { pharmaciesStore, loadingStore, fetchPharmacies } from './stores/pharmacyStore';
-import { editPharmacy } from './services/pharmacyService';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchPharmaciesAsync } from './redux/pharmacySlice';
-import { ThunkDispatch } from '@reduxjs/toolkit';
+import { PharmacyState } from './redux/store';
+import { fetchPharmaciesAsync } from './services/pharmacyService';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
 
 
 export default function App() {    
     // const pharmacies = useSelector((state: any) => state.pharmacy.pharmacies);
-    const loading = useSelector((state: any) => state.loading)
-
-    // const pharmacies = useSelector((state: any) => state.pharmacy.pharmacies);
-    const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+    const loading = useSelector((state: any) => state.loading);
+    const dispatch = useDispatch<ThunkDispatch<PharmacyState, unknown, AnyAction>>();    
     
     useEffect(() => {
         dispatch(fetchPharmaciesAsync());

@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
 import PharmacyRow from './PharmacyRow';
+import { useSelector } from 'react-redux';
+import { PharmacyState } from '../redux/store';
+import { Pharmacy } from '../models/pharmacy';
 import './PharmacyList.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import { ThunkDispatch } from '@reduxjs/toolkit';
-import { fetchPharmaciesAsync } from '../redux/pharmacySlice';
 
 
 const PharmacyList: React.FC = () => {
-    const pharmacies = useSelector((state: any) => state.pharmacy.pharmacies);
-    const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
-    
-    useEffect(() => {
-        dispatch(fetchPharmaciesAsync());
-    }, [dispatch]);
+    const pharmacies = useSelector((state: PharmacyState) => state.pharmacies);
 
     return (
         <table className='table table-striped' aria-labelledby="tabelLabel">
@@ -27,7 +22,7 @@ const PharmacyList: React.FC = () => {
                 </tr>
             </thead>
             <tbody>
-                {pharmacies.map((pharmacy: Pharmacy) => <PharmacyRow key={pharmacy.id} pharmacy={pharmacy}/>)}
+                {pharmacies.map((pharmacy: Pharmacy) => <PharmacyRow pharmacy={pharmacy}/>)}
             </tbody>
         </table>    
     )

@@ -1,11 +1,11 @@
-type Pharmacy = {
-    id: number;
-    name: string;
-    address: string;
-    city: string;
-    state: string;
-    zip: string;
-    prescriptionsFilled: number;
-    createdDate: Date;
-    updatedDate: Date;
-};
+export type Pharmacy = {
+    id?: number | undefined;
+    name?: string | undefined;
+    address?: string | undefined;
+    city?: string | undefined;
+    state?: string | undefined;
+    zip?: string | undefined;
+    prescriptionsFilled?: number | undefined;
+    createdDate?: Date | undefined;
+    updatedDate?: Date | undefined;
+}

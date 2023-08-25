@@ -1,48 +1,42 @@
-import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
 import { editPharmacy } from '../services/pharmacyService';
 import { Pharmacy } from '../models/pharmacy';
-
-// Types
-
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 export type PharmacyState = {
     pharmacies: Pharmacy[];
     loading: boolean;
 }
 
-export type PharmacyAction =
-    | { type: 'UPDATE_PHARMACY'; payload: Pharmacy }
-    | { type: 'FETCH_PHARMACIES'; payload: Pharmacy[] }
-    | { type: 'UPDATE_LOADING'; payload: boolean };
-
-// Action Creators
-export const updatePharmacy  = (payload: Pharmacy): PharmacyAction => ({ type: 'UPDATE_PHARMACY', payload });
-export const fetchPharmacies = (payload: Pharmacy[]): PharmacyAction => ({ type: 'FETCH_PHARMACIES', payload });
-export const updateLoading = (payload: boolean): PharmacyAction => ({ type: 'UPDATE_LOADING', payload });
-
-
-// Initial State
 const initialState: PharmacyState = {
     pharmacies: [],
     loading: true
 };
 
-// Reducer
-const pharmacyReducer = (state = initialState, action: PharmacyAction): PharmacyState => {
-    switch (action.type) {
-        case 'UPDATE_PHARMACY':
+const pharmacySlice = createSlice({
+    name: 'pharmacy',
+    initialState,
+    reducers: {
+        updatePharmacy: (state, action) => {
             editPharmacy(action.payload);
-            return { ...state, pharmacies: state.pharmacies.map((pharmacy) => pharmacy.id === action.payload.id ? action.payload : pharmacy) };
-        case 'FETCH_PHARMACIES':
-            return { ...state, pharmacies: action.payload };
-        case 'UPDATE_LOADING':
-            return { ...state, loading: action.payload };
-        default:
-            return state;
+            state.pharmacies = state.pharmacies.map(
+                (pharmacy) => 
+                    pharmacy.id === action.payload.id 
+                    ? action.payload
+                    : pharmacy);
+        },
+        fetchPharmacies: (state, action) => { state.pharmacies = action.payload; },
+        updateLoading: (state, action) => { state.loading = action.payload }
     }
-};
+});
 
-// Store
-const store = createStore(pharmacyReducer, applyMiddleware(thunk));
+export const { updatePharmacy, fetchPharmacies, updateLoading } = pharmacySlice.actions;
+
+
+const store = configureStore({
+    reducer: pharmacySlice.reducer,
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(thunk)
+});
+
+
 export default store;

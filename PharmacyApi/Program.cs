@@ -23,13 +23,12 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<PharmacyDbContext>(options =>
+builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
 
 builder.Services.AddScoped<IPharmacyService, PharmacyService>();
-builder.Services.AddScoped<IPharmacyDbContext, PharmacyDbContext>();
 
 var app = builder.Build();
 

@@ -24,29 +24,27 @@ public class PharmacyController : ControllerBase
 
     #endregion
 
-    [HttpGet]
+    [HttpPost]
     [Route("all")]
-    public async Task<IActionResult> GetAll()
+    [Route("{id?}")]
+    public async Task<IActionResult> GetPharmacy(int? id = null)
     {
-        var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
-        
-        return pharmacyListResult.Success 
-            ? Ok(pharmacyListResult.Result)
-            : NotFound(pharmacyListResult.ErrorMessage);
-    } 
-    
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetById(int id)
-    {
-        var pharmacyResult = await _pharmacyService.GetByIdAsync(id);
+        if (id is null)
+        {
+            var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
+            return pharmacyListResult.Success 
+                ? Ok(pharmacyListResult.Result) 
+                : NotFound(pharmacyListResult.ErrorMessage);
+        }
 
-        return pharmacyResult.Success
-            ? Ok(pharmacyResult.Result)
+        var pharmacyResult = await _pharmacyService.GetByIdAsync(id.Value);
+        return pharmacyResult.Success 
+            ? Ok(pharmacyResult.Result) 
             : NotFound(pharmacyResult.ErrorMessage);
     }
+    
 
-    [HttpPut]
+    [HttpPost]
     [Route("update")]
     public async Task<IActionResult> UpdateById(Pharmacy pharmacy)
     {

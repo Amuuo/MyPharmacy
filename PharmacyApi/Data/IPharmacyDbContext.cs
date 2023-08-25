@@ -3,7 +3,7 @@ using PharmacyApi.Models;
 
 namespace PharmacyApi.Data
 {
-    public interface IPharmacyDbContext
+    public interface IPharmacyDbContext : IDisposable
     {
         DbSet<Pharmacy> PharmacyList { get; }
 

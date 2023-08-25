@@ -8,7 +8,7 @@ public class Pharmacy
 {
     public int Id { get; set; }
     
-    [StringLength(50)]  public string Name    { get; set; }
+    [StringLength(50)]  public string? Name    { get; set; }
     [StringLength(100)] public string? Address { get; set; }
     [StringLength(50)]  public string? City    { get; set; }
     [StringLength(2)]   public string? State   { get; set; }

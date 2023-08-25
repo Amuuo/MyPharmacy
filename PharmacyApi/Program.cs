@@ -1,13 +1,10 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using PharmacyApi;
 using PharmacyApi.Data;
 using PharmacyApi.Middleware;
 using PharmacyApi.Services;
 using Serilog;
-using Serilog.Events;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,6 +30,7 @@ builder.Services.AddDbContext<PharmacyDbContext>(options =>
 });
 
 builder.Services.AddTransient<IPharmacyService, PharmacyService>();
+builder.Services.AddScoped<IPharmacyDbContext, PharmacyDbContext>();
 
 var app = builder.Build();
 

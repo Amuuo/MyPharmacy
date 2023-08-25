@@ -26,27 +26,34 @@ public class PharmacyController : ControllerBase
 
     [HttpGet]
     [Route("all")]
-    public IActionResult GetAll() => Ok(_pharmacyService.GetAll());
+    public async Task<IActionResult> GetAll()
+    {
+        var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
+        
+        return pharmacyListResult.Success 
+            ? Ok(pharmacyListResult.Result)
+            : NotFound(pharmacyListResult.ErrorMessage);
+    } 
     
     [HttpGet]
     [Route("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var pharmacy = await _pharmacyService.GetById(id);
+        var pharmacyResult = await _pharmacyService.GetByIdAsync(id);
 
-        return pharmacy is not null
-            ? Ok(pharmacy)
-            : StatusCode(404, $"No pharmacy found with id {id}");
+        return pharmacyResult.Success
+            ? Ok(pharmacyResult.Result)
+            : NotFound(pharmacyResult.ErrorMessage);
     }
 
-    [HttpPost]
-    [Route("update/{id}")]
-    public async Task<IActionResult> UpdateById(int id, Pharmacy pharmacy)
+    [HttpPut]
+    [Route("update")]
+    public async Task<IActionResult> UpdateById(Pharmacy pharmacy)
     {
-        var updatedPharmacy = await _pharmacyService.UpdateById(id, pharmacy);
+        var updatedPharmacyResult = await _pharmacyService.UpdateByIdAsync(pharmacy);
 
-        return updatedPharmacy is not null
-            ? Ok(updatedPharmacy)
-            : StatusCode(404, $"No pharmacy found with id {id}");
+        return updatedPharmacyResult.Success
+            ? Ok(updatedPharmacyResult.Result)
+            : NotFound(updatedPharmacyResult.ErrorMessage);
     }
 }

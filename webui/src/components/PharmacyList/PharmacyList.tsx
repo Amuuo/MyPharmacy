@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import PharmacyRow from './PharmacyRow';
+import PharmacyRow from '../PharmacyRow/PharmacyRow';
 import { useSelector } from 'react-redux';
-import { PharmacyState } from '../redux/store';
-import { Pharmacy } from '../models/pharmacy';
+import { PharmacyState } from '../../store/store';
+import { Pharmacy } from '../../models/pharmacy';
 import './PharmacyList.scss';
 
 

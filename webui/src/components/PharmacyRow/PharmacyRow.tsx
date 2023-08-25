@@ -1,7 +1,7 @@
 import { useRef, useEffect, useState } from "react";
-import { updatePharmacy } from "../redux/store";
+import { updatePharmacy } from "../../store/store";
 import { useDispatch } from "react-redux";
-import { Pharmacy } from "../models/pharmacy";
+import { Pharmacy } from "../../models/pharmacy";
 
 type PharmacyRowProps = {
     pharmacy: Pharmacy;    

@@ -9,130 +9,21 @@
 }
 
 
-table {
-    background-color: rgb(110, 143, 215);
-    border: 2px double rgb(217, 217, 217);
-    border-radius: 0.5rem;
-    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);
-    max-width: 1250px;
+
+.MuiDataGrid-root {
+    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
+    color: whitesmoke !important;        
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);    
     will-change: opacity, transform;
     animation: fade-in 0.5s ease; 
     z-index: 2; 
+    padding: 0 1rem;
     // border-collapse: collapse;
     white-space: nowrap;   
-    transition: all 0.2s ease;
+    transition: all 0.1s ease;
 
     &:hover {
         transform: scale(1.005);
         box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.548);
     }
-}
-
-thead {
-    box-sizing: content-box;
-    background-color: rgb(62, 62, 62);     
-    color: rgb(151, 190, 237);   
-    text-transform: uppercase;
-}
-
-tbody {
-    background: rgb(98,93,196);
-    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
-}
-
-th {        
-    text-align: center;
-    padding: 0.5rem 1rem;
-}
-
-tr {
-    transition: all 0.2s ease;
-    max-height: 30px;
-    // &:not(thead tr):hover {
-    //     transform: scale(1.01);
-    //     background-color: rgba(147, 181, 212, 0.232);
-    // }
-}
-
-tr:not(thead tr):hover {
-    // transform: scale(1.01);
-    background-color: rgba(147, 181, 212, 0.232);
-}
-
-.col-name { width: 225px; }
-.col-address { width: 150px; }
-.col-city { width: 150px; }
-.col-state { 
-    width: 50px; 
-    text-align: center; 
-
-    input { text-align: center; }
-}
-.col-zip { 
-    width: 80px; 
-    text-align: center; 
-
-    input { text-align: center; }
-}
-.col-prescriptionsFilled { 
-    width: 90px; 
-    text-align: end; 
-
-    input { text-align: end; }
-}
-
-.col-date {
-    text-align: center;
-}
-
-td {
-    padding: 0.3rem 0.8rem;  
-    transition: all 0.2s ease-in-out;
-    // max-height: 30px;
-    box-sizing: border-box;
-    font-size: 1rem;  
-
-    &:not(:has(input)) {
-        // width: 100px;
-    }
-    
-    &:has(input) {         
-        // width: 100px; 
-    }
-
-    input {
-        font-size: 1rem;  
-        border: none !important;
-        width: 100% !important;
-        // text-align: center;
-        // min-width: 100% !important;
-        // box-sizing: content-box;
-        background: rgba(29, 73, 128, 0);
-        // width: 50%;       
-        
-        &::selection {
-            background-color: rgb(77, 28, 133);
-        }
-    }
-
-    
-}
-
-// td:not(thead td):hover {
-//     transform: scale(1.05);
-// }
-
-td:hover {
-    background-color: rgba(133, 182, 228, 0.5);    
-}
-
-.editable-cell {
-    cursor: pointer;
-}
-
-.save-button-cell {
-    margin: 0;
-    padding: 0;
-    max-height: 20px;
-    font-size: 12px;
 }

@@ -1,11 +1,11 @@
 import { ThunkAction } from 'redux-thunk';
-import { PharmacyState, PharmacyAction, fetchPharmacies } from '../store/store';
+import { PharmacyState, PharmacyAction, fetchPharmacies, updateLoading } from '../store/store';
 import { Pharmacy } from '../models/pharmacy';
 
 export async function editPharmacy(pharmacy: Pharmacy) {
     try {
-        const response = await fetch(`api/pharmacy/update/${pharmacy.id}`, {
-            method: 'PUT',
+        const response = await fetch(`api/pharmacy/update`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pharmacy)
         });
@@ -20,12 +20,15 @@ export async function editPharmacy(pharmacy: Pharmacy) {
 }
 
 export const fetchPharmaciesAsync = (): ThunkAction<void, PharmacyState, unknown, PharmacyAction> => async dispatch => {
-    const response = await fetch('api/pharmacy/all');
+    const response = await fetch('api/pharmacy/all', {
+        method: 'POST'              
+    });
     if (response.ok) {
-        const pharmacies = await response.json() as Pharmacy[];
+        const pharmacies = await response.json() as Pharmacy[];        
         dispatch(fetchPharmacies(pharmacies));
     } else {
         dispatch(fetchPharmacies([]));
     }
+    dispatch(updateLoading(false));
 };
   

@@ -5,6 +5,7 @@ import { PharmacyState } from './store/store';
 import { fetchPharmaciesAsync } from './services/pharmacyService';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
+import { CircularProgress } from '@mui/material';
 
 
 export default function App() {    
@@ -17,12 +18,12 @@ export default function App() {
     }, [dispatch]);
  
     let contents = loading
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
+        ? <CircularProgress/>
         : <PharmacyList/>;
 
     return (
         <div>
-            <h1 id="tabelLabel">MyPharmacy™</h1>                
+            <h1>MyPharmacy™</h1>                
             {contents}
         </div>
     );        

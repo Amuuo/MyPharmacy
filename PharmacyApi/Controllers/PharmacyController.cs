@@ -36,16 +36,16 @@ public class PharmacyController : ControllerBase
             return HandleResponse(pharmacyListResult);
         }
 
-        var pharmacyResult = await _pharmacyService.GetByIdAsync(id.Value);
+        var pharmacyResult = await _pharmacyService.GetPharmacyByIdAsync(id.Value);
         return HandleResponse(pharmacyResult);
     }
     
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdateById(Pharmacy pharmacy)
+    public async Task<IActionResult> UpdatePharmacyById(Pharmacy pharmacy)
     {
-        var updatedPharmacyResult = await _pharmacyService.UpdateByIdAsync(pharmacy);
+        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyByIdAsync(pharmacy);
 
         return HandleResponse(updatedPharmacyResult);
     }

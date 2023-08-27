@@ -79,7 +79,7 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing the Pharmacy object if found, 
     /// or an error message if no pharmacy record with the specified id exists.
     /// </returns>
-    public async Task<ServiceResult<Pharmacy>> GetByIdAsync(int id)
+    public async Task<ServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id)
     {
         var pharmacy = await _pharmacyDbContext.PharmacyList.FindAsync(id);
 
@@ -113,9 +113,9 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing the updated Pharmacy object if successful,
     /// or an error message if no pharmacy is found with the given id or if an exception occurs during the update.
     /// </returns>
-    public async Task<ServiceResult<Pharmacy>> UpdateByIdAsync(Pharmacy updatedPharmacy)
+    public async Task<ServiceResult<Pharmacy>> UpdatePharmacyByIdAsync(Pharmacy updatedPharmacy)
     {
-        var searchResult = await GetByIdAsync(updatedPharmacy.Id);
+        var searchResult = await GetPharmacyByIdAsync(updatedPharmacy.Id);
         if (searchResult.IsSuccess is false) return searchResult;
         
         var existingPharmacy = searchResult.Result;

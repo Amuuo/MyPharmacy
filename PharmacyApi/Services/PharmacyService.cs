@@ -86,7 +86,12 @@ public class PharmacyService : IPharmacyService
         if (pharmacy is not null)
         {
             _logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
-            return new ServiceResult<Pharmacy> { IsSuccess = true, Result = pharmacy, StatusCode = HttpStatusCode.OK };
+            return new ServiceResult<Pharmacy>
+            {
+                IsSuccess  = true, 
+                Result     = pharmacy, 
+                StatusCode = HttpStatusCode.OK
+            };
         }
 
         _logger.LogWarning("No pharmacy found with id {id}", id);

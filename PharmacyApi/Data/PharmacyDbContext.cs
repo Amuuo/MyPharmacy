@@ -6,12 +6,9 @@ namespace PharmacyApi.Data;
 
 public class PharmacyDbContext : DbContext, IPharmacyDbContext
 {
-    private readonly ILogger _logger;
 
-    public PharmacyDbContext(DbContextOptions options, 
-                             ILogger<PharmacyDbContext> logger) : base(options)
+    public PharmacyDbContext(DbContextOptions options) : base(options)
     {
-        _logger = logger;
     }
 
     public DbSet<Pharmacy> PharmacyList { get; set; }

@@ -1,4 +1,6 @@
-﻿using PharmacyApi.Data;
+﻿using System.Net;
+using Microsoft.Extensions.FileProviders;
+using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Utilities;
 
@@ -41,20 +43,28 @@ public class PharmacyService : IPharmacyService
                 _logger.LogWarning("No pharmacies found.");
                 return new ServiceResult<IAsyncEnumerable<Pharmacy>>
                 {
-                    Success = false, ErrorMessage = "No pharmacies found."
+                    IsSuccess    = false, 
+                    ErrorMessage = "No pharmacies found.", 
+                    StatusCode   = HttpStatusCode.NoContent
                 };
             }
 
             _logger.LogDebug("Retrieved all pharmacies.");
-            return new ServiceResult<IAsyncEnumerable<Pharmacy>> { Success = true, Result = pharmacyList };
+            return new ServiceResult<IAsyncEnumerable<Pharmacy>>
+            {
+                IsSuccess  = true, 
+                Result     = pharmacyList, 
+                StatusCode = HttpStatusCode.OK
+            };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while retrieving pharmacies.");
             return new ServiceResult<IAsyncEnumerable<Pharmacy>>
             {
-                Success      = false,
-                ErrorMessage = "An error occurred while retrieving pharmacies."
+                IsSuccess    = false,
+                ErrorMessage = $"An error occurred while retrieving pharmacies, ex: {ex}",
+                StatusCode   = HttpStatusCode.InternalServerError
             };
         }
     }
@@ -76,14 +86,15 @@ public class PharmacyService : IPharmacyService
         if (pharmacy is not null)
         {
             _logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
-            return new ServiceResult<Pharmacy> { Success = true, Result = pharmacy };
+            return new ServiceResult<Pharmacy> { IsSuccess = true, Result = pharmacy, StatusCode = HttpStatusCode.OK };
         }
 
         _logger.LogWarning("No pharmacy found with id {id}", id);
         return new ServiceResult<Pharmacy>
         {
-            Success      = false,
-            ErrorMessage = $"No pharmacy found with id {id}"
+            IsSuccess    = false,
+            ErrorMessage = $"No pharmacy found with id {id}",
+            StatusCode   = HttpStatusCode.NoContent
         };
     }
 
@@ -100,7 +111,7 @@ public class PharmacyService : IPharmacyService
     public async Task<ServiceResult<Pharmacy>> UpdateByIdAsync(Pharmacy updatedPharmacy)
     {
         var searchResult = await GetByIdAsync(updatedPharmacy.Id);
-        if (searchResult.Success is false) return searchResult;
+        if (searchResult.IsSuccess is false) return searchResult;
         
         var existingPharmacy = searchResult.Result;
 
@@ -120,15 +131,21 @@ public class PharmacyService : IPharmacyService
             _logger.LogError(ex, "Error attempting to save {@record}", existingPharmacy);
             return new ServiceResult<Pharmacy>
             {
-                Success = false,
-                ErrorMessage = $"Something went wrong when trying to save changes, ex: {ex}"
+                IsSuccess    = false,
+                ErrorMessage = $"Something went wrong when trying to save changes, ex: {ex}",
+                StatusCode   = HttpStatusCode.InternalServerError
             };
         }
 
         _logger.LogDebug("Updated pharmacy record: {@pharmacy} with changes from request {@updateContent}", 
                          existingPharmacy, updatedPharmacy);
 
-        return new ServiceResult<Pharmacy> { Success = true, Result = existingPharmacy };
+        return new ServiceResult<Pharmacy>
+        {
+            IsSuccess  = true, 
+            Result     = existingPharmacy, 
+            StatusCode = HttpStatusCode.OK
+        };
     }
 
     #endregion

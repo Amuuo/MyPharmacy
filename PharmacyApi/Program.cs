@@ -28,7 +28,7 @@ builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options
     options.UseSqlServer(connectionString);
 });
 
-builder.Services.AddScoped<IPharmacyService, PharmacyService>();
+builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 
 var app = builder.Build();
 

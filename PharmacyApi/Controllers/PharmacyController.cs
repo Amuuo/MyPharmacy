@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Models;
 using PharmacyApi.Services;
+using PharmacyApi.Utilities;
 
 namespace PharmacyApi.Controllers;
 
@@ -32,15 +33,11 @@ public class PharmacyController : ControllerBase
         if (id is null)
         {
             var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
-            return pharmacyListResult.Success 
-                ? Ok(pharmacyListResult.Result) 
-                : NotFound(pharmacyListResult.ErrorMessage);
+            return HandleResponse(pharmacyListResult);
         }
 
         var pharmacyResult = await _pharmacyService.GetByIdAsync(id.Value);
-        return pharmacyResult.Success 
-            ? Ok(pharmacyResult.Result) 
-            : NotFound(pharmacyResult.ErrorMessage);
+        return HandleResponse(pharmacyResult);
     }
     
 
@@ -50,8 +47,14 @@ public class PharmacyController : ControllerBase
     {
         var updatedPharmacyResult = await _pharmacyService.UpdateByIdAsync(pharmacy);
 
-        return updatedPharmacyResult.Success
-            ? Ok(updatedPharmacyResult.Result)
-            : NotFound(updatedPharmacyResult.ErrorMessage);
+        return HandleResponse(updatedPharmacyResult);
+    }
+
+
+    private IActionResult HandleResponse<T>(ServiceResult<T> serviceResponse)
+    {
+        return serviceResponse.IsSuccess
+            ? StatusCode((int)serviceResponse.StatusCode, serviceResponse.Result)
+            : StatusCode((int)serviceResponse.StatusCode, serviceResponse.ErrorMessage);
     }
 }

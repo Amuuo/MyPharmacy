@@ -1,11 +1,12 @@
 ﻿using PharmacyApi.Models;
+using PharmacyApi.Utilities;
 
-namespace PharmacyApi.Services
+namespace PharmacyApi.Services;
+
+public interface IPharmacyService
 {
-    public interface IPharmacyService
-    {
-        IEnumerable<Pharmacy> GetAll();
-        Task<Pharmacy?> GetById(int id);
-        Task<Pharmacy?> UpdateById(int id, Pharmacy updatedPharmacy);
-    }
+    Task<ServiceResult<IAsyncEnumerable<Pharmacy>>> GetPharmacyListAsync();
+    Task<ServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id);
+    Task<ServiceResult<Pharmacy>> UpdatePharmacyByIdAsync(Pharmacy updatedPharmacy);
 }
+

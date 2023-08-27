@@ -361,4 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/.vscode/launch.json
+/.vscode/tasks.json
+PharmacyApi/Properties/ServiceDependencies/app-pharmacy-api-southus-dev-001 - Web Deploy/profile.arm.json
+webui/.vite/deps_temp_a1aacf26/package.json
+FodyWeavers.xsd
 /.vscode

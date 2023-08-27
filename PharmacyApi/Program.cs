@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using PharmacyApi;
 using PharmacyApi.Data;
-using PharmacyApi.Middleware;
 using PharmacyApi.Services;
 using Serilog;
-using Serilog.Events;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +30,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<PharmacyDbContext>(options =>
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
@@ -42,17 +40,6 @@ builder.Services.AddDbContext<PharmacyDbContext>(options =>
 builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 
 var app = builder.Build();
-
-//app.UseStaticFiles();
-//app.UseRouting();
-
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller}/{action=Index}/{id?}");
-
-//app.MapFallbackToFile("index.html");
-
-app.UseMiddleware<RequestExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -31,7 +31,7 @@ export default defineConfig({
     server: {
         proxy: {
             '/api': {
-                target: 'https://localhost:7191/',
+                target: 'https://app-pharmacy-api-southus-dev-001.azurewebsites.net/',
                 changeOrigin: true,
                 secure: false,
                 rewrite: (path) => path.replace(/^\/api/, '')

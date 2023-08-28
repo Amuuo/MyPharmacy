@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Models;
 using PharmacyApi.Services;
+using PharmacyApi.Utilities;
 
 namespace PharmacyApi.Controllers;
 
@@ -24,29 +25,36 @@ public class PharmacyController : ControllerBase
 
     #endregion
 
-    [HttpGet]
+    [HttpPost]
     [Route("all")]
-    public IActionResult GetAll() => Ok(_pharmacyService.GetAll());
-    
-    [HttpGet]
-    [Route("{id}")]
-    public async Task<IActionResult> GetById(int id)
+    [Route("{id?}")]
+    public async Task<IActionResult> GetPharmacy(int? id = null)
     {
-        var pharmacy = await _pharmacyService.GetById(id);
+        if (id is null)
+        {
+            var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
+            return HandleResponse(pharmacyListResult);
+        }
 
-        return pharmacy is not null
-            ? Ok(pharmacy)
-            : StatusCode(404, $"No pharmacy found with id {id}");
+        var pharmacyResult = await _pharmacyService.GetPharmacyByIdAsync(id.Value);
+        return HandleResponse(pharmacyResult);
+    }
+    
+
+    [HttpPost]
+    [Route("update")]
+    public async Task<IActionResult> UpdatePharmacyById(Pharmacy pharmacy)
+    {
+        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyByIdAsync(pharmacy);
+
+        return HandleResponse(updatedPharmacyResult);
     }
 
-    [HttpPut]
-    [Route("update/{id}")]
-    public async Task<IActionResult> UpdateById(int id, Pharmacy pharmacy)
-    {
-        var updatedPharmacy = await _pharmacyService.UpdateById(id, pharmacy);
 
-        return updatedPharmacy is not null
-            ? Ok(updatedPharmacy)
-            : StatusCode(404, $"No pharmacy found with id {id}");
+    private IActionResult HandleResponse<T>(ServiceResult<T> serviceResponse)
+    {
+        return serviceResponse.IsSuccess
+            ? StatusCode((int)serviceResponse.StatusCode, serviceResponse.Result)
+            : StatusCode((int)serviceResponse.StatusCode, serviceResponse.ErrorMessage);
     }
 }

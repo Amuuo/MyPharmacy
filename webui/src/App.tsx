@@ -1,27 +1,31 @@
 import { useEffect } from 'react';
-import PharmacyList from './components/PharmacyList';
-import { useStore } from 'effector-react';
-import { pharmaciesStore, loadingStore, fetchPharmacies } from './stores/pharmacyStore';
-import { editPharmacy } from './services/pharmacyService';
+import PharmacyList from './components/PharmacyList/PharmacyList';
+import { useDispatch, useSelector } from 'react-redux';
+import { PharmacyState } from './store/store';
+import { fetchPharmaciesAsync } from './services/pharmacyService';
+import { ThunkDispatch } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { CircularProgress } from '@mui/material';
+import PharamcySelection from './components/PharmacySelection/PharmacySelection';
+import './App.css';
 
 
-export default function App() {
+export default function App() {    
     
-    const pharmacies = useStore(pharmaciesStore);
-    const loading = useStore(loadingStore);
-
+    const loading = useSelector((state: PharmacyState) => state.loading);
+    const dispatch = useDispatch<ThunkDispatch<PharmacyState, unknown, AnyAction>>();    
+    
     useEffect(() => {
-        fetchPharmacies();
-    }, []);
+        dispatch(fetchPharmaciesAsync());
+    }, [dispatch]);
  
-    let contents = loading
-        ? <p><em>Loading... Please refresh once the ASP.NET backend has started. See <a href="https://aka.ms/jspsintegrationreact">https://aka.ms/jspsintegrationreact</a> for more details.</em></p>
-        : <PharmacyList pharmacies={pharmacies} onEdit={editPharmacy}/>;
+    const contents = loading ? <CircularProgress/> : <PharmacyList/>;
 
     return (
         <div>
-            <h1 id="tabelLabel">MyPharmacy™</h1>                
+            <h1>MyPharmacy™</h1>                
             {contents}
+            <PharamcySelection/>
         </div>
     );        
 }

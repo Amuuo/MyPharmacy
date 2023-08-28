@@ -1,6 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
-import { PharmacyState, PharmacyAction, fetchPharmacies, updateLoading } from '../store/store';
+import { PharmacyState, fetchPharmacies, updateLoading } from '../store/store';
 import { Pharmacy } from '../models/pharmacy';
+import { AnyAction } from 'redux';
 
 export async function editPharmacy(pharmacy: Pharmacy) {
     try {
@@ -19,7 +20,7 @@ export async function editPharmacy(pharmacy: Pharmacy) {
     }               
 }
 
-export const fetchPharmaciesAsync = (): ThunkAction<void, PharmacyState, unknown, PharmacyAction> => async dispatch => {
+export const fetchPharmaciesAsync = (): ThunkAction<void, PharmacyState, unknown, AnyAction> => async dispatch => {
     const response = await fetch('api/pharmacy/all', {
         method: 'POST'              
     });

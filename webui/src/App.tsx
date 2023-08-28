@@ -17,9 +17,7 @@ export default function App() {
         dispatch(fetchPharmaciesAsync());
     }, [dispatch]);
  
-    let contents = loading
-        ? <CircularProgress/>
-        : <PharmacyList/>;
+    const contents = loading ? <CircularProgress/> : <PharmacyList/>;
 
     return (
         <div>

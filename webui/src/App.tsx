@@ -8,6 +8,7 @@ import { AnyAction } from 'redux';
 import { CircularProgress } from '@mui/material';
 import PharamcySelection from './components/PharmacySelection/PharmacySelection';
 import './App.css';
+import PharmacyAppBar from './components/PharmacyAppBar/PharmacyAppBar';
 
 
 export default function App() {    
@@ -18,14 +19,12 @@ export default function App() {
     useEffect(() => {
         dispatch(fetchPharmaciesAsync());
     }, [dispatch]);
- 
-    const contents = loading ? <CircularProgress/> : <PharmacyList/>;
+     
 
     return (
-        <div>
-            <h1>MyPharmacy™</h1>                
-            {contents}
+        <div className='App'>                        
             <PharamcySelection/>
+            {loading ? <CircularProgress/> : <PharmacyList/>}
         </div>
     );        
 }

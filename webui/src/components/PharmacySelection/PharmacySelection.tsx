@@ -13,7 +13,7 @@ const PharamcySelection: React.FC = () => {
     }
     
     return (
-        <Card className="pharmacy-selection" variant="outlined">
+        <Card className="pharmacy-selection" variant="outlined" sx={{color: "whitesmoke"}}>
             <CardHeader title={selectedPharmacy.name} sx={{ fontFamily: 'Inter' }}/>                            
             <CardContent sx={{ paddingTop: 0}}>
                 <Typography fontFamily={'Inter'}> {selectedPharmacy.address} </Typography>

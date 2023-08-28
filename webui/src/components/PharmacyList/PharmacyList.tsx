@@ -42,9 +42,8 @@ const PharmacyList: React.FC = () => {
         <div>   
             <DataGrid rows={pharmacyList} 
                       columns={columns}                       
-                      initialState={{pagination: {paginationModel: {pageSize: 10}}}}
-                      pageSizeOptions={[5, 10]}                                            
-                      checkboxSelection
+                      initialState={{pagination: {paginationModel: {pageSize: 5}}}}
+                      pageSizeOptions={[5, 10]}                                                                  
                       processRowUpdate={handleEditCellChange}
                       onRowSelectionModelChange={handlePharmacySelectionChange}                    
                       sx={{                                            

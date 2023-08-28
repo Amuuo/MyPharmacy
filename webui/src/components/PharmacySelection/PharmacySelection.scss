@@ -6,9 +6,10 @@
 
 @keyframes slide-in {
     from {
-        transform: translateY(-150px);
+        transform: translateX(150px);
     }
 }
+
 
 div.pharmacy-selection {
     background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
@@ -17,13 +18,13 @@ div.pharmacy-selection {
     border-radius: 0.5rem;
     border: 3px solid whitesmoke;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);   
-    height: auto;
-    width: fit-content;
+    height: fit-content;
+    width: 300px;
     will-change: height, width;
     overflow: hidden;
     transition: width 0.2s ease;
     // animation: grow-in 0.5s ease;
-    animation: slide-in 0.3s ease;
+    animation: slide-in 0.3s ease;    
     font-family: 'Inter' !important;
 }
 

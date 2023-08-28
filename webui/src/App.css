@@ -1,4 +1,4 @@
-#root {
+/* #root {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,7 +6,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
-}
+} */
 
 .logo {
   height: 6em;
@@ -42,4 +42,9 @@
 
 .read-the-docs {
   color: #888;
+}
+
+h1 {
+  font-family: 'Proza Libre', sans-serif;
+  font-weight: 800;
 }

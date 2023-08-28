@@ -6,11 +6,13 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 export type PharmacyState = {
     pharmacies: Pharmacy[];
     loading: boolean;
+    selectedPharmacy: Pharmacy;
 }
 
 const initialState: PharmacyState = {
     pharmacies: [],
-    loading: true
+    loading: true,
+    selectedPharmacy: {}
 };
 
 const pharmacySlice = createSlice({
@@ -26,11 +28,17 @@ const pharmacySlice = createSlice({
                     : pharmacy);
         },
         fetchPharmacies: (state, action) => { state.pharmacies = action.payload; },
-        updateLoading: (state, action) => { state.loading = action.payload }
+        updateLoading: (state, action) => { state.loading = action.payload },
+        setPharmacySelection: (state, action) => { state.selectedPharmacy = action.payload }
     }
 });
 
-export const { updatePharmacy, fetchPharmacies, updateLoading } = pharmacySlice.actions;
+export const { 
+    updatePharmacy, 
+    fetchPharmacies, 
+    updateLoading, 
+    setPharmacySelection 
+} = pharmacySlice.actions;
 
 
 const store = configureStore({

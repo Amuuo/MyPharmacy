@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { PharmacyState, updatePharmacy } from '../../store/store';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { PharmacyState, updatePharmacy, setPharmacySelection } from '../../store/store';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import './PharmacyList.scss';
 import { Pharmacy } from '../../models/pharmacy';
 import _ from 'lodash';
@@ -12,6 +12,15 @@ const PharmacyList: React.FC = () => {
     const dispatch = useDispatch();
     const pharmacyList = useSelector((state: PharmacyState) => state.pharmacies);
     
+    const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {
+                
+        const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);
+        if (selectedPharmacy)        
+            dispatch(setPharmacySelection(selectedPharmacy)); 
+        else 
+            dispatch(setPharmacySelection({}));
+    }
+
     const handleEditCellChange = (updatedPharmacy: Pharmacy, originalPharmacy: Pharmacy) => {
         
         if( !_.isEqual(updatedPharmacy, originalPharmacy) )
@@ -34,10 +43,11 @@ const PharmacyList: React.FC = () => {
             <DataGrid rows={pharmacyList} 
                       columns={columns}                       
                       initialState={{pagination: {paginationModel: {pageSize: 10}}}}
-                      pageSizeOptions={[5, 10]}
+                      pageSizeOptions={[5, 10]}                                            
                       checkboxSelection
                       processRowUpdate={handleEditCellChange}
-                      sx={{
+                      onRowSelectionModelChange={handlePharmacySelectionChange}                    
+                      sx={{                                            
                         m: 2,                        
                         border: 3,
                         borderColor: 'primary'

@@ -1,13 +1,9 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
-using PharmacyApi;
 using PharmacyApi.Data;
-using PharmacyApi.Middleware;
 using PharmacyApi.Services;
 using Serilog;
-using Serilog.Events;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,7 +23,7 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Services.AddDbContext<PharmacyDbContext>(options =>
+builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options =>
 {
     options.UseSqlServer(connectionString);
 });
@@ -35,8 +31,6 @@ builder.Services.AddDbContext<PharmacyDbContext>(options =>
 builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 
 var app = builder.Build();
-
-app.UseMiddleware<RequestExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -6,7 +6,7 @@ namespace PharmacyApi.Models;
 [Table("pharmacy")]
 public class Pharmacy
 {
-    public int? Id { get; set; }
+    public int Id { get; set; }
     
     [StringLength(50)]  public string? Name    { get; set; }
     [StringLength(100)] public string? Address { get; set; }
@@ -15,6 +15,6 @@ public class Pharmacy
     [StringLength(20)]  public string? Zip     { get; set; }
     
     public int? PrescriptionsFilled { get; set; }
-    public DateTime? CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
     public DateTime? UpdatedDate { get; set; }
 }

@@ -1,0 +1,30 @@
+@keyframes fade-in { 
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 100;
+    }
+}
+
+
+
+.MuiDataGrid-root {
+    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
+    color: whitesmoke !important;        
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);    
+    will-change: opacity, transform;
+    animation: fade-in 0.5s ease; 
+    z-index: 2; 
+    // padding: 0 1rem;    
+    white-space: nowrap;   
+    transition: all 0.1s ease;    
+    width: fit-content;
+    min-width: 500px;
+    border: 4px outset whitesmoke !important;
+    // &:hover {
+    //     transform: scale(1.005);
+    //     box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.548);
+    // }
+}

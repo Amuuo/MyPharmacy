@@ -365,6 +365,9 @@ FodyWeavers.xsd
 /.vscode/tasks.json
 PharmacyApi/Properties/ServiceDependencies/app-pharmacy-api-southus-dev-001 - Web Deploy/profile.arm.json
 webui/.vite/deps_temp_a1aacf26/package.json
+FodyWeavers.xsd
+/.vscode
+/webui/package-lock.json
 /webui/dist
 /webui/package-lock.json
 /webui/.vite/deps_temp_4b72444e/package.json

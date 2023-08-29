@@ -4,7 +4,7 @@
     <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>aspnet-PharmacyApi-b12dadd8-f0d9-44b1-89d2-a55d0cf724be</UserSecretsId>
+    <!--<UserSecretsId>aspnet-PharmacyApi-b12dadd8-f0d9-44b1-89d2-a55d0cf724be</UserSecretsId>-->
   </PropertyGroup>
 
   <ItemGroup>

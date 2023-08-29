@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import store from './store/store.ts';
-import App from './App.tsx'
+import store from './store.ts';
+import App from './pages/App/App.tsx'
 import './index.css'
 import { Provider } from 'react-redux'
-import PharmacyAppBar from './components/PharmacyAppBar/PharmacyAppBar.tsx';
+import PharmacyAppBar from './MainAppBar.tsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

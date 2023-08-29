@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
-import { PharmacyState, fetchPharmacies, updateLoading } from '../store/store';
-import { Pharmacy } from '../models/pharmacy';
+import { PharmacyState, fetchPharmacies, updateLoading } from '../../store';
+import { Pharmacy } from './pharmacy';
 import { AnyAction } from 'redux';
 
 export async function editPharmacy(pharmacy: Pharmacy) {

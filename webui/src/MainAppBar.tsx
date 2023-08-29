@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
 
 
-function PharmacyAppBar() {
+function MainAppBar() {
   
 
   return (
@@ -15,4 +15,4 @@ function PharmacyAppBar() {
   );
 }
 
-export default PharmacyAppBar;
+export default MainAppBar;

@@ -1,6 +1,6 @@
 import thunk from 'redux-thunk';
-import { editPharmacy } from '../services/pharmacyService';
-import { Pharmacy } from '../models/pharmacy';
+import { editPharmacy } from './domains/pharmacy/pharmacyService';
+import { Pharmacy } from './domains/pharmacy/pharmacy';
 import { configureStore, createSlice } from '@reduxjs/toolkit';
 
 export type PharmacyState = {

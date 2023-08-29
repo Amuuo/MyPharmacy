@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { PharmacyState, updatePharmacy, setPharmacySelection } from '../../store/store';
+import { PharmacyState, updatePharmacy, setPharmacySelection } from '../../../../store';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
 import './PharmacyList.scss';
-import { Pharmacy } from '../../models/pharmacy';
+import { Pharmacy } from '../../pharmacy';
 import _ from 'lodash';
 
 

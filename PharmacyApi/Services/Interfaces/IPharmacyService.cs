@@ -1,7 +1,7 @@
 ﻿using PharmacyApi.Models;
 using PharmacyApi.Utilities;
 
-namespace PharmacyApi.Services;
+namespace PharmacyApi.Services.Interfaces;
 
 public interface IPharmacyService
 {

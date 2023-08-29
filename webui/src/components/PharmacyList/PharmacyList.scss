@@ -17,9 +17,12 @@
     will-change: opacity, transform;
     animation: fade-in 0.5s ease; 
     z-index: 2; 
-    padding: 0 1rem;    
+    // padding: 0 1rem;    
     white-space: nowrap;   
     transition: all 0.1s ease;    
+    width: fit-content;
+    min-width: 500px;
+    border: 4px outset whitesmoke !important;
     // &:hover {
     //     transform: scale(1.005);
     //     box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.548);

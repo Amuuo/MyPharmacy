@@ -30,28 +30,27 @@ const PharmacyList: React.FC = () => {
     }
 
     const columns: GridColDef[] = [
-        { field: 'name', headerName: 'Name', width: 200, editable: true },
-        { field: 'address', headerName: 'Address', width: 150, editable: true },
-        { field: 'city', headerName: 'City', width: 100, editable: true },
-        { field: 'state', headerName: 'State', width: 50, editable: true },
-        { field: 'zip', headerName: 'Zip', width: 80, type: 'number', editable: true},
-        { field: 'prescriptionsFilled', headerName: 'RX Filled', width: 90, type: 'number', editable: true }
+        { field: 'name',    headerName: 'Name',    width: 200, editable: true, flex: 2 },
+        { field: 'address', headerName: 'Address', width: 150, editable: true, flex: 1.5 },
+        { field: 'city',    headerName: 'City',    width: 100, editable: true, flex: 1.5 },
+        { field: 'state',   headerName: 'State',   width: 50,  editable: true, flex: 0.5 },
+        { field: 'zip',     headerName: 'Zip',     width: 80,  editable: true, flex: 1, type: 'number' },
+        { field: 'prescriptionsFilled', headerName: 'RX Filled', width: 90, type: 'number', editable: true, flex: 1 }
     ];
 
-    return (
-        <div>   
-            <DataGrid rows={pharmacyList} 
-                      columns={columns}                       
-                      initialState={{pagination: {paginationModel: {pageSize: 5}}}}
-                      pageSizeOptions={[5, 10]}                                                                  
-                      processRowUpdate={handleEditCellChange}
-                      onRowSelectionModelChange={handlePharmacySelectionChange}                    
-                      sx={{                                            
-                        m: 2,                        
-                        border: 3,
-                        borderColor: 'primary'
-                      }}/>
-        </div>
+    return (        
+        <DataGrid rows={pharmacyList} 
+                    columns={columns}                       
+                    initialState={{pagination: {paginationModel: {pageSize: 5}}}}
+                    pageSizeOptions={[5, 10]}                                                                  
+                    processRowUpdate={handleEditCellChange}
+                    onRowSelectionModelChange={handlePharmacySelectionChange}                    
+                    sx={{                                            
+                    m: 2,                        
+                    border: 3,
+                    borderColor: 'primary'
+                    }}
+        />        
     )
 };
 

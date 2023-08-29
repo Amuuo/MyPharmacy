@@ -6,9 +6,9 @@ import { fetchPharmaciesAsync } from './services/pharmacyService';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import { CircularProgress } from '@mui/material';
-import PharamcySelection from './components/PharmacySelection/PharmacySelection';
 import './App.css';
 import PharmacyAppBar from './components/PharmacyAppBar/PharmacyAppBar';
+import PharamcySelectionCard from './components/PharmacySelectionCard/PharmacySelectionCard';
 
 
 export default function App() {    
@@ -23,7 +23,7 @@ export default function App() {
 
     return (
         <div className='App'>                        
-            <PharamcySelection/>
+            <PharamcySelectionCard/>
             {loading ? <CircularProgress/> : <PharmacyList/>}
         </div>
     );        

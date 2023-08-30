@@ -32,6 +32,7 @@ builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options
 builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 builder.Services.AddTransient<IDeliveryService, DeliveryService>();
 builder.Services.AddTransient<IPharmacistService, PharmacistService>();
+builder.Services.AddTransient<IWarehouseService, WarehouseService>();
 
 var app = builder.Build();
 

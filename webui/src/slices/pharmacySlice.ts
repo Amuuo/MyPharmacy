@@ -3,17 +3,15 @@ import { Pharmacy } from '../domains/pharmacy/pharmacy';
 import { createSlice } from '@reduxjs/toolkit';
 
 export type PharmacyState = {
-    pageData: { [key: number]: Pharmacy[]}
+    pharmacyList: Pharmacy[];
     loading: boolean;
-    selectedPharmacy: Pharmacy;
-    currentPage: number;
+    selectedPharmacy: Pharmacy;    
 }
 
 const initialState: PharmacyState = {
-    pageData: {},
+    pharmacyList: [],
     loading: true,
-    selectedPharmacy: {},
-    currentPage: 0
+    selectedPharmacy: {},    
 };
 
 export const pharmacySlice = createSlice({
@@ -22,19 +20,15 @@ export const pharmacySlice = createSlice({
     reducers: {
         updatePharmacy: (state, action) => {
             editPharmacy(action.payload);
-            const currentPageData = state.pageData[state.currentPage] || [];
-            state.pageData[state.currentPage] = currentPageData.map(
+            state.pharmacyList = state.pharmacyList.map(
                 (pharmacy) => 
                     pharmacy.id === action.payload.id 
                     ? action.payload
                     : pharmacy);
         },
-        // setPharmacyList: (state, action) => { 
-        //     state.pageData[state.currentPage] = action.payload;             
-        // },
-        setPageData: (state, action) => {
-            state.pageData[action.payload.page] = action.payload.data;
-            state.currentPage = action.payload.page;
+        setPharmacyList: (state, action) => { 
+            state.pharmacyList = action.payload;        
+            state.selectedPharmacy = state.pharmacyList[0];
         },
         setLoading: (state, action) => { state.loading = action.payload },
         setPharmacySelection: (state, action) => { state.selectedPharmacy = action.payload },        
@@ -43,8 +37,7 @@ export const pharmacySlice = createSlice({
 
 export const { 
     updatePharmacy, 
-    // setPharmacyList, 
+    setPharmacyList, 
     setLoading, 
-    setPharmacySelection ,
-    setPageData,    
+    setPharmacySelection    
 } = pharmacySlice.actions;

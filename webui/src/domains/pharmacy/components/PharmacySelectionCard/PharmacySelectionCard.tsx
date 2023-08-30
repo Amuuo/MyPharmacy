@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { PharmacyState } from "../../../../store";
+import { PharmacyState } from "../../../../slices/pharmacySlice";
 import './PharmacySelectionCard.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 

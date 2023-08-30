@@ -20,7 +20,7 @@ namespace PharmacyApi.Controllers
         }
 
         [HttpPost]
-        [Route("all")]
+        [Route("")]
         public async Task<IActionResult> GetPharmacistList()
         {
             var result = await _pharmacistService.GetPharmacistList();

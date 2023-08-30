@@ -19,7 +19,7 @@ namespace PharmacyApi.Controllers
         }
 
         [HttpPost]
-        [Route("all")]
+        [Route("")]
         public async Task<IActionResult> GetDeliveryList()
         {
             var result = await _deliveryService.GetDeliveryList();

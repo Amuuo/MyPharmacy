@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using System.Data;
+using System.Net;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
@@ -24,85 +27,53 @@ public class PharmacyService : IPharmacyService
 
     #region Public Methods
     
+
     /// <summary>
-    /// Asynchronously retrieves the complete list of pharmacy records.
+    /// Asynchronously retrieves pharmacy records based on the search criteria.
     /// </summary>
+    /// <param name="searchCriteria">The search criteria object.</param>
     /// <returns>
-    /// A ServiceResult containing an IAsyncEnumerable of Pharmacy objects if any are found,
-    /// or an error message if no pharmacies are found or if an exception occurs during retrieval.
+    /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
+    /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<ServiceResult<IAsyncEnumerable<Pharmacy>>> GetPharmacyListAsync()
+    public async Task<ServiceResult<IAsyncEnumerable<Pharmacy>>> SearchPharmacyAsync(PharmacySearch searchCriteria)
     {
         try
         {
-            var pharmacyList = _pharmacyDbContext.PharmacyList.AsAsyncEnumerable();
-            
-            var hasPharmacies = await pharmacyList.AnyAsync();
-            if (hasPharmacies is false)
+            _logger.LogDebug("Attempting to query pharmacy table with {@searchCriteria}", searchCriteria);
+
+            var pharmacyList = ExecuteSearchProcedure(searchCriteria);
+
+            var hasResults = await pharmacyList.AnyAsync();
+            if (hasResults is false)
             {
-                _logger.LogWarning("No pharmacies found.");
                 return new ServiceResult<IAsyncEnumerable<Pharmacy>>
                 {
-                    IsSuccess    = false, 
-                    ErrorMessage = "No pharmacies found.", 
+                    IsSuccess    = false,
+                    ErrorMessage = "No pharmacies found with the provided search criteria.",
                     StatusCode   = HttpStatusCode.NoContent
                 };
             }
-
-            _logger.LogDebug("Retrieved all pharmacies.");
+            _logger.LogDebug("Retrieved pharmacies.");
             return new ServiceResult<IAsyncEnumerable<Pharmacy>>
             {
-                IsSuccess  = true, 
-                Result     = pharmacyList, 
+                IsSuccess  = true,
+                Result     = pharmacyList,
                 StatusCode = HttpStatusCode.OK
             };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while retrieving pharmacies.");
+            _logger.LogError(ex, "An error occurred while searching for pharmacies.");
             return new ServiceResult<IAsyncEnumerable<Pharmacy>>
             {
                 IsSuccess    = false,
-                ErrorMessage = $"An error occurred while retrieving pharmacies, ex: {ex}",
+                ErrorMessage = $"An error occurred while searching for pharmacies, ex: {ex}",
                 StatusCode   = HttpStatusCode.InternalServerError
             };
         }
     }
-
-
-
-    /// <summary>
-    /// Asynchronously retrieves a pharmacy record by its unique identifier.
-    /// </summary>
-    /// <param name="id">The unique identifier of the pharmacy record to retrieve.</param>
-    /// <returns>
-    /// A ServiceResult containing the Pharmacy object if found, 
-    /// or an error message if no pharmacy record with the specified id exists.
-    /// </returns>
-    public async Task<ServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id)
-    {
-        var pharmacy = await _pharmacyDbContext.PharmacyList.FindAsync(id);
-
-        if (pharmacy is not null)
-        {
-            _logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
-            return new ServiceResult<Pharmacy>
-            {
-                IsSuccess  = true, 
-                Result     = pharmacy, 
-                StatusCode = HttpStatusCode.OK
-            };
-        }
-
-        _logger.LogWarning("No pharmacy found with id {id}", id);
-        return new ServiceResult<Pharmacy>
-        {
-            IsSuccess    = false,
-            ErrorMessage = $"No pharmacy found with id {id}",
-            StatusCode   = HttpStatusCode.NoContent
-        };
-    }
-
+    
 
 
     /// <summary>
@@ -113,7 +84,7 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing the updated Pharmacy object if successful,
     /// or an error message if no pharmacy is found with the given id or if an exception occurs during the update.
     /// </returns>
-    public async Task<ServiceResult<Pharmacy>> UpdatePharmacyByIdAsync(Pharmacy updatedPharmacy)
+    public async Task<ServiceResult<Pharmacy>> UpdatePharmacyAsync(Pharmacy updatedPharmacy)
     {
         var searchResult = await GetPharmacyByIdAsync(updatedPharmacy.Id);
         if (searchResult.IsSuccess is false) return searchResult;
@@ -155,4 +126,60 @@ public class PharmacyService : IPharmacyService
 
     #endregion
 
+
+    #region Private Methods
+
+    /// <summary>
+    /// Asynchronously retrieves a pharmacy record by its unique identifier.
+    /// </summary>
+    /// <param name="id">The unique identifier of the pharmacy record to retrieve.</param>
+    /// <returns>
+    /// A ServiceResult containing the Pharmacy object if found, 
+    /// or an error message if no pharmacy record with the specified id exists.
+    /// </returns>
+    private async Task<ServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id)
+    {
+        var pharmacy = await _pharmacyDbContext.PharmacyList.FindAsync(id);
+
+        if (pharmacy is not null)
+        {
+            _logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
+            return new ServiceResult<Pharmacy>
+            {
+                IsSuccess  = true, 
+                Result     = pharmacy, 
+                StatusCode = HttpStatusCode.OK
+            };
+        }
+
+        _logger.LogWarning("No pharmacy found with id {id}", id);
+        return new ServiceResult<Pharmacy>
+        {
+            IsSuccess    = false,
+            ErrorMessage = $"No pharmacy found with id {id}",
+            StatusCode   = HttpStatusCode.NoContent
+        };
+    }
+
+
+    private IAsyncEnumerable<Pharmacy> ExecuteSearchProcedure(PharmacySearch searchCriteria)
+    {
+        var parameters = new SqlParameter[]
+        {
+            new("@SearchQuery",   searchCriteria.SearchQuery ?? (object)DBNull.Value),
+            new("@PageNumber",    searchCriteria.PageNumber),
+            new("@PageSize",      searchCriteria.PageSize),
+            new("@SortColumn",    string.IsNullOrEmpty(searchCriteria.SortColumn) ? "Id" : searchCriteria.SortColumn),
+            new("@SortDirection", string.IsNullOrEmpty(searchCriteria.SortDirection) ? "ASC" : searchCriteria.SortDirection)
+        };
+
+        const string sql = "EXEC sp_SearchPharmacyList @SearchQuery, @PageNumber, @PageSize, @SortColumn, @SortDirection";
+
+        return _pharmacyDbContext.PharmacyList
+            .FromSqlRaw(sql, parameters)
+            .AsAsyncEnumerable();
+    }
+
+
+    #endregion
 }

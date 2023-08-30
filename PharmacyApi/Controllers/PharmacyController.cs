@@ -26,26 +26,22 @@ public class PharmacyController : ControllerBase
     #endregion
 
     [HttpPost]
-    [Route("all")]
-    [Route("{id?}")]
-    public async Task<IActionResult> GetPharmacy(int? id = null)
+    [Route("search")]
+    public async Task<IActionResult> SearchPharmacyList(PharmacySearch? searchCriteria)
     {
-        if (id is null)
-        {
-            var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
-            return ControllerHelper.HandleResponse(pharmacyListResult);
-        }
-
-        var pharmacyResult = await _pharmacyService.GetPharmacyByIdAsync(id.Value);
-        return ControllerHelper.HandleResponse(pharmacyResult);
+        searchCriteria ??= new PharmacySearch();
+        
+        var searchResult = await _pharmacyService.SearchPharmacyAsync(searchCriteria);
+        
+        return ControllerHelper.HandleResponse(searchResult);
     }
     
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdatePharmacyById(Pharmacy pharmacy)
+    public async Task<IActionResult> UpdatePharmacy(Pharmacy pharmacy)
     {
-        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyByIdAsync(pharmacy);
+        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyAsync(pharmacy);
 
         return ControllerHelper.HandleResponse(updatedPharmacyResult);
     }

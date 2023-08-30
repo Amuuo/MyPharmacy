@@ -5,8 +5,7 @@ namespace PharmacyApi.Services.Interfaces;
 
 public interface IPharmacyService
 {
-    Task<ServiceResult<IAsyncEnumerable<Pharmacy>>> GetPharmacyListAsync();
-    Task<ServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id);
-    Task<ServiceResult<Pharmacy>> UpdatePharmacyByIdAsync(Pharmacy updatedPharmacy);
+    Task<ServiceResult<IAsyncEnumerable<Pharmacy>>> SearchPharmacyAsync(PharmacySearch searchCriteria);
+    Task<ServiceResult<Pharmacy>> UpdatePharmacyAsync(Pharmacy updatedPharmacy);
 }
 

@@ -21,7 +21,7 @@ export async function editPharmacy(pharmacy: Pharmacy) {
 }
 
 export const fetchPharmaciesAsync = (): ThunkAction<void, PharmacyState, unknown, AnyAction> => async dispatch => {
-    const response = await fetch('api/pharmacy/all', {
+    const response = await fetch('api/pharmacy/search', {
         method: 'POST'              
     });
     if (response.ok) {

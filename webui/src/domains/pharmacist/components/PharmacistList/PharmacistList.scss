@@ -1,0 +1,21 @@
+@keyframes grow-in {
+    from {
+        height: 0px;
+    }
+}
+
+.pharmacistGrid {
+    .MuiDataGrid-root {
+        background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
+    }
+    animation: grow-in 0.3s ease-in-out;
+    transition: 300ms;
+    height: 100%;
+}
+
+.pharmacist-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 1rem;
+}

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Models;
-using PharmacyApi.Services;
+using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
 
 namespace PharmacyApi.Controllers;
@@ -26,35 +26,23 @@ public class PharmacyController : ControllerBase
     #endregion
 
     [HttpPost]
-    [Route("all")]
-    [Route("{id?}")]
-    public async Task<IActionResult> GetPharmacy(int? id = null)
+    [Route("search")]
+    public async Task<IActionResult> SearchPharmacyList(PharmacySearch? searchCriteria)
     {
-        if (id is null)
-        {
-            var pharmacyListResult = await _pharmacyService.GetPharmacyListAsync();
-            return HandleResponse(pharmacyListResult);
-        }
-
-        var pharmacyResult = await _pharmacyService.GetPharmacyByIdAsync(id.Value);
-        return HandleResponse(pharmacyResult);
+        searchCriteria ??= new PharmacySearch();
+        
+        var searchResult = await _pharmacyService.SearchPharmacyAsync(searchCriteria);
+        
+        return ControllerHelper.HandleResponse(searchResult);
     }
     
 
     [HttpPost]
     [Route("update")]
-    public async Task<IActionResult> UpdatePharmacyById(Pharmacy pharmacy)
+    public async Task<IActionResult> UpdatePharmacy(Pharmacy pharmacy)
     {
-        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyByIdAsync(pharmacy);
+        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyAsync(pharmacy);
 
-        return HandleResponse(updatedPharmacyResult);
-    }
-
-
-    private IActionResult HandleResponse<T>(ServiceResult<T> serviceResponse)
-    {
-        return serviceResponse.IsSuccess
-            ? StatusCode((int)serviceResponse.StatusCode, serviceResponse.Result)
-            : StatusCode((int)serviceResponse.StatusCode, serviceResponse.ErrorMessage);
+        return ControllerHelper.HandleResponse(updatedPharmacyResult);
     }
 }

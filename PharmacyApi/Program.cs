@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
 using PharmacyApi.Data;
 using PharmacyApi.Services;
+using PharmacyApi.Services.Interfaces;
 using Serilog;
 
 
@@ -13,15 +14,6 @@ Log.Logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog();
-
-//var provider = builder.Services.BuildServiceProvider();
-//var config = provider.GetRequiredService<IConfiguration>();
-
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-//    var frontendURL = config.GetValue<string>("frontend_url");
-//});
 
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
@@ -38,6 +30,9 @@ builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options
 });
 
 builder.Services.AddTransient<IPharmacyService, PharmacyService>();
+builder.Services.AddTransient<IDeliveryService, DeliveryService>();
+builder.Services.AddTransient<IPharmacistService, PharmacistService>();
+builder.Services.AddTransient<IWarehouseService, WarehouseService>();
 
 var app = builder.Build();
 

@@ -1,0 +1,22 @@
+INSERT INTO delivery (warehouse_id, pharmacy_id, drug_name, unit_count, unit_price, delivery_date)
+VALUES
+(1, 1, 'Ibuprofen', 100, 5.99, '2023-01-01'),
+(2, 1, 'Paracetamol', 200, 3.49, '2023-01-02'),
+(1, 1, 'Aspirin', 150, 4.75, '2023-01-03'),
+(2, 1, 'Metformin', 120, 2.99, '2023-01-04'),
+(3, 2, 'Lisinopril', 90, 6.70, '2023-01-05'),
+(1, 2, 'Atorvastatin', 110, 8.50, '2023-01-06'),
+(2, 2, 'Simvastatin', 80, 7.25, '2023-01-07'),
+(3, 2, 'Levothyroxine', 70, 5.50, '2023-01-08'),
+(1, 3, 'Salbutamol', 60, 3.80, '2023-01-09'),
+(2, 3, 'Warfarin', 50, 9.99, '2023-01-10'),
+(3, 3, 'Ibuprofen', 40, 5.99, '2023-01-11'),
+(1, 3, 'Paracetamol', 30, 3.49, '2023-01-12'),
+(2, 4, 'Aspirin', 20, 4.75, '2023-01-13'),
+(3, 4, 'Metformin', 35, 2.99, '2023-01-14'),
+(1, 4, 'Lisinopril', 45, 6.70, '2023-01-15'),
+(2, 4, 'Atorvastatin', 55, 8.50, '2023-01-16'),
+(3, 5, 'Simvastatin', 65, 7.25, '2023-01-17'),
+(1, 5, 'Levothyroxine', 75, 5.50, '2023-01-18'),
+(2, 5, 'Salbutamol', 85, 3.80, '2023-01-19'),
+(3, 5, 'Warfarin', 95, 9.99, '2023-01-20');

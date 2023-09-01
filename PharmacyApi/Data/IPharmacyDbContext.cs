@@ -5,7 +5,10 @@ namespace PharmacyApi.Data
 {
     public interface IPharmacyDbContext : IDisposable
     {
-        DbSet<Pharmacy> PharmacyList { get; }
+        DbSet<Pharmacy>   PharmacyList   { get; }
+        DbSet<Delivery>   DeliveryList   { get; }
+        DbSet<Pharmacist> PharmacistList { get; }
+        DbSet<Warehouse>  WarehouseList  { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

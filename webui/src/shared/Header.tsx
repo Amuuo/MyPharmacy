@@ -1,13 +1,12 @@
 import { AppBar, Toolbar, Typography } from '@mui/material';
 
 
-function PharmacyAppBar() {
+function Header() {
   
-
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h6" sx={{fontFamily: 'monospace'}}>
+        <Typography variant="h6" sx={{fontFamily: 'monospace', width: '100vw'}}>
           MyPharmacy®
         </Typography>
       </Toolbar>
@@ -15,4 +14,4 @@ function PharmacyAppBar() {
   );
 }
 
-export default PharmacyAppBar;
+export default Header;

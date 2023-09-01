@@ -1,14 +1,13 @@
-import { useSelector } from "react-redux";
-import { PharmacyState } from "../../store/store";
+import { useSelector } from "../../../../store";
 import './PharmacySelectionCard.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 
 
 const PharamcySelectionCard: React.FC = () => {
 
-    const selectedPharmacy = useSelector((state: PharmacyState) => state.selectedPharmacy );
+    const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy );
 
-    if (!selectedPharmacy.name) {
+    if (!selectedPharmacy?.name) {
         return null;
     }
     

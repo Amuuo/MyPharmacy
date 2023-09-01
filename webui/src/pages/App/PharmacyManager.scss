@@ -11,9 +11,29 @@
 }
 
 div.App {
-  display: flex;
+  display: grid;
+  // box-sizing: content-box;
+  grid-template-columns: 60% 1fr;
+  grid-template-rows: 1fr;
   justify-content: center;
-  margin: 1rem;
+  // width: 100%;
+  margin: 2rem ;
+  grid-gap: 2rem;
+  max-width: 1280px;
+}
+
+.pharmacy-section {
+  display: flex;
+  flex-direction: column;
+  // width: 70%;
+  // max-width: 800px;
+  grid-gap: 2rem;
+}
+
+.card-section {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 1rem;
 }
 
 .logo {

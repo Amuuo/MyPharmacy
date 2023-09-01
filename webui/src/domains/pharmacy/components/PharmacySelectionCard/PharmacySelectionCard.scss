@@ -6,20 +6,19 @@
 
 @keyframes slide-in {
     from {
-        transform: translateX(150px);
+        transform: translateX(-150px);
     }
 }
 
 
 div.pharmacy-selection {
     background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
-    padding: 0.5rem;
-    margin: 1rem;
+    padding: 0.5rem;    
     border-radius: 0.3rem;
     border: 4px outset whitesmoke;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);   
     height: fit-content;
-    width: 300px;
+    max-width: 300px;    
     will-change: height, width;
     overflow: hidden;
     animation: slide-in 0.3s ease;    

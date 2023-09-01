@@ -1,4 +1,4 @@
-import { editPharmacy } from '../domains/pharmacy/pharmacyService';
+import { editPharmacy, fetchPharmacyList } from '../domains/pharmacy/pharmacyService';
 import { Pharmacy } from '../domains/pharmacy/pharmacy';
 import { createSlice } from '@reduxjs/toolkit';
 
@@ -27,11 +27,25 @@ export const pharmacySlice = createSlice({
                     : pharmacy);
         },
         setPharmacyList: (state, action) => { 
-            state.pharmacyList = action.payload;        
-            state.selectedPharmacy = state.pharmacyList[0];
+            state.pharmacyList = action.payload;            
         },
         setLoading: (state, action) => { state.loading = action.payload },
         setPharmacySelection: (state, action) => { state.selectedPharmacy = action.payload },        
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchPharmacyList.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchPharmacyList.fulfilled, (state, action) => {
+                state.loading = false;
+                state.pharmacyList = action.payload;
+            })
+            .addCase(fetchPharmacyList.rejected, (state, action) => {
+                state.loading = false;
+                console.error('Error fetching pharmacies:', action.error);
+                state.pharmacyList = [];
+            });
     }
 });
 

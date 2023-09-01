@@ -1,3 +1,4 @@
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Pharmacy } from './pharmacy';
 
 export async function editPharmacy(pharmacy: Pharmacy) {
@@ -17,4 +18,26 @@ export async function editPharmacy(pharmacy: Pharmacy) {
     }               
 }
 
+export type PaginationModel = {
+    PageSize: number;
+    Page: number;
+}
   
+export const fetchPharmacyList = createAsyncThunk(
+    'pharmacy/fetchPharmacyList',
+    async (paginationModel: PaginationModel, {}) => {
+        const response = await fetch('api/pharmacy/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                PageSize: paginationModel.PageSize, 
+                PageNumber: paginationModel.Page + 1 
+            })
+        });
+        
+        if (!response.ok)
+            throw new Error('Failed to fetch pharmacies');
+        
+        return await response.json();
+    }
+);

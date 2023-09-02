@@ -1,10 +1,10 @@
 ﻿using PharmacyApi.Models;
-using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services.Interfaces
 {
     public interface IWarehouseService
     {
-        Task<ServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync();
+        Task<IServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync();
     }
 }

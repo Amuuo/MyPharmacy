@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Text.Json.Serialization;
 
 namespace PharmacyApi.Models;
 
-public partial class Pharmacy
+public class Pharmacy
 {
     public int Id { get; set; }
 
@@ -23,5 +22,6 @@ public partial class Pharmacy
 
     public DateTime? UpdatedDate { get; set; }
 
-    public virtual ICollection<Pharmacist> Pharmacists { get; set; } = new List<Pharmacist>();
+    [JsonIgnore]
+    public ICollection<PharmacyPharmacist>? PharmacyPharmacists { get; set; } = null!;
 }

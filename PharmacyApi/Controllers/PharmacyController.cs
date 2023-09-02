@@ -25,11 +25,21 @@ public class PharmacyController : ControllerBase
 
     #endregion
 
+
+    [HttpGet]
+    [Route("{id}")]
+    public async Task<IActionResult> GetPharmacyById(int id)
+    {
+        var pharmacyResult = await _pharmacyService.GetPharmacyByIdAsync(id);
+
+        return ControllerHelper.HandleResponse(pharmacyResult);
+    }
+
     [HttpPost]
     [Route("search")]
-    public async Task<IActionResult> SearchPharmacyList(PharmacySearch? searchCriteria)
+    public async Task<IActionResult> SearchPharmacyList(PharmacyPagedSearch? searchCriteria)
     {
-        searchCriteria ??= new PharmacySearch();
+        searchCriteria ??= new PharmacyPagedSearch();
         
         var searchResult = await _pharmacyService.SearchPharmacyAsync(searchCriteria);
         

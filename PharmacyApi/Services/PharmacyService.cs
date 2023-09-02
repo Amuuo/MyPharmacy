@@ -1,11 +1,11 @@
-﻿using System.Data;
-using System.Net;
+﻿using System.Net;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services;
 
@@ -31,18 +31,18 @@ public class PharmacyService : IPharmacyService
     /// <summary>
     /// Asynchronously retrieves pharmacy records based on the search criteria.
     /// </summary>
-    /// <param name="searchCriteria">The search criteria object.</param>
+    /// <param name="pagedSearch">The search criteria object.</param>
     /// <returns>
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<ServiceResult<IAsyncEnumerable<Pharmacy>>> SearchPharmacyAsync(PharmacySearch searchCriteria)
+    public async Task<IServiceResult<IAsyncEnumerable<Pharmacy>>> SearchPharmacyAsync(PharmacyPagedSearch pagedSearch)
     {
         try
         {
-            _logger.LogDebug("Attempting to query pharmacy table with {@searchCriteria}", searchCriteria);
+            _logger.LogDebug("Attempting to query pharmacy table with {@pagedSearch}", pagedSearch);
 
-            var pharmacyList = ExecuteSearchProcedure(searchCriteria);
+            var pharmacyList = ExecuteSearchProcedure(pagedSearch);
 
             var hasResults = await pharmacyList.AnyAsync();
             if (hasResults is false)
@@ -84,7 +84,7 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing the updated Pharmacy object if successful,
     /// or an error message if no pharmacy is found with the given id or if an exception occurs during the update.
     /// </returns>
-    public async Task<ServiceResult<Pharmacy>> UpdatePharmacyAsync(Pharmacy updatedPharmacy)
+    public async Task<IServiceResult<Pharmacy>> UpdatePharmacyAsync(Pharmacy updatedPharmacy)
     {
         var searchResult = await GetPharmacyByIdAsync(updatedPharmacy.Id);
         if (searchResult.IsSuccess is false) return searchResult;
@@ -109,7 +109,7 @@ public class PharmacyService : IPharmacyService
             {
                 IsSuccess    = false,
                 ErrorMessage = $"Something went wrong when trying to save changes, ex: {ex}",
-                StatusCode   = HttpStatusCode.InternalServerError
+                StatusCode   = HttpStatusCode.NoContent
             };
         }
 
@@ -124,10 +124,6 @@ public class PharmacyService : IPharmacyService
         };
     }
 
-    #endregion
-
-
-    #region Private Methods
 
     /// <summary>
     /// Asynchronously retrieves a pharmacy record by its unique identifier.
@@ -137,7 +133,7 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing the Pharmacy object if found, 
     /// or an error message if no pharmacy record with the specified id exists.
     /// </returns>
-    private async Task<ServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id)
+    public async Task<IServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id)
     {
         var pharmacy = await _pharmacyDbContext.PharmacyList.FindAsync(id);
 
@@ -161,19 +157,42 @@ public class PharmacyService : IPharmacyService
         };
     }
 
+    public async Task<IServiceResult<int>> GetPharmacyTotalCountAsync()
+    {
+        var totalCount = await _pharmacyDbContext.PharmacyList.CountAsync();
 
-    private IAsyncEnumerable<Pharmacy> ExecuteSearchProcedure(PharmacySearch searchCriteria)
+        return new ServiceResult<int>
+        {
+            StatusCode = HttpStatusCode.OK,
+            IsSuccess  = true,
+            Result     = totalCount
+        };
+    }
+
+    #endregion
+
+
+    #region Private Methods
+
+
+    private IAsyncEnumerable<Pharmacy> ExecuteSearchProcedure(PharmacyPagedSearch pagedSearch)
     {
         var parameters = new SqlParameter[]
         {
-            new("@SearchQuery",   searchCriteria.SearchQuery ?? (object)DBNull.Value),
-            new("@PageNumber",    searchCriteria.PageNumber),
-            new("@PageSize",      searchCriteria.PageSize),
-            new("@SortColumn",    string.IsNullOrEmpty(searchCriteria.SortColumn) ? "Id" : searchCriteria.SortColumn),
-            new("@SortDirection", string.IsNullOrEmpty(searchCriteria.SortDirection) ? "ASC" : searchCriteria.SortDirection)
+            new("@SearchQuery",   pagedSearch.SearchCriteria.SearchQuery ?? (object)DBNull.Value),
+            new("@PageNumber",    pagedSearch.PageNumber),
+            new("@PageSize",      pagedSearch.PageSize),
+            new("@SortColumn",    pagedSearch.SortColumn),
+            new("@SortDirection", pagedSearch.SortDirection)
         };
 
-        const string sql = "EXEC sp_SearchPharmacyList @SearchQuery, @PageNumber, @PageSize, @SortColumn, @SortDirection";
+        const string sql = @"EXEC 
+                                sp_SearchPharmacyList 
+                                    @SearchQuery, 
+                                    @PageNumber, 
+                                    @PageSize, 
+                                    @SortColumn, 
+                                    @SortDirection";
 
         return _pharmacyDbContext.PharmacyList
             .FromSqlRaw(sql, parameters)

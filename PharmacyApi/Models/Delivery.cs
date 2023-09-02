@@ -1,16 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace PharmacyApi.Models;
 
-namespace PharmacyApi.Models;
-
-public partial class Delivery
+public class Delivery
 {
     public int Id { get; set; }
 
     public int WarehouseId { get; set; }
 
     public int PharmacyId { get; set; }
-
+     
     public string DrugName { get; set; } = null!;
 
     public int UnitCount { get; set; }

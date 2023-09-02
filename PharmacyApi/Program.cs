@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
 using PharmacyApi.Data;
 using PharmacyApi.Services;
 using PharmacyApi.Services.Interfaces;
@@ -21,6 +19,7 @@ builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -44,6 +43,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 //app.UseAuthentication();
 
 app.UseAuthorization();

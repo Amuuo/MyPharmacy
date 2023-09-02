@@ -9,6 +9,7 @@ namespace PharmacyApi.Data
         DbSet<Delivery>   DeliveryList   { get; }
         DbSet<Pharmacist> PharmacistList { get; }
         DbSet<Warehouse>  WarehouseList  { get; }
+        DbSet<PharmacyPharmacist> PharmacyPharmacists { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

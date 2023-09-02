@@ -5,12 +5,14 @@ import { createSlice } from '@reduxjs/toolkit';
 export type PharmacyState = {
     pharmacyList: Pharmacy[];
     loading: boolean;
+    initialLoad: boolean;
     selectedPharmacy: Pharmacy;    
 }
 
 const initialState: PharmacyState = {
     pharmacyList: [],
     loading: true,
+    initialLoad: true,
     selectedPharmacy: {},    
 };
 
@@ -39,6 +41,7 @@ export const pharmacySlice = createSlice({
             })
             .addCase(fetchPharmacyList.fulfilled, (state, action) => {
                 state.loading = false;
+                state.initialLoad = false;
                 state.pharmacyList = action.payload;
             })
             .addCase(fetchPharmacyList.rejected, (state, action) => {

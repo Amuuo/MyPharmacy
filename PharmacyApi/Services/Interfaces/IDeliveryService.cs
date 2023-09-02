@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using PharmacyApi.Models;
-using PharmacyApi.Utilities;
+﻿using PharmacyApi.Models;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services.Interfaces
 {
     public interface IDeliveryService
     {
-        Task<ServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryList();
+        Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryList();
     }
 }

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Utilities
 {
     public static class ControllerHelper
     {
-        public static IActionResult HandleResponse<T>(ServiceResult<T> serviceResponse)
+        public static IActionResult HandleResponse<T>(IServiceResult<T> serviceResponse)
         {
             return serviceResponse.IsSuccess 
                 ? new ObjectResult(serviceResponse.Result)

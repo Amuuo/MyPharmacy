@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import './PharmacistList.scss';
 import { LinearProgress } from '@mui/material';
-import { resetPharmacistList, setLoadingPharmacist, setPharmacistList } from '../../../../slices/pharmacistSlice';
+import { resetPharmacistList } from '../../../../slices/pharmacistSlice';
 import { AppDispatch, useSelector } from '../../../../store';
 import { fetchPharmacistList } from '../../pharmacistService';
 
@@ -13,6 +13,7 @@ const PharmacistList = () => {
     const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy);
     const pharmacistList = useSelector(state => state.pharmacist.pharmacistList);
     const loading = useSelector(state => state.pharmacist.loading);
+    const initialLoad = useSelector(state => state.pharmacy.initialLoad);
 
     useEffect(() => {
         dispatch(resetPharmacistList());
@@ -29,11 +30,12 @@ const PharmacistList = () => {
         { field: 'primaryRx', headerName: 'Primary RX', width: 120, editable: true, flex: 1 },
     ]), []);
     
+    if (initialLoad) return null;    
+    
     if (!selectedPharmacy?.id) {
-        return <h3 style={{textAlign: 'center'}}>Select a pharmacy</h3>;
+        return <h3 style={{textAlign: 'center'}}>Select Pharmacy to view Pharmacists</h3>;
     }
-    
-    
+        
     // Loading state
     if (loading) {
         return <div><LinearProgress /></div>;
@@ -45,7 +47,9 @@ const PharmacistList = () => {
     }
     return (
         <div className="pharmacistGrid">
-            <DataGrid
+            <DataGrid                
+                hideFooter={true}
+                sx={{overflow: 'hidden'}}
                 rows={pharmacistList}
                 columns={columns}
                 loading={loading}

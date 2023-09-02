@@ -1,7 +1,12 @@
-:root {
-  font-family: Merriweather, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
+$light-blue: #4375D9;
+$dark-blue: #2A3A59;
+$bright-blue: #1A80D9;
+$muted-blue: #4586BF;
+$teal-blue: #4AB0D9;
 
+:root {
+  font-family: 'Inter', 'Merriweather', system-ui, Avenir, Helvetica, Arial, sans-serif !important;
+  font-weight: 600;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background: rgb(36,36,36);
@@ -11,6 +16,38 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;  
+}
+
+.MuiDataGrid-root {
+  overflow: hidden !important;
+  overflow-y: hidden !important;
+  overflow-x: hidden !important;
+  background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
+  color: whitesmoke !important;        
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);        
+  z-index: 2; 
+  white-space: nowrap;   
+  border: 4px outset whitesmoke !important;
+}
+
+.MuiDataGrid-footerContainer {
+  height: 20px !important;
+  min-height: 40px !important;
+}
+
+.MuiTablePagination-toolbar {
+  // min-height: 30px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  overflow: hidden;
+}
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 *, *::before, *::after {

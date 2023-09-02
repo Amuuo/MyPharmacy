@@ -1,7 +1,7 @@
 import { pharmacistSlice } from './slices/pharmacistSlice';
 import { pharmacySlice } from './slices/pharmacySlice';
 import { configureStore } from '@reduxjs/toolkit';
-import { TypedUseSelectorHook, useSelector as untypedUseSelector, useDispatch } from 'react-redux';
+import { TypedUseSelectorHook, useSelector as untypedUseSelector } from 'react-redux';
 
 const store = configureStore({
     reducer: {

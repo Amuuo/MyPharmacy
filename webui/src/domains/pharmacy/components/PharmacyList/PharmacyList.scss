@@ -15,7 +15,7 @@
 }
 
 .MuiDataGrid-root {
-    overflow: hidden;
+    overflow: hidden !important;
     background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
     color: whitesmoke !important;        
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);        

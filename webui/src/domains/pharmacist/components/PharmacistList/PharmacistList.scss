@@ -1,6 +1,7 @@
 @keyframes grow-in {
     from {
         height: 0px;
+        transform: scale(0.5);
     }
 }
 
@@ -9,8 +10,12 @@
         background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
     }
     animation: grow-in 0.3s ease-in-out;
-    transition: 300ms;
+    transition: all 300ms ease;
+    will-change: transform;
     height: 100%;
+    max-width: 500px;
+    width: 100%;
+    place-self: end;
 }
 
 .pharmacist-loading {

@@ -13,14 +13,17 @@
 div.App {
   display: grid;
   // box-sizing: content-box;
-  grid-template-columns: 60% 1fr;
+  grid-template-columns: 65% 1fr;
   grid-template-rows: 1fr;
   justify-content: center;
-  // width: 100%;
+  width: 80%;
+  min-width: 550px;
   margin: 2rem ;
   grid-gap: 2rem;
   max-width: 1280px;
 }
+
+
 
 .pharmacy-section {
   display: flex;

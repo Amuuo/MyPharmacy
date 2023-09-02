@@ -5,9 +5,12 @@ function Header() {
   
   return (
     <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" sx={{fontFamily: 'monospace', width: '100vw'}}>
+      <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
+        <Typography variant="h6" sx={{fontFamily: 'monospace' }}>
           MyPharmacy®
+        </Typography>
+        <Typography variant='body1' sx={{fontFamily: 'monospace', textAlign: 'end' }}>
+          Environment: {import.meta.env.MODE}
         </Typography>
       </Toolbar>
     </AppBar>

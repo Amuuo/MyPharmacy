@@ -4,6 +4,7 @@ using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services
 {
@@ -18,10 +19,9 @@ namespace PharmacyApi.Services
             _logger = logger;
             _dbContext = dbContext;
         }
-        public async Task<ServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistList()
+        public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistListAsync()
         {
             var pharmacists = _dbContext.PharmacistList
-                .Include(p => p.Pharmacy)
                 .AsAsyncEnumerable();
 
             var hasPharmacists = await pharmacists.AnyAsync();
@@ -42,6 +42,42 @@ namespace PharmacyApi.Services
                 StatusCode   = HttpStatusCode.NoContent,
                 ErrorMessage = "No pharmacists found"
             };
+        }
+
+        public Task<IServiceResult<Pharmacist>> GetPharmacistByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistListByPharmacyIdAsync(int pharmacyId)
+        {
+            try
+            {
+                _logger.LogDebug("Attempting to retrieve pharmacists for pharmacy with ID {PharmacyId}", pharmacyId);
+
+                var pharmacistList = _dbContext.PharmacyPharmacists
+                    .Where(pp => pp.PharmacyId == pharmacyId)
+                    .Select(pp => pp.Pharmacist)
+                    .AsAsyncEnumerable();
+
+                _logger.LogDebug("Retrieved pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
+                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
+                {
+                    IsSuccess  = true,
+                    StatusCode = HttpStatusCode.OK,
+                    Result     = pharmacistList
+                };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while retrieving pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
+                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
+                {
+                    IsSuccess    = false,
+                    ErrorMessage = $"An error occurred while retrieving pharmacists for pharmacy with ID {pharmacyId}. Exception: {ex}",
+                    StatusCode   = HttpStatusCode.InternalServerError
+                };
+            }
         }
     }
 }

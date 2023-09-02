@@ -3,6 +3,7 @@ using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services
 {
@@ -18,7 +19,7 @@ namespace PharmacyApi.Services
             _dbContext = dbContext;
         }
 
-        public async Task<ServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync()
+        public async Task<IServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync()
         {
             var warehouseList = _dbContext.WarehouseList.AsAsyncEnumerable();
 

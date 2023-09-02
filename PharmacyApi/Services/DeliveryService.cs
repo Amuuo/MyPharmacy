@@ -4,6 +4,7 @@ using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services
 {
@@ -19,7 +20,7 @@ namespace PharmacyApi.Services
             _dbContext = dbContext;
         }
 
-        public async Task<ServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryList()
+        public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryList()
         {
             var deliveryList = _dbContext.DeliveryList
                 .Include(d => d.Pharmacy)

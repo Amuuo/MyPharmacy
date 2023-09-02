@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace PharmacyApi.Models;
 
-namespace PharmacyApi.Models;
-
-public partial class Warehouse
+public class Warehouse
 {
     public int Id { get; set; }
 

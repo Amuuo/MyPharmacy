@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
 
@@ -23,8 +22,18 @@ namespace PharmacyApi.Controllers
         [Route("")]
         public async Task<IActionResult> GetPharmacistList()
         {
-            var result = await _pharmacistService.GetPharmacistList();
+            var result = await _pharmacistService.GetPharmacistListAsync();
             return ControllerHelper.HandleResponse(result);
+        }
+
+
+        [HttpGet]
+        [Route("{pharmacyId}")]
+        public async Task<IActionResult> GetPharmacistListByPharmacyId(int pharmacyId)
+        {
+            var pharmacistResult = await _pharmacistService.GetPharmacistListByPharmacyIdAsync(pharmacyId);
+
+            return ControllerHelper.HandleResponse(pharmacistResult);
         }
     }
 }

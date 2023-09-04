@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import store from './store.ts';
+import store from './store/store.ts';
 import PharmacyManager  from './pages/PharmacyManager/PharmacyManager.tsx';
 import './index.scss'
 import { Provider } from 'react-redux'

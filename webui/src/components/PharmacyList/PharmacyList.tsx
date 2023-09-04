@@ -1,14 +1,14 @@
 import React from 'react';
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { updatePharmacy, setPharmacySelection } from '../../../../slices/pharmacySlice';
+import { updatePharmacy, setPharmacySelection } from '../../store/slices/pharmacySlice';
 import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from '@mui/x-data-grid';
 import './PharmacyList.scss';
-import { Pharmacy } from '../../pharmacy';
+import { Pharmacy } from '../../models/pharmacy';
 import _ from 'lodash';
-import { fetchPharmacyList } from '../../pharmacyService';
-import { useSelector } from '../../../../store';
-import { resetPharmacistList } from '../../../../slices/pharmacistSlice';
+import { fetchPharmacyList } from '../../services/pharmacyService';
+import { useSelector } from '../../store/store';
+import { resetPharmacistList } from '../../store/slices/pharmacistSlice';
 import { CircularProgress } from '@mui/material';
 
 

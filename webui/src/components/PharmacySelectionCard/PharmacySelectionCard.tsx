@@ -1,4 +1,4 @@
-import { useSelector } from "../../../../store";
+import { useSelector } from "../../store/store";
 import './PharmacySelectionCard.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 

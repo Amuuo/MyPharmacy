@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Pharmacist } from "../domains/pharmacist/pharmacist";
+import { Pharmacist } from "../../models/pharmacist";
 
 export type PharmacistState = {
     pharmacistList: Pharmacist[];

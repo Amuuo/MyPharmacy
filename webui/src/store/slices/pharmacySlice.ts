@@ -1,5 +1,5 @@
-import { editPharmacy, fetchPharmacyList } from '../domains/pharmacy/pharmacyService';
-import { Pharmacy } from '../domains/pharmacy/pharmacy';
+import { editPharmacy, fetchPharmacyList } from '../../services/pharmacyService';
+import { Pharmacy } from '../../models/pharmacy';
 import { createSlice } from '@reduxjs/toolkit';
 
 export type PharmacyState = {

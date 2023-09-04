@@ -47,7 +47,7 @@ public class PharmacyController : ControllerBase
     }
     
 
-    [HttpPost]
+    [HttpPut]
     [Route("update")]
     public async Task<IActionResult> UpdatePharmacy(Pharmacy pharmacy)
     {

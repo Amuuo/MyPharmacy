@@ -21,28 +21,45 @@ namespace PharmacyApi.Services
         }
         public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistListAsync()
         {
-            var pharmacists = _dbContext.PharmacistList
-                .AsAsyncEnumerable();
-
-            var hasPharmacists = await pharmacists.AnyAsync();
-
-            if (hasPharmacists)
+            try
             {
+                _logger.LogDebug("Attempting to retrieve all pharmacists.");
+
+                var pharmacists = _dbContext.PharmacistList.AsAsyncEnumerable();
+
+                var hasPharmacists = await pharmacists.AnyAsync();
+
+                if (hasPharmacists)
+                {
+                    _logger.LogDebug("Successfully retrieved all pharmacists.");
+                    return new ServiceResult<IAsyncEnumerable<Pharmacist>>
+                    {
+                        IsSuccess  = true,
+                        StatusCode = HttpStatusCode.OK,
+                        Result     = pharmacists
+                    };
+                }
+
+                _logger.LogWarning("No pharmacists found.");
                 return new ServiceResult<IAsyncEnumerable<Pharmacist>>
                 {
-                    IsSuccess  = true,
-                    StatusCode = HttpStatusCode.OK,
-                    Result     = pharmacists
+                    IsSuccess    = false,
+                    StatusCode   = HttpStatusCode.NoContent,
+                    ErrorMessage = "No pharmacists found"
                 };
             }
-
-            return new ServiceResult<IAsyncEnumerable<Pharmacist>>
+            catch (Exception ex)
             {
-                IsSuccess    = false,
-                StatusCode   = HttpStatusCode.NoContent,
-                ErrorMessage = "No pharmacists found"
-            };
+                _logger.LogError(ex, "An error occurred while retrieving all pharmacists.");
+                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
+                {
+                    IsSuccess    = false,
+                    ErrorMessage = $"An error occurred while retrieving all pharmacists. Exception: {ex}",
+                    StatusCode   = HttpStatusCode.InternalServerError
+                };
+            }
         }
+
 
         public Task<IServiceResult<Pharmacist>> GetPharmacistByIdAsync(int id)
         {

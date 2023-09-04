@@ -33,17 +33,15 @@ const PharmacistList = () => {
     if (initialLoad) return null;    
     
     if (!selectedPharmacy?.id) {
-        return <h3 style={{textAlign: 'center'}}>Select Pharmacy to view Pharmacists</h3>;
+        return <h3 style={{textAlign: 'center', gridRow: 2, gridColumn: 1}}>Select Pharmacy to view Pharmacists</h3>;
     }
-        
-    // Loading state
+       
     if (loading) {
-        return <div><LinearProgress /></div>;
+        return <div style={{gridRow: 2, gridColumn: 1}}><LinearProgress /></div>;
     }
     
-    // No pharmacists found
     if (!loading && (pharmacistList.length === 0)) {
-        return <h3 style={{textAlign: 'center'}}>No pharmacists found...</h3>;
+        return <h3 style={{textAlign: 'center', gridRow: 2, gridColumn: 1}}>No pharmacists found...</h3>;
     }
     return (
         <div className="pharmacistGrid">

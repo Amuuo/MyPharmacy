@@ -23,3 +23,9 @@
     white-space: nowrap;   
     border: 4px outset whitesmoke !important;
 }
+
+.PharmacyGrid {
+    max-width: 600px;
+    height: fit-content;
+    grid-area: pharmacy;
+}

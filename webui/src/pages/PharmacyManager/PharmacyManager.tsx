@@ -6,14 +6,10 @@ import './PharmacyManager.scss';
 export default function PharmacyManager() {    
         
     return (
-        <div className='App'>                        
-            <div className="pharmacy-section">
-                <PharmacyList/>                
-                <PharmacistList/>
-            </div>
-            <div className="card-section">
-                <PharamcySelectionCard/>
-            </div>
+        <div className='PharmacyManager'>                                    
+                <PharmacyList/>                            
+                <PharmacistList/>            
+                <PharamcySelectionCard/>                           
         </div>
     );        
 }

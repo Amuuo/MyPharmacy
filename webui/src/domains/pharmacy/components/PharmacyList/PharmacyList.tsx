@@ -14,10 +14,12 @@ import { CircularProgress } from '@mui/material';
 
 const PharmacyList: React.FC = () => {
     
-    const dispatch = useDispatch();
+    const dispatch     = useDispatch();
     const pharmacyList = useSelector(state => state.pharmacy.pharmacyList);    
-    const loading = useSelector(state => state.pharmacy.loading);
-    const initialLoad = useSelector(state => state.pharmacy.initialLoad);
+    const loading      = useSelector(state => state.pharmacy.loading);
+    const initialLoad  = useSelector(state => state.pharmacy.initialLoad);
+    const totalCount   = useSelector(state => state.pharmacy.totalCount);
+    
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
         pageSize: 5
@@ -73,12 +75,12 @@ const PharmacyList: React.FC = () => {
                 columns={columns}    
                 loading={loading}   
                 hideFooterSelectedRowCount={true}  
-                rowCount={20}   
+                rowCount={totalCount}   
                 pagination
                 paginationMode='server'    
                 paginationModel={paginationModel}
                 onPaginationModelChange={handlePaginationModelChange}                
-                pageSizeOptions={[5, 10]}                                                                          
+                pageSizeOptions={[5, 10, 15]}                                                                          
                 processRowUpdate={handleEditCellChange}
                 onRowSelectionModelChange={handlePharmacySelectionChange}     
                 rowHeight={30}    

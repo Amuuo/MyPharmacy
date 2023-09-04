@@ -6,7 +6,8 @@ export type PharmacyState = {
     pharmacyList: Pharmacy[];
     loading: boolean;
     initialLoad: boolean;
-    selectedPharmacy: Pharmacy;    
+    selectedPharmacy: Pharmacy; 
+    totalCount: number;   
 }
 
 const initialState: PharmacyState = {
@@ -14,6 +15,7 @@ const initialState: PharmacyState = {
     loading: true,
     initialLoad: true,
     selectedPharmacy: {},    
+    totalCount: 0
 };
 
 export const pharmacySlice = createSlice({
@@ -42,7 +44,8 @@ export const pharmacySlice = createSlice({
             .addCase(fetchPharmacyList.fulfilled, (state, action) => {
                 state.loading = false;
                 state.initialLoad = false;
-                state.pharmacyList = action.payload;
+                state.pharmacyList = action.payload.data;
+                state.totalCount = action.payload.totalCount;
             })
             .addCase(fetchPharmacyList.rejected, (state, action) => {
                 state.loading = false;

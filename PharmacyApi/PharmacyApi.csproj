@@ -30,7 +30,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Utilities\Helpers\" />
     <Folder Include="Utilities\Implementation\" />
   </ItemGroup>
 

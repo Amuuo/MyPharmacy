@@ -1,10 +1,10 @@
-﻿using System.Net;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services;
@@ -40,18 +40,25 @@ public class PharmacyService : IPharmacyService
     {
         try
         {
-            var pharmacyList = ExecuteSearchProcedure(pagedSearch);
+            var pharmacyList = ExecutePharmacySearchProcedure(pagedSearch);
 
             if (await pharmacyList.AnyAsync() is false)
             {
-                return BuildNoContentResult<IPagedResult<Pharmacy>>("No pharmacies found with search criteria");
+                return ServiceHelper
+                    .BuildNoContentResult<IPagedResult<Pharmacy>>("No pharmacies found with search criteria");
             }
 
-            return await BuildPagedResultAsync(pharmacyList, pagedSearch);
+            _logger.LogDebug("Retrieved pharmacies.");
+            
+            return await ServiceHelper
+                .BuildPagedResultAsync(pharmacyList, 
+                                       pagedSearch, 
+                                       await _pharmacyDbContext.PharmacyList.CountAsync());
         }
         catch (Exception ex)
         {
-            return BuildErrorServiceResult<IPagedResult<Pharmacy>>(ex, "searching for pharmacies");
+            return ServiceHelper
+                .BuildErrorServiceResult<IPagedResult<Pharmacy>>(ex, "searching for pharmacies");
         }
     }
     
@@ -84,13 +91,15 @@ public class PharmacyService : IPharmacyService
         }
         catch (Exception ex)
         {
-            return BuildErrorServiceResult<Pharmacy>(ex, "updating a pharmacy record");
+            _logger.LogError(ex, "An error occurred while attempting to update pharmacy record");
+            
+            return ServiceHelper.BuildErrorServiceResult<Pharmacy>(ex, "updating a pharmacy record");
         }
 
         _logger.LogDebug("Updated pharmacy record: {@pharmacy} with changes from request {@updateContent}", 
                          existingPharmacy, updatedPharmacy);
 
-        return BuildSuccessServiceResult(existingPharmacy);
+        return ServiceHelper.BuildSuccessServiceResult(existingPharmacy);
     }
 
 
@@ -108,12 +117,12 @@ public class PharmacyService : IPharmacyService
 
         if (pharmacy is null)
         {
-            return BuildNoContentResult<Pharmacy>($"No pharmacy found with id {id}");
+            return ServiceHelper.BuildNoContentResult<Pharmacy>($"No pharmacy found with id {id}");
         }
 
         _logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
         
-        return BuildSuccessServiceResult(pharmacy);
+        return ServiceHelper.BuildSuccessServiceResult(pharmacy);
     }
 
 
@@ -123,7 +132,7 @@ public class PharmacyService : IPharmacyService
     #region Private Methods
 
 
-    private IAsyncEnumerable<Pharmacy> ExecuteSearchProcedure(PharmacyPagedSearch pagedSearch)
+    private IAsyncEnumerable<Pharmacy> ExecutePharmacySearchProcedure(PharmacyPagedSearch pagedSearch)
     {
         _logger.LogDebug("Attempting to query pharmacy table with {@pagedSearch}", pagedSearch);
 
@@ -147,58 +156,6 @@ public class PharmacyService : IPharmacyService
         return _pharmacyDbContext.PharmacyList
             .FromSqlRaw(sql, parameters)
             .AsAsyncEnumerable();
-    }
-
-
-    private IServiceResult<T> BuildNoContentResult<T>(string message)
-    {
-        _logger.LogWarning(message);
-
-        return new ServiceResult<T>
-        {
-            IsSuccess    = false,
-            ErrorMessage = message,
-            StatusCode   = HttpStatusCode.OK
-        };
-    }
-
-
-    private IServiceResult<T> BuildErrorServiceResult<T>(Exception ex, string operation)
-    {
-        _logger.LogError(ex, $"An error occurred while {operation}.");
-    
-        return new ServiceResult<T>
-        {
-            IsSuccess    = false,
-            ErrorMessage = $"An error occurred while {operation}, ex: {ex}",
-            StatusCode   = HttpStatusCode.InternalServerError
-        };
-    }
-
-    private static IServiceResult<T> BuildSuccessServiceResult<T>(T result)
-    {
-        return new ServiceResult<T>
-        {
-            IsSuccess  = true,
-            Result     = result,
-            StatusCode = HttpStatusCode.OK
-        };
-    }
-
-
-    private async Task<IServiceResult<IPagedResult<Pharmacy>>> 
-        BuildPagedResultAsync(IAsyncEnumerable<Pharmacy> pharmacyList, 
-                                       PharmacyPagedSearch pagedSearch)
-    {
-        _logger.LogDebug("Retrieved pharmacies.");
-
-        var pagedResult = await PagedResultHelper
-            .BuildPagedResultAsync(pharmacyList, 
-                                   pagedSearch.PageNumber, 
-                                   pagedSearch.PageSize, 
-                                   await _pharmacyDbContext.PharmacyList.CountAsync());
-
-        return BuildSuccessServiceResult(pagedResult);
     }
 
 

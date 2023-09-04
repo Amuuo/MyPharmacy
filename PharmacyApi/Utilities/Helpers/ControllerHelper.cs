@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Utilities.Interfaces;
 
-namespace PharmacyApi.Utilities
+namespace PharmacyApi.Utilities.Helpers
 {
     public static class ControllerHelper
     {

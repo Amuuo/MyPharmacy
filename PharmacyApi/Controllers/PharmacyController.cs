@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Helpers;
 
 namespace PharmacyApi.Controllers;
 

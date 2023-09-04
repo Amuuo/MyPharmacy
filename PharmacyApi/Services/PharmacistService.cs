@@ -1,9 +1,8 @@
-﻿using System.Net;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
-using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services
@@ -27,36 +26,21 @@ namespace PharmacyApi.Services
 
                 var pharmacists = _dbContext.PharmacistList.AsAsyncEnumerable();
 
-                var hasPharmacists = await pharmacists.AnyAsync();
-
-                if (hasPharmacists)
+                if (await pharmacists.AnyAsync())
                 {
                     _logger.LogDebug("Successfully retrieved all pharmacists.");
-                    return new ServiceResult<IAsyncEnumerable<Pharmacist>>
-                    {
-                        IsSuccess  = true,
-                        StatusCode = HttpStatusCode.OK,
-                        Result     = pharmacists
-                    };
+
+                    return ServiceHelper.BuildSuccessServiceResult(pharmacists);
                 }
 
                 _logger.LogWarning("No pharmacists found.");
-                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
-                {
-                    IsSuccess    = false,
-                    StatusCode   = HttpStatusCode.NoContent,
-                    ErrorMessage = "No pharmacists found"
-                };
+                return ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Pharmacist>>("No pharmacists found.");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while retrieving all pharmacists.");
-                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
-                {
-                    IsSuccess    = false,
-                    ErrorMessage = $"An error occurred while retrieving all pharmacists. Exception: {ex}",
-                    StatusCode   = HttpStatusCode.InternalServerError
-                };
+
+                return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, "retrieving all pharmacists.");
             }
         }
 
@@ -78,22 +62,15 @@ namespace PharmacyApi.Services
                     .AsAsyncEnumerable();
 
                 _logger.LogDebug("Retrieved pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
-                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
-                {
-                    IsSuccess  = true,
-                    StatusCode = HttpStatusCode.OK,
-                    Result     = pharmacistList
-                };
+                
+                return ServiceHelper.BuildSuccessServiceResult(pharmacistList);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while retrieving pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
-                return new ServiceResult<IAsyncEnumerable<Pharmacist>>
-                {
-                    IsSuccess    = false,
-                    ErrorMessage = $"An error occurred while retrieving pharmacists for pharmacy with ID {pharmacyId}. Exception: {ex}",
-                    StatusCode   = HttpStatusCode.InternalServerError
-                };
+
+                return ServiceHelper
+                    .BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, $"retrieving pharmacists for pharmacy with ID {pharmacyId}");
             }
         }
     }

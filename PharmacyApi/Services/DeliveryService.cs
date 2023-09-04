@@ -1,9 +1,8 @@
-﻿using System.Net;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
-using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services
@@ -22,79 +21,67 @@ namespace PharmacyApi.Services
 
         public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryList()
         {
-            var deliveryList = _dbContext.DeliveryList
-                .Include(d => d.Pharmacy)
-                .Include(d => d.Warehouse)
-                .AsAsyncEnumerable();
-
-            var hasDeliveries = await deliveryList.AnyAsync();
-            if (hasDeliveries)
+            try
             {
-                return new ServiceResult<IAsyncEnumerable<Delivery>>
-                {
-                    IsSuccess = true, Result = deliveryList, StatusCode = HttpStatusCode.OK
-                };
+                var deliveryList = _dbContext.DeliveryList.AsAsyncEnumerable();
+
+                var hasDeliveries = await deliveryList.AnyAsync();
+
+                return hasDeliveries
+                    ? ServiceHelper.BuildSuccessServiceResult(deliveryList)
+                    : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Delivery>>("No deliveries found");
             }
-
-            return new ServiceResult<IAsyncEnumerable<Delivery>>
+            catch (Exception ex)
             {
-                IsSuccess    = false,
-                ErrorMessage = "No deliveries found",
-                StatusCode   = HttpStatusCode.NoContent
-            };
-
-
+                return ServiceHelper
+                    .BuildErrorServiceResult<IAsyncEnumerable<Delivery>>(ex, "searching for deliveries");
+            }
         }
 
         public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByPharmacyId(int pharmacyId)
         {
-            var deliveryListByPharmacy = _dbContext.DeliveryList
-                //.Include(d => d.Pharmacy)
-                //.Include(d => d.Warehouse)
-                .Where(d => d.Pharmacy.Id == pharmacyId)
-                .AsAsyncEnumerable();
-
-            var hasDeliveries = await deliveryListByPharmacy.AnyAsync();
-            if (hasDeliveries)
+            try
             {
-                return new ServiceResult<IAsyncEnumerable<Delivery>>
-                {
-                    IsSuccess = true, Result = deliveryListByPharmacy, StatusCode = HttpStatusCode.OK
-                };
+                var deliveryListByPharmacy = _dbContext.DeliveryList
+                    .Where(d => d.Pharmacy.Id == pharmacyId)
+                    .AsAsyncEnumerable();
+
+                var hasDeliveries = await deliveryListByPharmacy.AnyAsync();
+
+                return hasDeliveries
+                    ? ServiceHelper.BuildSuccessServiceResult(deliveryListByPharmacy)
+                    : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Delivery>>(
+                            $"No deliveries found for the pharmacy with id {pharmacyId}");
             }
-
-            return new ServiceResult<IAsyncEnumerable<Delivery>>
+            catch (Exception ex)
             {
-                IsSuccess    = false,
-                ErrorMessage = "No deliveries found for the given pharmacy",
-                StatusCode   = HttpStatusCode.NoContent
-            };
+                return ServiceHelper
+                    .BuildErrorServiceResult<IAsyncEnumerable<Delivery>>(ex,
+                        $"searching for deliveries for pharmacy with id {pharmacyId}");
+            }
         }
 
 
         public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByWarehouseId(int warehouseId)
         {
-            var deliveryListByWarehouse = _dbContext.DeliveryList
-                //.Include(d => d.Pharmacy)
-                //.Include(d => d.Warehouse)
-                .Where(d => d.Warehouse.Id == warehouseId)
-                .AsAsyncEnumerable();
-
-            var hasDeliveries = await deliveryListByWarehouse.AnyAsync();
-            if (hasDeliveries)
+            try
             {
-                return new ServiceResult<IAsyncEnumerable<Delivery>>
-                {
-                    IsSuccess = true, Result = deliveryListByWarehouse, StatusCode = HttpStatusCode.OK
-                };
+                var deliveryListByWarehouse = _dbContext.DeliveryList
+                    .Where(d => d.Warehouse.Id == warehouseId)
+                    .AsAsyncEnumerable();
+
+                var hasDeliveries = await deliveryListByWarehouse.AnyAsync();
+
+                return hasDeliveries
+                    ? ServiceHelper.BuildSuccessServiceResult(deliveryListByWarehouse)
+                    : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Delivery>>(
+                        $"No deliveries found for the warehouse with id {warehouseId}");
             }
-
-            return new ServiceResult<IAsyncEnumerable<Delivery>>
+            catch (Exception ex)
             {
-                IsSuccess    = false,
-                ErrorMessage = "No deliveries found for the given warehouse",
-                StatusCode   = HttpStatusCode.NoContent
-            };
+                return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Delivery>>(ex,
+                        $"searching for deliveries for warehouse with id {warehouseId}");
+            }
         }
 
     }

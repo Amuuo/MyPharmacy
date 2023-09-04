@@ -1,8 +1,7 @@
-﻿using System.Net;
-using PharmacyApi.Data;
+﻿using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
-using PharmacyApi.Utilities;
+using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services
@@ -21,26 +20,22 @@ namespace PharmacyApi.Services
 
         public async Task<IServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync()
         {
-            var warehouseList = _dbContext.WarehouseList.AsAsyncEnumerable();
-
-            var hasWarehouses = await warehouseList.AnyAsync();
-
-            if (hasWarehouses)
+            try
             {
-                return new ServiceResult<IAsyncEnumerable<Warehouse>>
-                {
-                    IsSuccess  = true,
-                    StatusCode = HttpStatusCode.OK,
-                    Result     = warehouseList
-                };
+                var warehouseList = _dbContext.WarehouseList.AsAsyncEnumerable();
+
+                var hasWarehouses = await warehouseList.AnyAsync();
+
+                return hasWarehouses
+                    ? ServiceHelper.BuildSuccessServiceResult(warehouseList)
+                    : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Warehouse>>(
+                        "No warehouses found");
             }
-
-            return new ServiceResult<IAsyncEnumerable<Warehouse>>
+            catch (Exception ex)
             {
-                IsSuccess    = false,
-                StatusCode   = HttpStatusCode.NoContent,
-                ErrorMessage = "No warehouses found"
-            };
+                return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Warehouse>>(
+                        ex, "searching for warehouses");
+            }
         }
     }
 }

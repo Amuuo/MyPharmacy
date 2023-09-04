@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import './PharmacistList.scss';
 import { LinearProgress } from '@mui/material';
-import { resetPharmacistList } from '../../../../slices/pharmacistSlice';
-import { AppDispatch, useSelector } from '../../../../store';
-import { fetchPharmacistList } from '../../pharmacistService';
+import { resetPharmacistList } from '../../store/slices/pharmacistSlice';
+import { AppDispatch, useSelector } from '../../store/store';
+import { fetchPharmacistList } from '../../services/pharmacistService';
 
 const PharmacistList = () => {
 

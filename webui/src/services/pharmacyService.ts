@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { Pharmacy } from './pharmacy';
+import { Pharmacy } from '../models/pharmacy';
 
 export async function editPharmacy(pharmacy: Pharmacy) {
     try {
-        // const response = await fetch(`https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/update`, {
-        const response = await fetch(`api/pharmacy/update`, {
-            method: 'POST',
+        const response = await fetch(`https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/update`, {
+        // const response = await fetch(`api/pharmacy/update`, {
+            method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pharmacy)
         });
@@ -27,8 +27,8 @@ export type PaginationModel = {
 export const fetchPharmacyList = createAsyncThunk(
     'pharmacy/fetchPharmacyList',
     async (paginationModel: PaginationModel, {}) => {
-        // const response = await fetch('https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/search', {
-        const response = await fetch("api/pharmacy/search", {
+        const response = await fetch('https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/search', {
+        // const response = await fetch("api/pharmacy/search", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

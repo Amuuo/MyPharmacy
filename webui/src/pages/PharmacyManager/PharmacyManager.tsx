@@ -1,6 +1,6 @@
-import PharmacistList from '../../domains/pharmacist/components/PharmacistList/PharmacistList';
-import PharmacyList from '../../domains/pharmacy/components/PharmacyList/PharmacyList';
-import PharamcySelectionCard from '../../domains/pharmacy/components/PharmacySelectionCard/PharmacySelectionCard';
+import PharmacistList from '../../components/PharmacistList/PharmacistList';
+import PharmacyList from '../../components/PharmacyList/PharmacyList';
+import PharamcySelectionCard from '../../components/PharmacySelectionCard/PharmacySelectionCard';
 import './PharmacyManager.scss';
 
 export default function PharmacyManager() {    

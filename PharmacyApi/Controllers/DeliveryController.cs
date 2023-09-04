@@ -26,5 +26,23 @@ namespace PharmacyApi.Controllers
 
             return ControllerHelper.HandleResponse(result);
         }
+
+        [HttpGet]
+        [Route("pharmacy/{pharmacyId}")]
+        public async Task<IActionResult> GetDeliveryListByPharmacyId(int pharmacyId)
+        {
+            var result = await _deliveryService.GetDeliveryListByPharmacyId(pharmacyId);
+
+            return ControllerHelper.HandleResponse(result);
+        }
+
+        [HttpGet]
+        [Route("warehouse/{warehouseId}")]
+        public async Task<IActionResult> GetDelieveryListByWarehouseId(int warehouseId)
+        {
+            var result = await _deliveryService.GetDeliveryListByWarehouseId(warehouseId);
+
+            return ControllerHelper.HandleResponse(result);
+        }
     }
 }

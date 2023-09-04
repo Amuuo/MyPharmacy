@@ -45,5 +45,57 @@ namespace PharmacyApi.Services
 
 
         }
+
+        public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByPharmacyId(int pharmacyId)
+        {
+            var deliveryListByPharmacy = _dbContext.DeliveryList
+                //.Include(d => d.Pharmacy)
+                //.Include(d => d.Warehouse)
+                .Where(d => d.Pharmacy.Id == pharmacyId)
+                .AsAsyncEnumerable();
+
+            var hasDeliveries = await deliveryListByPharmacy.AnyAsync();
+            if (hasDeliveries)
+            {
+                return new ServiceResult<IAsyncEnumerable<Delivery>>
+                {
+                    IsSuccess = true, Result = deliveryListByPharmacy, StatusCode = HttpStatusCode.OK
+                };
+            }
+
+            return new ServiceResult<IAsyncEnumerable<Delivery>>
+            {
+                IsSuccess    = false,
+                ErrorMessage = "No deliveries found for the given pharmacy",
+                StatusCode   = HttpStatusCode.NoContent
+            };
+        }
+
+
+        public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByWarehouseId(int warehouseId)
+        {
+            var deliveryListByWarehouse = _dbContext.DeliveryList
+                //.Include(d => d.Pharmacy)
+                //.Include(d => d.Warehouse)
+                .Where(d => d.Warehouse.Id == warehouseId)
+                .AsAsyncEnumerable();
+
+            var hasDeliveries = await deliveryListByWarehouse.AnyAsync();
+            if (hasDeliveries)
+            {
+                return new ServiceResult<IAsyncEnumerable<Delivery>>
+                {
+                    IsSuccess = true, Result = deliveryListByWarehouse, StatusCode = HttpStatusCode.OK
+                };
+            }
+
+            return new ServiceResult<IAsyncEnumerable<Delivery>>
+            {
+                IsSuccess    = false,
+                ErrorMessage = "No deliveries found for the given warehouse",
+                StatusCode   = HttpStatusCode.NoContent
+            };
+        }
+
     }
 }

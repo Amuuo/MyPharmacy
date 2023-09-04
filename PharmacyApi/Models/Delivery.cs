@@ -18,7 +18,7 @@ public class Delivery
 
     public DateTime DeliveryDate { get; set; }
 
-    public virtual Pharmacy Pharmacy { get; set; } = null!;
+    public virtual Pharmacy? Pharmacy { get; set; }
 
-    public virtual Warehouse Warehouse { get; set; } = null!;
+    public virtual Warehouse? Warehouse { get; set; } 
 }

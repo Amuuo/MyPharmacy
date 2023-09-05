@@ -1,12 +1,11 @@
 ﻿using PharmacyApi.Models;
 using PharmacyApi.Utilities.Interfaces;
 
-namespace PharmacyApi.Services.Interfaces
+namespace PharmacyApi.Services.Interfaces;
+
+public interface IReportService
 {
-    public interface IReportService
-    {
-        Task<IServiceResult<IAsyncEnumerable<VwWarehouseProfit>>> GetWarehouseProfitAsync();
-        Task<IServiceResult<IAsyncEnumerable<VwDeliveryDetail>>> GetDeliveryDetailAsync();
-        Task<IServiceResult<IAsyncEnumerable<VwPharmacistSalesSummary>>> GetPharmacistSalesSummaryAsync();
-    }
+    Task<IServiceResult<IAsyncEnumerable<VwWarehouseProfit>>> GetWarehouseProfitAsync();
+    Task<IServiceResult<IAsyncEnumerable<VwDeliveryDetail>>> GetDeliveryDetailAsync();
+    Task<IServiceResult<IAsyncEnumerable<VwPharmacistSalesSummary>>> GetPharmacistSalesSummaryAsync();
 }

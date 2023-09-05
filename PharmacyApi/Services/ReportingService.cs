@@ -9,12 +9,12 @@ using System.Linq;
 
 namespace PharmacyApi.Services; 
 
-public class ReportService : IReportService 
+public class ReportingService : IReportService 
 {
     private readonly ILogger<IReportService> _logger;
     private readonly IPharmacyDbContext _dbContext;
 
-    public ReportService(ILogger<IReportService> logger, IPharmacyDbContext dbContext) 
+    public ReportingService(ILogger<IReportService> logger, IPharmacyDbContext dbContext) 
     {
         _logger = logger;
         _dbContext = dbContext;

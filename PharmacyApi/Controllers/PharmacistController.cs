@@ -29,7 +29,7 @@ public class PharmacistController : ControllerBase
     
 
     [HttpGet]
-    [Route("{pharmacyId}")]
+    [Route("by-pharmacy/{pharmacyId}")]
     public async Task<IActionResult> GetPharmacistListByPharmacyId(int pharmacyId) =>
         (await _pharmacistService.GetPharmacistListByPharmacyIdAsync(pharmacyId)).HandleResponse();
     

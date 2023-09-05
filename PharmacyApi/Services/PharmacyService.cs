@@ -36,7 +36,7 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<IServiceResult<IPagedResult<Pharmacy>>> SearchPharmacyListAsync(PharmacyPagedSearch pagedSearch)
+    public async Task<IServiceResult<IPagedResult<Pharmacy>>> SearchPharmacyListPagedAsync(PharmacyPagedSearch pagedSearch)
     {
         try
         {
@@ -44,6 +44,7 @@ public class PharmacyService : IPharmacyService
 
             if (await pharmacyList.AnyAsync() is false)
             {
+                _logger.LogWarning("No pharmacies found with search criteria: {@searchCriteria}", pagedSearch);
                 return ServiceHelper
                     .BuildNoContentResult<IPagedResult<Pharmacy>>("No pharmacies found with search criteria");
             }
@@ -57,6 +58,8 @@ public class PharmacyService : IPharmacyService
         }
         catch (Exception ex)
         {
+            _logger.LogError(ex, "Error occurred while searching for pharmacies with criteria: {@searchCriteria}", pagedSearch);
+            
             return ServiceHelper
                 .BuildErrorServiceResult<IPagedResult<Pharmacy>>(ex, "searching for pharmacies");
         }
@@ -113,10 +116,13 @@ public class PharmacyService : IPharmacyService
     /// </returns>
     public async Task<IServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id)
     {
+        _logger.LogDebug("Searching for pharmacy with id {id}", id);
+
         var pharmacy = await _pharmacyDbContext.PharmacyList.FindAsync(id);
 
         if (pharmacy is null)
         {
+            _logger.LogWarning("No pharmacy found with id {id}", id);
             return ServiceHelper.BuildNoContentResult<Pharmacy>($"No pharmacy found with id {id}");
         }
 
@@ -134,11 +140,17 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing the inserted Pharmacy object if successful,
     /// or an error message if an exception occurs during the insertion.
     /// </returns>
-    public async Task<IServiceResult<Pharmacy>> InsertPharmacyAsync(Pharmacy? newPharmacy)
+    public async Task<IServiceResult<Pharmacy>> InsertPharmacyAsync(Pharmacy newPharmacy)
     {
-        if (newPharmacy is null)
+        _logger.LogDebug("Initiating pharmacy insert with {@newPharmacy}", newPharmacy);
+
+        if (await _pharmacyDbContext.PharmacyList.FindAsync(newPharmacy.Id) is not null)
         {
-            return ServiceHelper.BuildErrorServiceResult<Pharmacy>(null, "Pharmacy object is null");
+            _logger.LogWarning("pharmacy with id {id} already exists", newPharmacy.Id);
+            
+            return ServiceHelper.BuildErrorServiceResult<Pharmacy>(new Exception(), 
+                @$"pharmacy with id {newPharmacy.Id} already exists. 
+                   Use update endpoint to modify an existing record");
         }
 
         try
@@ -159,6 +171,46 @@ public class PharmacyService : IPharmacyService
             return ServiceHelper.BuildErrorServiceResult<Pharmacy>(ex, "inserting a pharmacy record");
         }
     }
+
+
+    /// <summary>
+    /// Asynchronously retrieves pharmacies associated with a specific pharmacist using the relationship table.
+    /// </summary>
+    /// <param name="pharmacistId">The unique identifier of the pharmacist.</param>
+    /// <returns> 
+    /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects associated with the specified pharmacist,
+    /// or an error message if no pharmacies are found or if an exception occurs during retrieval.
+    /// </returns>
+    public async Task<IServiceResult<IAsyncEnumerable<Pharmacy>>> GetPharmaciesByPharmacistIdAsync(int pharmacistId)
+    {
+        _logger.LogDebug("Searching for pharmacies associated with pharmacist with ID: {PharmacistId}", pharmacistId);
+    
+        try
+        {
+            var pharmacyList = _pharmacyDbContext.PharmacyPharmacists
+                .Where(pp => pp.PharmacistId == pharmacistId)
+                .Select(pp => pp.Pharmacy)
+                .AsAsyncEnumerable();
+
+            if (await pharmacyList.AnyAsync())
+            {
+                _logger.LogDebug("Found pharmacies associated with {pharmacistId}: {@pharmacyList}", pharmacistId, pharmacyList);
+                return ServiceHelper.BuildSuccessServiceResult(pharmacyList);
+            }
+
+            _logger.LogWarning("No pharmacies found associated with pharmacist with ID: {PharmacistId}", pharmacistId);
+            return ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Pharmacy>>(
+                $"No pharmacies found associated with pharmacist with id {pharmacistId}");
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while searching for pharmacies associated with pharmacist with ID: {PharmacistId}", pharmacistId);
+            return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Pharmacy>>(ex, 
+                $"searching for pharmacies associated with pharmacist with id {pharmacistId}");
+        }
+    }
+
 
 
 

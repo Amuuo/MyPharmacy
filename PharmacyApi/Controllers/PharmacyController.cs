@@ -30,9 +30,9 @@ public class PharmacyController : ControllerBase
         (await _pharmacyService.GetPharmacyByIdAsync(id)).HandleResponse();
     
     [HttpGet]
-    [Route("by-pharmacist/{pharmacistId}")]
-    public async Task<IActionResult> GetPharmaciesByPharmacistId(int pharmacistId) =>
-        (await _pharmacyService.GetPharmaciesByPharmacistIdAsync(pharmacistId)).HandleResponse();
+    [Route("by-pharmacist/{id}")]
+    public async Task<IActionResult> GetPharmaciesByPharmacistId(int id) =>
+        (await _pharmacyService.GetPharmaciesByPharmacistIdAsync(id)).HandleResponse();
 
     [HttpPost]
     [Route("search/paged")]

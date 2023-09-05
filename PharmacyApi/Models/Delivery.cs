@@ -1,4 +1,6 @@
-﻿namespace PharmacyApi.Models;
+﻿using System.Text.Json.Serialization;
+
+namespace PharmacyApi.Models;
 
 public class Delivery
 {
@@ -18,7 +20,8 @@ public class Delivery
 
     public DateTime DeliveryDate { get; set; }
 
+    [JsonIgnore]
     public virtual Pharmacy? Pharmacy { get; set; }
-
+    [JsonIgnore]
     public virtual Warehouse? Warehouse { get; set; } 
 }

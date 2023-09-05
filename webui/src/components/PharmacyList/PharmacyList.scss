@@ -9,23 +9,9 @@
 }
 
 
-.Mui-selected {
-    background-color: rgba(75, 230, 230, 0.367) !important;
-    background: linear-gradient(0deg, rgb(152, 149, 209) 0%, rgba(61,107,205,1) 21%,rgba(61,107,205,1) 81% rgba(77,145,203,1) 100%);    
-}
-
-.MuiDataGrid-root {
-    overflow: hidden !important;
-    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
-    color: whitesmoke !important;        
-    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);        
-    z-index: 2; 
-    white-space: nowrap;   
-    border: 4px outset whitesmoke !important;
-}
-
 .PharmacyGrid {
-    max-width: 600px;
+    // max-width: 600px;
+    animation: fade-in 0.3s ease;
     height: fit-content;
     grid-area: pharmacy;
 }

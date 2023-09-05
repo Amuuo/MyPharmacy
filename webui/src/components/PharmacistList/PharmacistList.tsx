@@ -1,9 +1,8 @@
 import { useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import './PharmacistList.scss';
+import  './PharmacistList.scss';
 import { LinearProgress } from '@mui/material';
-import { resetPharmacistList } from '../../store/slices/pharmacistSlice';
 import { AppDispatch, useSelector } from '../../store/store';
 import { fetchPharmacistList } from '../../services/pharmacistService';
 
@@ -16,45 +15,40 @@ const PharmacistList = () => {
     const initialLoad = useSelector(state => state.pharmacy.initialLoad);
 
     useEffect(() => {
-        dispatch(resetPharmacistList());
-        
+                
         if (selectedPharmacy.id) 
             dispatch(fetchPharmacistList(selectedPharmacy.id));
         
     }, [selectedPharmacy, dispatch]);
 
-    const columns: GridColDef[] = useMemo(() => ([
-        { field: 'firstName', headerName: 'First Name', width: 100, editable: true, flex: 1 },
-        { field: 'lastName',  headerName: 'Last Name',  width: 100, editable: true, flex: 1 },
-        { field: 'age',       headerName: 'Age',        width: 40,  editable: true, flex: 0.5, type: 'number' },        
-        { field: 'primaryRx', headerName: 'Primary RX', width: 120, editable: true, flex: 1 },
+    const columns: GridColDef[] = useMemo(() => ([        
+        { field: 'fullName', headerName: 'Pharmacist', width: 150, valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`},        
+        { field: 'primaryRx', headerName: 'Primary RX', width: 150, editable: true },        
     ]), []);
     
     if (initialLoad) return null;    
     
-    if (!selectedPharmacy?.id) {
-        return <h3 style={{textAlign: 'center', gridRow: 2, gridColumn: 1}}>Select Pharmacy to view Pharmacists</h3>;
+    if (!selectedPharmacy?.id) {        
+        return null;
     }
        
     if (loading) {
-        return <div style={{gridRow: 2, gridColumn: 1}}><LinearProgress /></div>;
+        return <div style={{gridArea: 'pharmacist'}}><LinearProgress /></div>;
     }
     
     if (!loading && (pharmacistList.length === 0)) {
-        return <h3 style={{textAlign: 'center', gridRow: 2, gridColumn: 1}}>No pharmacists found...</h3>;
+        return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;
     }
-    return (
-        <div className="pharmacistGrid">
+    return (        
+        <div className="pharmacistGrid">                        
             <DataGrid                
-                hideFooter={true}
-                sx={{overflow: 'hidden'}}
+                hideFooter={true}                
                 rows={pharmacistList}
                 columns={columns}
-                loading={loading}
-                pageSizeOptions={[5, 10]}
-                rowHeight={30}
-                columnHeaderHeight={40}
-            />
+                loading={loading}                        
+                rowHeight={30}        
+                columnHeaderHeight={35}
+            />                
         </div>
     );         
 }

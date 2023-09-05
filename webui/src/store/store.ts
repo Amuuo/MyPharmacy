@@ -1,3 +1,4 @@
+import { deliverySlice } from './slices/deliverySlice';
 import { pharmacistSlice } from './slices/pharmacistSlice';
 import { pharmacySlice } from './slices/pharmacySlice';
 import { configureStore } from '@reduxjs/toolkit';
@@ -6,7 +7,8 @@ import { TypedUseSelectorHook, useSelector as untypedUseSelector } from 'react-r
 const store = configureStore({
     reducer: {
         pharmacy: pharmacySlice.reducer,
-        pharmacist: pharmacistSlice.reducer
+        pharmacist: pharmacistSlice.reducer,
+        delivery: deliverySlice.reducer
     }
 });
 

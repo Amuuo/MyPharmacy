@@ -1,0 +1,9 @@
+.delivery-list {
+    grid-area: order;    
+    // max-width: 600px;
+    width: 100%;
+    height: 100%;
+    transition: 300ms;
+    animation: grow-in 0.2s ease-in-out;    
+}
+

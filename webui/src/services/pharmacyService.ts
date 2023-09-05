@@ -1,10 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Pharmacy } from '../models/pharmacy';
+import { GridPaginationModel } from '@mui/x-data-grid';
 
 export async function editPharmacy(pharmacy: Pharmacy) {
     try {
-        const response = await fetch(`https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/update`, {
-        // const response = await fetch(`api/pharmacy/update`, {
+        // const response = await fetch(`https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/update`, {
+        const response = await fetch(`api/pharmacy/update`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(pharmacy)
@@ -26,14 +27,14 @@ export type PaginationModel = {
 
 export const fetchPharmacyList = createAsyncThunk(
     'pharmacy/fetchPharmacyList',
-    async (paginationModel: PaginationModel, {}) => {
-        const response = await fetch('https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/search', {
-        // const response = await fetch("api/pharmacy/search", {
+    async (paginationModel: GridPaginationModel, {}) => {
+        // const response = await fetch('https://app-pharmacy-api-southus-dev-001.azurewebsites.net/pharmacy/search', {
+        const response = await fetch("api/pharmacy/search", {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                PageSize: paginationModel.PageSize, 
-                PageNumber: paginationModel.Page + 1 
+                PageSize: paginationModel.pageSize, 
+                PageNumber: paginationModel.page + 1 
             })
         });
         

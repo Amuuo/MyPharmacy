@@ -8,8 +8,7 @@ import { Pharmacy } from '../../models/pharmacy';
 import _ from 'lodash';
 import { fetchPharmacyList } from '../../services/pharmacyService';
 import { useSelector } from '../../store/store';
-import { resetPharmacistList } from '../../store/slices/pharmacistSlice';
-import { CircularProgress } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 
 
 const PharmacyList: React.FC = () => {
@@ -20,36 +19,37 @@ const PharmacyList: React.FC = () => {
     const initialLoad  = useSelector(state => state.pharmacy.initialLoad);
     const totalCount   = useSelector(state => state.pharmacy.totalCount);
     
-    const [paginationModel, setPaginationModel] = useState({
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 5
     })
     
     useEffect(() => {                
-        dispatch(setPharmacySelection({}));
-        dispatch(resetPharmacistList());
-        dispatch(fetchPharmacyList({ 
-            PageSize: paginationModel.pageSize, 
-            Page: paginationModel.page 
-        }) as any);
+        // dispatch(setPharmacySelection({}));
+        // dispatch(resetPharmacistList());
+        // dispatch(resetDeliveryList());
+        dispatch(fetchPharmacyList(paginationModel) as any);
         
     }, [paginationModel]);
 
+
     const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {                
-        const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);
+        const selectedPharmacy = 
+            pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);
         
         if (selectedPharmacy) dispatch(setPharmacySelection(selectedPharmacy)); 
         else dispatch(setPharmacySelection({}));
     }
 
+
     const handleEditCellChange = (updatedPharmacy: Pharmacy, 
                                   originalPharmacy: Pharmacy) => {
-        
         if( !_.isEqual(updatedPharmacy, originalPharmacy) )
             dispatch(updatePharmacy(updatedPharmacy));
 
         return updatedPharmacy;
     }
+
 
     const handlePaginationModelChange = (newModel: GridPaginationModel) => {        
         if (paginationModel.pageSize !== newModel.pageSize) 
@@ -59,7 +59,7 @@ const PharmacyList: React.FC = () => {
     };
 
     const columns: GridColDef[] = useMemo(() => ([
-        { field: 'name',  headerName: 'Name',  width: 200, editable: true, flex: 2 },        
+        { field: 'name',  headerName: 'Name',  width: 175, editable: true, flex: 2 },        
         { field: 'city',  headerName: 'City',  width: 100, editable: true, flex: 1.5 },
         { field: 'state', headerName: 'State', width: 50,  editable: true, flex: 0.5 },
         { field: 'zip',   headerName: 'Zip',   width: 80,  editable: true, flex: 1, type: 'number' },        
@@ -69,7 +69,7 @@ const PharmacyList: React.FC = () => {
     return  (              
         <div className="PharmacyGrid">  
         {initialLoad 
-            ? <CircularProgress/> 
+            ? <LinearProgress/> 
             : <DataGrid 
                 rows={pharmacyList} 
                 columns={columns}    
@@ -85,11 +85,7 @@ const PharmacyList: React.FC = () => {
                 onRowSelectionModelChange={handlePharmacySelectionChange}     
                 rowHeight={30}    
                 columnHeaderHeight={40}                       
-                sx={{                                                                                 
-                    border: 3,
-                    borderColor: 'primary',
-                    fontFamily: 'Inter'                    
-                }}
+                keepNonExistentRowsSelected={true}  
             />}
         </div>    
     )

@@ -36,7 +36,7 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<IServiceResult<IPagedResult<Pharmacy>>> SearchPharmacyAsync(PharmacyPagedSearch pagedSearch)
+    public async Task<IServiceResult<IPagedResult<Pharmacy>>> SearchPharmacyListAsync(PharmacyPagedSearch pagedSearch)
     {
         try
         {

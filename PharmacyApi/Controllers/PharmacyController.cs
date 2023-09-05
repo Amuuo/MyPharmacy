@@ -6,10 +6,8 @@ using PharmacyApi.Utilities.Helpers;
 
 namespace PharmacyApi.Controllers;
 
-//[Authorize]
 [ApiController]
 [Route("pharmacy")]
-//[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class PharmacyController : ControllerBase
 {
     #region Members and Constructor
@@ -26,16 +24,12 @@ public class PharmacyController : ControllerBase
 
     #endregion
 
-
     [HttpGet]
     [Route("{id}")]
     public async Task<IActionResult> GetPharmacyById(int id)
     {
-        var pharmacyResult = await _pharmacyService.GetPharmacyByIdAsync(id);
-
-        return ControllerHelper.HandleResponse(pharmacyResult);
+        return (await _pharmacyService.GetPharmacyByIdAsync(id)).HandleResponse();
     }
-
 
     [HttpPost]
     [Route("search")]
@@ -43,29 +37,21 @@ public class PharmacyController : ControllerBase
     {
         searchCriteria ??= new PharmacyPagedSearch();
         
-        var searchResult = await _pharmacyService.SearchPharmacyAsync(searchCriteria);
-        
-        return ControllerHelper.HandleResponse(searchResult);
+        return (await _pharmacyService.SearchPharmacyListAsync(searchCriteria)).HandleResponse();
     }
     
-
     [HttpPut]
     [Route("update")]
-    public async Task<IActionResult> UpdatePharmacy(Pharmacy pharmacy)
+    public async Task<IActionResult> UpdatePharmacy(Pharmacy updatedPharmacy)
     {
-        var updatedPharmacyResult = await _pharmacyService.UpdatePharmacyAsync(pharmacy);
-
-        return ControllerHelper.HandleResponse(updatedPharmacyResult);
+        return (await _pharmacyService.UpdatePharmacyAsync(updatedPharmacy)).HandleResponse();
     }
-
 
     [HttpPost]
     [Route("add")]
     public async Task<IActionResult> AddPharmacy(Pharmacy newPharmacy)
     {
-        var result = await _pharmacyService.InsertPharmacyAsync(newPharmacy);
-    
-        return ControllerHelper.HandleResponse(result);
+        return (await _pharmacyService.InsertPharmacyAsync(newPharmacy)).HandleResponse();
     }
 
 }

@@ -136,7 +136,7 @@ public class PharmacyService : IPharmacyService
     /// </returns>
     public async Task<IServiceResult<Pharmacy>> InsertPharmacyAsync(Pharmacy? newPharmacy)
     {
-        if (newPharmacy == null)
+        if (newPharmacy is null)
         {
             return ServiceHelper.BuildErrorServiceResult<Pharmacy>(null, "Pharmacy object is null");
         }

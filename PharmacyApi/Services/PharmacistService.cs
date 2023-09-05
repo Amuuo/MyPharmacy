@@ -40,7 +40,8 @@ namespace PharmacyApi.Services
             {
                 _logger.LogError(ex, "An error occurred while retrieving all pharmacists.");
 
-                return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, "retrieving all pharmacists.");
+                return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, 
+                    "retrieving all pharmacists.");
             }
         }
 
@@ -50,11 +51,13 @@ namespace PharmacyApi.Services
             throw new NotImplementedException();
         }
 
-        public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistListByPharmacyIdAsync(int pharmacyId)
+        public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> 
+            GetPharmacistListByPharmacyIdAsync(int pharmacyId)
         {
             try
             {
-                _logger.LogDebug("Attempting to retrieve pharmacists for pharmacy with ID {PharmacyId}", pharmacyId);
+                _logger.LogDebug(@"Attempting to retrieve pharmacists 
+                                   for pharmacy with ID {PharmacyId}", pharmacyId);
 
                 var pharmacistList = _dbContext.PharmacyPharmacists
                     .Where(pp => pp.PharmacyId == pharmacyId)
@@ -67,10 +70,12 @@ namespace PharmacyApi.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
+                _logger.LogError(ex, @"An error occurred while retrieving 
+                                       pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
 
                 return ServiceHelper
-                    .BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, $"retrieving pharmacists for pharmacy with ID {pharmacyId}");
+                    .BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, 
+                        $"retrieving pharmacists for pharmacy with ID {pharmacyId}");
             }
         }
     }

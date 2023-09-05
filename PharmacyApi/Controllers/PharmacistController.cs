@@ -24,17 +24,14 @@ public class PharmacistController : ControllerBase
 
     [HttpPost]
     [Route("")]
-    public async Task<IActionResult> GetPharmacistList()
-    {
-        return (await _pharmacistService.GetPharmacistListAsync()).HandleResponse();
-    }
-
+    public async Task<IActionResult> GetPharmacistList() => 
+        (await _pharmacistService.GetPharmacistListAsync()).HandleResponse();
+    
 
     [HttpGet]
     [Route("{pharmacyId}")]
-    public async Task<IActionResult> GetPharmacistListByPharmacyId(int pharmacyId)
-    {
-        return (await _pharmacistService.GetPharmacistListByPharmacyIdAsync(pharmacyId)).HandleResponse();
-    }
+    public async Task<IActionResult> GetPharmacistListByPharmacyId(int pharmacyId) =>
+        (await _pharmacistService.GetPharmacistListByPharmacyIdAsync(pharmacyId)).HandleResponse();
+    
 }
 

@@ -24,23 +24,20 @@ public class DeliveryController : ControllerBase
 
     [HttpPost]
     [Route("")]
-    public async Task<IActionResult> GetDeliveryList()
-    {
-        return (await _deliveryService.GetDeliveryList()).HandleResponse();
-    }
+    public async Task<IActionResult> GetDeliveryList() =>
+        (await _deliveryService.GetDeliveryList()).HandleResponse();
+    
 
     [HttpGet]
     [Route("pharmacy/{pharmacyId}")]
-    public async Task<IActionResult> GetDeliveryListByPharmacyId(int pharmacyId)
-    {
-        return (await _deliveryService.GetDeliveryListByPharmacyId(pharmacyId)).HandleResponse();
-    }
+    public async Task<IActionResult> GetDeliveryListByPharmacyId(int pharmacyId) =>
+        (await _deliveryService.GetDeliveryListByPharmacyId(pharmacyId)).HandleResponse();
+    
 
     [HttpGet]
     [Route("warehouse/{warehouseId}")]
-    public async Task<IActionResult> GetDelieveryListByWarehouseId(int warehouseId)
-    {
-        return (await _deliveryService.GetDeliveryListByWarehouseId(warehouseId)).HandleResponse();
-    }
+    public async Task<IActionResult> GetDeliveryListByWarehouseId(int warehouseId) =>
+        (await _deliveryService.GetDeliveryListByWarehouseId(warehouseId)).HandleResponse();
+    
 }
 

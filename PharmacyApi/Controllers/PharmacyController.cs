@@ -26,10 +26,9 @@ public class PharmacyController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
-    public async Task<IActionResult> GetPharmacyById(int id)
-    {
-        return (await _pharmacyService.GetPharmacyByIdAsync(id)).HandleResponse();
-    }
+    public async Task<IActionResult> GetPharmacyById(int id) =>
+        (await _pharmacyService.GetPharmacyByIdAsync(id)).HandleResponse();
+    
 
     [HttpPost]
     [Route("search")]
@@ -42,16 +41,14 @@ public class PharmacyController : ControllerBase
     
     [HttpPut]
     [Route("update")]
-    public async Task<IActionResult> UpdatePharmacy(Pharmacy updatedPharmacy)
-    {
-        return (await _pharmacyService.UpdatePharmacyAsync(updatedPharmacy)).HandleResponse();
-    }
+    public async Task<IActionResult> UpdatePharmacy(Pharmacy updatedPharmacy) =>
+        (await _pharmacyService.UpdatePharmacyAsync(updatedPharmacy)).HandleResponse();
+    
 
     [HttpPost]
     [Route("add")]
-    public async Task<IActionResult> AddPharmacy(Pharmacy newPharmacy)
-    {
-        return (await _pharmacyService.InsertPharmacyAsync(newPharmacy)).HandleResponse();
-    }
+    public async Task<IActionResult> AddPharmacy(Pharmacy newPharmacy) =>
+        (await _pharmacyService.InsertPharmacyAsync(newPharmacy)).HandleResponse();
+    
 
 }

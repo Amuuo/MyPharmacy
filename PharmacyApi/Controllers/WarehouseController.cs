@@ -24,9 +24,8 @@ public class WarehouseController
 
     [HttpPost]
     [Route("")]
-    public async Task<IActionResult> GetWarehouseList()
-    {
-        return (await _warehouseService.GetWarehouseListAsync()).HandleResponse();
-    }
+    public async Task<IActionResult> GetWarehouseList() =>
+        (await _warehouseService.GetWarehouseListAsync()).HandleResponse();
+    
 }
 

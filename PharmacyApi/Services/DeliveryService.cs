@@ -25,9 +25,7 @@ namespace PharmacyApi.Services
             {
                 var deliveryList = _dbContext.DeliveryList.AsAsyncEnumerable();
 
-                var hasDeliveries = await deliveryList.AnyAsync();
-
-                return hasDeliveries
+                return await deliveryList.AnyAsync()
                     ? ServiceHelper.BuildSuccessServiceResult(deliveryList)
                     : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Delivery>>("No deliveries found");
             }
@@ -46,9 +44,7 @@ namespace PharmacyApi.Services
                     .Where(d => d.Pharmacy.Id == pharmacyId)
                     .AsAsyncEnumerable();
 
-                var hasDeliveries = await deliveryListByPharmacy.AnyAsync();
-
-                return hasDeliveries
+                return await deliveryListByPharmacy.AnyAsync()
                     ? ServiceHelper.BuildSuccessServiceResult(deliveryListByPharmacy)
                     : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Delivery>>(
                             $"No deliveries found for the pharmacy with id {pharmacyId}");
@@ -83,6 +79,26 @@ namespace PharmacyApi.Services
                         $"searching for deliveries for warehouse with id {warehouseId}");
             }
         }
+
+
+        public async Task<IServiceResult<Delivery>> InsertDeliveryAsync(Delivery delivery)
+        {
+            try
+            {
+                _dbContext.DeliveryList.Add(delivery);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogDebug($"Successfully inserted delivery with ID: {delivery.Id}");
+                return ServiceHelper.BuildSuccessServiceResult(delivery);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while inserting delivery");
+                return ServiceHelper.BuildErrorServiceResult<Delivery>(ex, 
+                    "Error occurred while inserting delivery");
+            }
+        }
+
 
     }
 }

@@ -16,7 +16,7 @@ const PharamcySelectionCard: React.FC = () => {
     return (
         <Card className="pharmacy-selection">
             <CardHeader title={selectedPharmacy.name} />
-            <CardContent sx={{ paddingTop: 0}} >                
+            <CardContent  >                
                 <Typography fontFamily={'Inter'}> {selectedPharmacy.address} </Typography>
                 <Typography fontFamily={'Inter'} gutterBottom> {cityStateZip} </Typography>
                 <Typography variant="subtitle1" color="text.secondary"> RX Filled </Typography> 

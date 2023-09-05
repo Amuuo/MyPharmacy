@@ -8,7 +8,6 @@ import { Pharmacy } from '../../models/pharmacy';
 import _ from 'lodash';
 import { fetchPharmacyList } from '../../services/pharmacyService';
 import { useSelector } from '../../store/store';
-import { resetPharmacistList } from '../../store/slices/pharmacistSlice';
 import { CircularProgress } from '@mui/material';
 
 
@@ -20,18 +19,16 @@ const PharmacyList: React.FC = () => {
     const initialLoad  = useSelector(state => state.pharmacy.initialLoad);
     const totalCount   = useSelector(state => state.pharmacy.totalCount);
     
-    const [paginationModel, setPaginationModel] = useState({
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: 5
     })
     
     useEffect(() => {                
-        dispatch(setPharmacySelection({}));
-        dispatch(resetPharmacistList());
-        dispatch(fetchPharmacyList({ 
-            PageSize: paginationModel.pageSize, 
-            Page: paginationModel.page 
-        }) as any);
+        // dispatch(setPharmacySelection({}));
+        // dispatch(resetPharmacistList());
+        // dispatch(resetDeliveryList());
+        dispatch(fetchPharmacyList(paginationModel) as any);
         
     }, [paginationModel]);
 
@@ -59,7 +56,7 @@ const PharmacyList: React.FC = () => {
     };
 
     const columns: GridColDef[] = useMemo(() => ([
-        { field: 'name',  headerName: 'Name',  width: 200, editable: true, flex: 2 },        
+        { field: 'name',  headerName: 'Name',  width: 175, editable: true, flex: 2 },        
         { field: 'city',  headerName: 'City',  width: 100, editable: true, flex: 1.5 },
         { field: 'state', headerName: 'State', width: 50,  editable: true, flex: 0.5 },
         { field: 'zip',   headerName: 'Zip',   width: 80,  editable: true, flex: 1, type: 'number' },        
@@ -71,26 +68,27 @@ const PharmacyList: React.FC = () => {
         {initialLoad 
             ? <CircularProgress/> 
             : <DataGrid 
-                rows={pharmacyList} 
-                columns={columns}    
-                loading={loading}   
-                hideFooterSelectedRowCount={true}  
-                rowCount={totalCount}   
-                pagination
-                paginationMode='server'    
-                paginationModel={paginationModel}
-                onPaginationModelChange={handlePaginationModelChange}                
-                pageSizeOptions={[5, 10, 15]}                                                                          
-                processRowUpdate={handleEditCellChange}
-                onRowSelectionModelChange={handlePharmacySelectionChange}     
-                rowHeight={30}    
-                columnHeaderHeight={40}                       
-                sx={{                                                                                 
-                    border: 3,
-                    borderColor: 'primary',
-                    fontFamily: 'Inter'                    
-                }}
-            />}
+                    rows={pharmacyList} 
+                    columns={columns}    
+                    loading={loading}   
+                    hideFooterSelectedRowCount={true}  
+                    rowCount={totalCount}   
+                    pagination
+                    paginationMode='server'    
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={handlePaginationModelChange}                
+                    pageSizeOptions={[5, 10, 15]}                                                                          
+                    processRowUpdate={handleEditCellChange}
+                    onRowSelectionModelChange={handlePharmacySelectionChange}     
+                    rowHeight={30}             
+                    columnHeaderHeight={35}     
+                    keepNonExistentRowsSelected={true}                     
+                    sx={{                                                                                 
+                        border: 3,
+                        borderColor: 'primary',
+                        fontFamily: 'Inter'                    
+                    }}
+                />}
         </div>    
     )
 };

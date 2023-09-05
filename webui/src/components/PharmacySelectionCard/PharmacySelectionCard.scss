@@ -12,14 +12,13 @@
 
 
 .pharmacy-selection {
-    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
-    padding: 0.5rem;    
+    background: linear-gradient(-20deg, rgb(98, 92, 214) 0%, rgb(50, 135, 193) 61%, rgba(26, 107, 228, 0.678) 100%);       
     color: whitesmoke !important;
     border-radius: 0.3rem;
     white-space: nowrap;
     border: 8px ridge whitesmoke;
     grid-area: 'pharmacyCard';
-    box-shadow: 2px 2px 15px rgba(0, 0, 0, 0.727);   
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548) !important;    
     height:fit-content;
     // max-width: 325px;    
     min-width: fit-content;
@@ -29,9 +28,4 @@
     animation: slide-in 0.3s ease;        
 }
 
-.css-1qvr50w-MuiTypography-root {
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 600 !important;
-    font-size: 24px !important;
-}
 

@@ -4,9 +4,16 @@ $bright-blue: #1A80D9;
 $muted-blue: #4586BF;
 $teal-blue: #4AB0D9;
 
+@keyframes grow-in {
+  from {
+      height: 0px;        
+  }
+}
+
 :root {
   font-family: 'Inter', 'Merriweather', system-ui, Avenir, Helvetica, Arial, sans-serif !important;
   font-weight: 600;
+  font-size: 16px;
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background: rgb(36,36,36);
@@ -18,16 +25,51 @@ $teal-blue: #4AB0D9;
   -webkit-text-size-adjust: 100%;  
 }
 
+.MuiDataGrid-virtualScroller {
+  overflow: hidden !important;
+}
+
+.MuiDataGrid-columnHeaderTitle {
+  font-weight: bolder;
+  font-size: 1rem;
+  font-family: monospace;
+  text-transform: uppercase;
+  
+}
+
+.MuiCardHeader-root {
+  background-color: rgba(2, 32, 85, 0.321);
+  
+  
+  .MuiTypography-root {
+    font-weight: 600 !important;  
+    font-size: 26px;
+    font-family: 'Inter', monospace !important;
+  }
+}
+
+.MuiDataGrid-columnHeaders {
+  background-color: rgba(2, 32, 85, 0.349);
+  //background: linear-gradient(250deg, rgb(54, 87, 179) 0%, rgb(55, 92, 171) 51%, rgb(23, 91, 151) 100%);
+}
+
+
 .MuiDataGrid-root {
   overflow: hidden !important;
   overflow-y: hidden !important;
   overflow-x: hidden !important;
+  font-family: 'Inter', monospace !important;
   background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
   color: whitesmoke !important;        
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);        
   z-index: 2; 
   white-space: nowrap;   
   border: 4px outset whitesmoke !important;
+}
+
+.Mui-selected {
+  background-color: rgba(75, 230, 230, 0.367) !important;
+  background: linear-gradient(0deg, rgb(152, 149, 209) 0%, rgba(61,107,205,1) 21%,rgba(61,107,205,1) 81% rgba(77,145,203,1) 100%);    
 }
 
 .MuiDataGrid-footerContainer {

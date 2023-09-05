@@ -23,9 +23,8 @@ public class PharmacyDbContext : DbContext, IPharmacyDbContext
     {
         modelBuilder.Entity<Delivery>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("delivery");
+            entity.HasKey(e => e.Id);
+            entity.ToTable("delivery");
 
             entity.Property(e => e.DeliveryDate)
                 .HasColumnType("date")
@@ -154,19 +153,19 @@ public class PharmacyDbContext : DbContext, IPharmacyDbContext
 
         modelBuilder.Entity<VwPharmacistSalesSummary>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToView("vw_pharmacist_sales_summary");
+            entity.HasKey(e => e.PharmacistId);
+            entity.ToView("vw_pharmacist_sales_summary");
 
+            entity.Property(e => e.PharmacistId).HasColumnName("pharmacist_id");
             entity.Property(e => e.FirstName)
                 .HasMaxLength(50)
                 .HasColumnName("first_name");
             entity.Property(e => e.LastName)
                 .HasMaxLength(50)
                 .HasColumnName("last_name");
-            entity.Property(e => e.Pharmacy)
+            entity.Property(e => e.PharmacyList)
                 .HasMaxLength(50)
-                .HasColumnName("pharmacy");
+                .HasColumnName("pharmacy_list");
             entity.Property(e => e.PrimaryRx)
                 .HasMaxLength(50)
                 .HasColumnName("primary_rx");

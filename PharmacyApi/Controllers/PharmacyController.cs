@@ -36,6 +36,7 @@ public class PharmacyController : ControllerBase
         return ControllerHelper.HandleResponse(pharmacyResult);
     }
 
+
     [HttpPost]
     [Route("search")]
     public async Task<IActionResult> SearchPharmacyList(PharmacyPagedSearch? searchCriteria)
@@ -56,4 +57,15 @@ public class PharmacyController : ControllerBase
 
         return ControllerHelper.HandleResponse(updatedPharmacyResult);
     }
+
+
+    [HttpPost]
+    [Route("add")]
+    public async Task<IActionResult> AddPharmacy(Pharmacy newPharmacy)
+    {
+        var result = await _pharmacyService.InsertPharmacyAsync(newPharmacy);
+    
+        return ControllerHelper.HandleResponse(result);
+    }
+
 }

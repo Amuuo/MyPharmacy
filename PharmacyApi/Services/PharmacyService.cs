@@ -126,6 +126,42 @@ public class PharmacyService : IPharmacyService
     }
 
 
+    /// <summary>
+    /// Asynchronously inserts a new pharmacy record.
+    /// </summary>
+    /// <param name="newPharmacy">The new pharmacy object to insert.</param>
+    /// <returns>
+    /// A ServiceResult containing the inserted Pharmacy object if successful,
+    /// or an error message if an exception occurs during the insertion.
+    /// </returns>
+    public async Task<IServiceResult<Pharmacy>> InsertPharmacyAsync(Pharmacy? newPharmacy)
+    {
+        if (newPharmacy == null)
+        {
+            return ServiceHelper.BuildErrorServiceResult<Pharmacy>(null, "Pharmacy object is null");
+        }
+
+        try
+        {
+            newPharmacy.CreatedDate = DateTime.Now;
+            newPharmacy.UpdatedDate = DateTime.Now;
+
+            await _pharmacyDbContext.PharmacyList.AddAsync(newPharmacy);
+            await _pharmacyDbContext.SaveChangesAsync();
+
+            _logger.LogDebug("Inserted new pharmacy record: {@pharmacy}", newPharmacy);
+
+            return ServiceHelper.BuildSuccessServiceResult(newPharmacy);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while attempting to insert pharmacy record");
+            return ServiceHelper.BuildErrorServiceResult<Pharmacy>(ex, "inserting a pharmacy record");
+        }
+    }
+
+
+
     #endregion
 
 

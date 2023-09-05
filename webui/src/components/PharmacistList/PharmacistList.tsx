@@ -21,19 +21,14 @@ const PharmacistList = () => {
         
     }, [selectedPharmacy, dispatch]);
 
-    const columns: GridColDef[] = useMemo(() => ([
-        // { field: 'firstName', headerName: 'First Name', width: 120, editable: true, flex: 1 },        
-        // { field: 'lastName',  headerName: 'Last Name',  width: 120, editable: true, flex: 1 },
-        { field: 'fullName', headerName: 'Pharmacist', width: 150, valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`},
-        { field: 'age',       headerName: 'Age',        width: 60,  editable: true, type: 'number' },        
-        { field: 'primaryRx', headerName: 'Primary RX', width: 150, editable: true },
-        // { field: 'hireDate', headerName: 'Hire Date', width: 150, flex: 1 }
+    const columns: GridColDef[] = useMemo(() => ([        
+        { field: 'fullName', headerName: 'Pharmacist', width: 150, valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`},        
+        { field: 'primaryRx', headerName: 'Primary RX', width: 150, editable: true },        
     ]), []);
     
     if (initialLoad) return null;    
     
-    if (!selectedPharmacy?.id) {
-        // return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>Select Pharmacy to view Pharmacists</h3>;
+    if (!selectedPharmacy?.id) {        
         return null;
     }
        

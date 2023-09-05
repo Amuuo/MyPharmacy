@@ -8,7 +8,7 @@ import { Pharmacy } from '../../models/pharmacy';
 import _ from 'lodash';
 import { fetchPharmacyList } from '../../services/pharmacyService';
 import { useSelector } from '../../store/store';
-import { CircularProgress } from '@mui/material';
+import { LinearProgress } from '@mui/material';
 
 
 const PharmacyList: React.FC = () => {
@@ -32,21 +32,24 @@ const PharmacyList: React.FC = () => {
         
     }, [paginationModel]);
 
+
     const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {                
-        const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);
+        const selectedPharmacy = 
+            pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);
         
         if (selectedPharmacy) dispatch(setPharmacySelection(selectedPharmacy)); 
         else dispatch(setPharmacySelection({}));
     }
 
+
     const handleEditCellChange = (updatedPharmacy: Pharmacy, 
                                   originalPharmacy: Pharmacy) => {
-        
         if( !_.isEqual(updatedPharmacy, originalPharmacy) )
             dispatch(updatePharmacy(updatedPharmacy));
 
         return updatedPharmacy;
     }
+
 
     const handlePaginationModelChange = (newModel: GridPaginationModel) => {        
         if (paginationModel.pageSize !== newModel.pageSize) 
@@ -66,29 +69,24 @@ const PharmacyList: React.FC = () => {
     return  (              
         <div className="PharmacyGrid">  
         {initialLoad 
-            ? <CircularProgress/> 
+            ? <LinearProgress/> 
             : <DataGrid 
-                    rows={pharmacyList} 
-                    columns={columns}    
-                    loading={loading}   
-                    hideFooterSelectedRowCount={true}  
-                    rowCount={totalCount}   
-                    pagination
-                    paginationMode='server'    
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={handlePaginationModelChange}                
-                    pageSizeOptions={[5, 10, 15]}                                                                          
-                    processRowUpdate={handleEditCellChange}
-                    onRowSelectionModelChange={handlePharmacySelectionChange}     
-                    rowHeight={30}             
-                    columnHeaderHeight={35}     
-                    keepNonExistentRowsSelected={true}                     
-                    sx={{                                                                                 
-                        border: 3,
-                        borderColor: 'primary',
-                        fontFamily: 'Inter'                    
-                    }}
-                />}
+                rows={pharmacyList} 
+                columns={columns}    
+                loading={loading}   
+                hideFooterSelectedRowCount={true}  
+                rowCount={totalCount}   
+                pagination
+                paginationMode='server'    
+                paginationModel={paginationModel}
+                onPaginationModelChange={handlePaginationModelChange}                
+                pageSizeOptions={[5, 10, 15]}                                                                          
+                processRowUpdate={handleEditCellChange}
+                onRowSelectionModelChange={handlePharmacySelectionChange}     
+                rowHeight={30}    
+                columnHeaderHeight={40}                       
+                keepNonExistentRowsSelected={true}  
+            />}
         </div>    
     )
 };

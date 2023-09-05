@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
 using PharmacyApi.Utilities.Helpers;
 
@@ -27,11 +28,22 @@ public class PharmacistController : ControllerBase
     public async Task<IActionResult> GetPharmacistList() => 
         (await _pharmacistService.GetPharmacistListAsync()).HandleResponse();
     
+    [HttpGet]
+    [Route("by-pharmacy/{id}")]
+    public async Task<IActionResult> GetPharmacistListByPharmacyId(int id) =>
+        (await _pharmacistService.GetPharmacistListByPharmacyIdAsync(id)).HandleResponse();
 
     [HttpGet]
-    [Route("by-pharmacy/{pharmacyId}")]
-    public async Task<IActionResult> GetPharmacistListByPharmacyId(int pharmacyId) =>
-        (await _pharmacistService.GetPharmacistListByPharmacyIdAsync(pharmacyId)).HandleResponse();
-    
+    [Route("{id}")]
+    public async Task<IActionResult> GetPharmacistById(int id) =>
+        (await _pharmacistService.GetPharmacistByIdAsync(id)).HandleResponse();
+
+    [HttpPut]
+    [Route("update")]
+    public async Task<IActionResult> UpdatePharmacist(Pharmacist pharmacist) =>
+        (await _pharmacistService.UpdatePharmacistAsync(pharmacist)).HandleResponse();
+
+
+
 }
 

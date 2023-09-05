@@ -10,6 +10,9 @@ namespace PharmacyApi.Data
         DbSet<Pharmacist> PharmacistList { get; }
         DbSet<Warehouse>  WarehouseList  { get; }
         DbSet<PharmacyPharmacist> PharmacyPharmacists { get; }
+        DbSet<VwDeliveryDetail> VwDeliveryDetails { get; set; }
+        DbSet<VwPharmacistSalesSummary> VwPharmacistSalesSummaries { get; set; }
+        DbSet<VwWarehouseProfit> VwWarehouseProfits { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

@@ -14,7 +14,10 @@ public class PharmacyDbContext : DbContext, IPharmacyDbContext
     public virtual DbSet<Delivery>   DeliveryList   { get; set; }
     public virtual DbSet<Pharmacist> PharmacistList { get; set; }
     public virtual DbSet<Warehouse>  WarehouseList  { get; set; }
-    public virtual DbSet<PharmacyPharmacist> PharmacyPharmacists { get; set; }
+    public virtual DbSet<PharmacyPharmacist>       PharmacyPharmacists        { get; set; }
+    public virtual DbSet<VwDeliveryDetail>         VwDeliveryDetails          { get; set; }
+    public virtual DbSet<VwPharmacistSalesSummary> VwPharmacistSalesSummaries { get; set; }
+    public virtual DbSet<VwWarehouseProfit>        VwWarehouseProfits         { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -119,6 +122,74 @@ public class PharmacyDbContext : DbContext, IPharmacyDbContext
 
             entity.Property(e => e.PharmacistId).HasColumnName("pharmacist_id");
             entity.Property(e => e.PharmacyId).HasColumnName("pharmacy_id");
+        });
+
+
+                modelBuilder.Entity<VwDeliveryDetail>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_delivery_detail");
+
+            entity.Property(e => e.DeliveryDate)
+                .HasColumnType("date")
+                .HasColumnName("delivery_date");
+            entity.Property(e => e.DrugName)
+                .HasMaxLength(100)
+                .HasColumnName("drug_name");
+            entity.Property(e => e.PharmacyTo)
+                .HasMaxLength(50)
+                .HasColumnName("pharmacy_to");
+            entity.Property(e => e.TotalPrice)
+                .HasColumnType("money")
+                .HasColumnName("total_price");
+            entity.Property(e => e.UnitCount).HasColumnName("unit_count");
+            entity.Property(e => e.UnitPrice)
+                .HasColumnType("money")
+                .HasColumnName("unit_price");
+            entity.Property(e => e.WarehouseFrom)
+                .HasMaxLength(100)
+                .HasColumnName("warehouse_from");
+        });
+
+        modelBuilder.Entity<VwPharmacistSalesSummary>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_pharmacist_sales_summary");
+
+            entity.Property(e => e.FirstName)
+                .HasMaxLength(50)
+                .HasColumnName("first_name");
+            entity.Property(e => e.LastName)
+                .HasMaxLength(50)
+                .HasColumnName("last_name");
+            entity.Property(e => e.Pharmacy)
+                .HasMaxLength(50)
+                .HasColumnName("pharmacy");
+            entity.Property(e => e.PrimaryRx)
+                .HasMaxLength(50)
+                .HasColumnName("primary_rx");
+            entity.Property(e => e.TotalNonPrimaryUnits).HasColumnName("total_non_primary_units");
+            entity.Property(e => e.TotalPrimaryUnits).HasColumnName("total_primary_units");
+        });
+
+        modelBuilder.Entity<VwWarehouseProfit>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("vw_warehouse_profit");
+
+            entity.Property(e => e.AverageProfitPerUnit)
+                .HasColumnType("money")
+                .HasColumnName("average_profit_per_unit");
+            entity.Property(e => e.TotalDeliveryRevenue)
+                .HasColumnType("money")
+                .HasColumnName("total_delivery_revenue");
+            entity.Property(e => e.TotalUnitCount).HasColumnName("total_unit_count");
+            entity.Property(e => e.Warehouse)
+                .HasMaxLength(100)
+                .HasColumnName("warehouse");
         });
     }
 }

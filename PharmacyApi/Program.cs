@@ -37,7 +37,7 @@ builder.Services.AddTransient<IPharmacyService, PharmacyService>();
 builder.Services.AddTransient<IDeliveryService, DeliveryService>();
 builder.Services.AddTransient<IPharmacistService, PharmacistService>();
 builder.Services.AddTransient<IWarehouseService, WarehouseService>();
-builder.Services.AddTransient<IReportService, ReportService>();
+builder.Services.AddTransient<IReportService, ReportingService>();
 
 var app = builder.Build();
 

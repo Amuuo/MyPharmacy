@@ -94,11 +94,11 @@ public class PharmacistService : IPharmacistService
                 return ServiceHelper.BuildNoContentResult<Pharmacist>($"No pharmacist found with ID {pharmacistToUpdate.Id}");
             }
 
-            existingPharmacist.FirstName = pharmacistToUpdate.FirstName;
-            existingPharmacist.LastName  = pharmacistToUpdate.LastName;
-            existingPharmacist.Age       = pharmacistToUpdate.Age;
-            existingPharmacist.HireDate  = pharmacistToUpdate.HireDate;
-            existingPharmacist.PrimaryRx = pharmacistToUpdate.PrimaryRx;
+            existingPharmacist.FirstName = pharmacistToUpdate.FirstName ?? existingPharmacist.FirstName;
+            existingPharmacist.LastName  = pharmacistToUpdate.LastName  ?? existingPharmacist.LastName;
+            existingPharmacist.Age       = pharmacistToUpdate.Age       ?? existingPharmacist.Age;
+            existingPharmacist.HireDate  = pharmacistToUpdate.HireDate  ?? existingPharmacist.HireDate;
+            existingPharmacist.PrimaryRx = pharmacistToUpdate.PrimaryRx ?? existingPharmacist.PrimaryRx;
 
             await _dbContext.SaveChangesAsync();
 

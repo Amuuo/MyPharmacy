@@ -23,9 +23,7 @@ const DeliveryList: React.FC = () => {
         return new Intl.NumberFormat(locale, { style: 'currency', currency }).format(value);
     }
 
-    const columns: GridColDef[] = useMemo(() => ([        
-            // { field: 'warehouseId', headerName: 'Warehouse ID', width: 120, editable: true, flex: 1 },
-            // { field: 'pharmacyId', headerName: 'Pharmacy ID', width: 120, editable: true, flex: 1 },
+    const columns: GridColDef[] = useMemo(() => ([                    
             { field: 'drugName', headerName: 'Drug Name', width: 120, editable: true },
             { field: 'unitCount', headerName: 'Count', width: 60, editable: true, type: 'number'},
             { field: 'unitPrice', headerName: 'Price', width: 80, editable: true,  type: 'number', valueFormatter: (params) => formatCurrency(params.value) },
@@ -34,8 +32,7 @@ const DeliveryList: React.FC = () => {
     ]), []);
 
 
-    if (!selectedPharmacy?.id) {
-        // return <h3 style={{textAlign: 'center'}} className='delivery-list'>Select Pharmacy to view Deliveries</h3>;
+    if (!selectedPharmacy?.id) {        
         return null;
     }
        

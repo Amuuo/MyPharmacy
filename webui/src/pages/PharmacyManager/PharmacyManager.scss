@@ -15,11 +15,11 @@
   grid-template-areas: 'pharmacy pharmacyCard'                       
                        'order pharmacist';                       
   grid-template-columns: minmax(400px, 600px) minmax(325px, 350px);
-  grid-template-rows: repeat(3, auto);// minmax(100px, auto) minmax(100px, auto);// minmax(auto, 200px) minmax(auto, 200px);
+  grid-template-rows: 280px 175px;// minmax(100px, auto) minmax(100px, auto);// minmax(auto, 200px) minmax(auto, 200px);
   transition: 300ms;
   justify-content: center;
   min-width: 450px;
-  margin: 2rem ;
+  // margin: 2rem ;
   grid-gap: 2rem;
   max-width: 1280px;
 }

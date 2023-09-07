@@ -8,10 +8,10 @@ export default function PharmacyManager() {
         
     return (
         <div className='PharmacyManager'>                                    
-                <PharmacyList/>                            
-                <PharmacistList/>            
-                <PharamcySelectionCard/>  
-                <DeliveryList/>                         
+            <PharmacyList/>                            
+            <PharmacistList/>            
+            <PharamcySelectionCard/>  
+            <DeliveryList/>                         
         </div>
     );        
 }

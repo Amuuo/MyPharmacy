@@ -1,0 +1,24 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'monospace';
+  }
+  
+.menu-container {
+    display: flex;
+    grid-gap: 1.5rem;
+    align-items: center;
+}
+
+.brand-link {
+    font-family: monospace !important;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: whitesmoke;
+}
+
+.env-text {
+    font-family: 'Roboto Mono' !important;
+    font-size: 12px;
+    text-align: end;
+}

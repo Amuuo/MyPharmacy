@@ -1,20 +1,19 @@
-import { AppBar, Toolbar, Typography } from '@mui/material';
+import { AppBar, Toolbar } from '@mui/material';
+import './Header.scss';
 
-
-function Header() {
-  
+export default function Header()  {
   return (
     <AppBar position="static">
-      <Toolbar sx={{display: 'flex', justifyContent: 'space-between'}}>
-        <Typography variant="h6" sx={{fontFamily: 'monospace' }}>
-          MyPharmacy®
-        </Typography>
-        <Typography variant='body1' sx={{fontFamily: 'monospace', textAlign: 'end' }}>
-          Environment: {import.meta.env.MODE}
-        </Typography>
+      <Toolbar className="toolbar">
+        <div className="menu-container">
+          <a href="/" className="brand-link">MyPharmacy®</a>
+          <a href='/'>Pharmacies</a> 
+          <a href='/reports'>Pharmacists</a>
+          <a href='/reports'>Deliveries</a>
+          <a href='/reports'>Reporting</a>
+        </div>
+        <span className="env-text">{import.meta.env.MODE}</span>
       </Toolbar>
     </AppBar>
   );
 }
-
-export default Header;

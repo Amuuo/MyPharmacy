@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import  './PharmacistList.scss';
@@ -6,51 +6,45 @@ import { LinearProgress } from '@mui/material';
 import { AppDispatch, useSelector } from '../../store/store';
 import { fetchPharmacistList } from '../../services/pharmacistService';
 
-const PharmacistList = () => {
+export default function PharmacistList() {
 
     const dispatch: AppDispatch = useDispatch();
-    const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy);
-    const pharmacistList = useSelector(state => state.pharmacist.pharmacistList);
-    const loading = useSelector(state => state.pharmacist.loading);
-    const initialLoad = useSelector(state => state.pharmacy.initialLoad);
 
-    useEffect(() => {
-                
+    const {selectedPharmacy, pharmacistList, loading, initialLoad} = useSelector(state => ({
+        selectedPharmacy: state.pharmacy.selectedPharmacy,
+        pharmacistList:   state.pharmacist.pharmacistList,
+        loading:          state.pharmacist.loading,
+        initialLoad:      state.pharmacy.initialLoad
+    }));
+    
+    useEffect(() => {                
         if (selectedPharmacy.id) 
-            dispatch(fetchPharmacistList(selectedPharmacy.id));
-        
-    }, [selectedPharmacy, dispatch]);
+            dispatch(fetchPharmacistList(selectedPharmacy.id));        
+    }, [selectedPharmacy]);
 
-    const columns: GridColDef[] = useMemo(() => ([        
+    const columns: GridColDef[] = [
         { field: 'fullName', headerName: 'Pharmacist', width: 150, valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`},        
         { field: 'primaryRx', headerName: 'Primary RX', width: 150, editable: true },        
-    ]), []);
+    ];
+        
     
-    if (initialLoad) return null;    
-    
-    if (!selectedPharmacy?.id) {        
-        return null;
-    }
-       
-    if (loading) {
-        return <div style={{gridArea: 'pharmacist'}}><LinearProgress /></div>;
-    }
-    
-    if (!loading && (pharmacistList.length === 0)) {
+    if (!selectedPharmacy?.id || initialLoad) 
+        return null;    
+    else if (loading) 
+        return <div style={{gridArea: 'pharmacist'}}><LinearProgress /></div>;    
+    else if (pharmacistList.length === 0) 
         return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;
-    }
-    return (        
-        <div className="pharmacistGrid">                        
-            <DataGrid                
-                hideFooter={true}                
-                rows={pharmacistList}
-                columns={columns}
-                loading={loading}                        
-                rowHeight={30}        
-                columnHeaderHeight={35}
-            />                
-        </div>
+    
+        
+    return (                   
+        <DataGrid       
+            className="pharmacistGrid"         
+            hideFooter={true}                
+            rows={pharmacistList}
+            columns={columns}
+            loading={loading}                        
+            rowHeight={30}        
+            columnHeaderHeight={35}
+        />                       
     );         
 }
-
-export default PharmacistList

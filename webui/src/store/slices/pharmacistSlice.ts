@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Pharmacist } from "../../models/pharmacist";
+import { fetchPharmacistList } from "../../services/pharmacistService";
 
 export type PharmacistState = {
     pharmacistList: Pharmacist[];
@@ -29,16 +30,27 @@ export const pharmacistSlice = createSlice({
         setPharmacistSelection: (state, action) => { 
             state.selectedPharmacist = action.payload 
         },
+    },
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchPharmacistList.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchPharmacistList.fulfilled, (state, action) => {
+                state.loading = false;
+                state.pharmacistList = action.payload;
+            })
+            .addCase(fetchPharmacistList.rejected, (state, action) => {
+                state.loading = false;
+                console.error('Error getting deliveries', action.error);
+                state.pharmacistList = [];
+            })
     }
 })
 
-export const { 
-    // updatePharmacist, 
+export const {     
     setPharmacistList, 
     resetPharmacistList,
     setLoadingPharmacist, 
     setPharmacistSelection    
 } = pharmacistSlice.actions;
-
-
-// export default pharmacistSlice.reducer;

@@ -1,29 +1,40 @@
+import { useState, useEffect } from 'react';
 import { useSelector } from "../../store/store";
 import './PharmacySelectionCard.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
 
+export default function PharamcySelectionCard() {
+    const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy);
 
-const PharamcySelectionCard: React.FC = () => {
+    const [isOutgoing, setIsOutgoing] = useState(false);
+    const [currentPharmacy, setCurrentPharmacy] = useState(selectedPharmacy);
 
-    const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy );
-
-    if (!selectedPharmacy?.name) {
-        return null;
-    }
+    useEffect(() => {
+        setIsOutgoing(true);
+        
+        setTimeout(() => {
+            setCurrentPharmacy(selectedPharmacy);
+            setIsOutgoing(false);
+        }, 200);
+        
+    }, [selectedPharmacy]);
     
-    const cityStateZip = `${selectedPharmacy.city}, ${selectedPharmacy.state} ${selectedPharmacy.zip}`;
 
     return (
-        <Card className="pharmacy-selection">
-            <CardHeader title={selectedPharmacy.name} />
-            <CardContent  >                
-                <Typography fontFamily={'Inter'}> {selectedPharmacy.address} </Typography>
-                <Typography fontFamily={'Inter'} gutterBottom> {cityStateZip} </Typography>
-                <Typography variant="subtitle1" color="text.secondary"> RX Filled </Typography> 
-                {selectedPharmacy.prescriptionsFilled} 
-            </CardContent>
-        </Card>
+        <div className="pharmacy-selection">
+            {!currentPharmacy?.name 
+                ? null 
+                : <Card className={isOutgoing ? 'pharmacy-card outgoing' : 'pharmacy-card incoming'}>
+                    <CardHeader title={currentPharmacy.name} />
+                    <CardContent>                
+                        <Typography> {currentPharmacy.address} </Typography>
+                        <Typography gutterBottom> 
+                            {`${currentPharmacy.city}, ${currentPharmacy.state} ${currentPharmacy.zip}`} 
+                        </Typography>
+                        <Typography variant="subtitle2" color="text.secondary"> RX Filled </Typography> 
+                        {currentPharmacy.prescriptionsFilled} 
+                    </CardContent>
+                  </Card>}
+        </div>
     );
 }
-
-export default PharamcySelectionCard;

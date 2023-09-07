@@ -4,9 +4,12 @@ $bright-blue: #1A80D9;
 $muted-blue: #4586BF;
 $teal-blue: #4AB0D9;
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
 @keyframes grow-in {
   from {
-      height: 0px;        
+      height: 0px;  
+      // opacity: 50;      
   }
 }
 
@@ -26,13 +29,24 @@ $teal-blue: #4AB0D9;
 }
 
 .MuiDataGrid-virtualScroller {
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  // scrollbar-width: thin !important;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;  
+  background-color: rgb(31, 93, 163);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(193, 233, 255) !important;
 }
 
 .MuiDataGrid-columnHeaderTitle {
   font-weight: bolder;
-  font-size: 1rem;
-  font-family: monospace;
+  font-size: 1em;
+  font-family: 'Roboto Mono';  
   text-transform: uppercase;
   
 }
@@ -55,10 +69,11 @@ $teal-blue: #4AB0D9;
 
 
 .MuiDataGrid-root {
-  overflow: hidden !important;
-  overflow-y: hidden !important;
-  overflow-x: hidden !important;
-  font-family: 'Inter', monospace !important;
+  // overflow: hidden !important;
+  // overflow-y: hidden !important;
+  // overflow-x: hidden !important;
+  font-family: 'Roboto Mono', 'Inter', monospace !important;
+  font-size: 13px !important;
   background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
   color: whitesmoke !important;        
   // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);    
@@ -73,9 +88,13 @@ $teal-blue: #4AB0D9;
   background: linear-gradient(0deg, rgb(152, 149, 209) 0%, rgba(61,107,205,1) 21%,rgba(61,107,205,1) 81% rgba(77,145,203,1) 100%);    
 }
 
-.MuiDataGrid-footerContainer {
-  height: 20px !important;
-  min-height: 40px !important;
+// .MuiDataGrid-footerContainer {
+//   height: 20px !important;
+//   min-height: 40px !important;  
+// }
+
+.MuiTablePagination-root {
+  color: rgb(11, 39, 100) !important; 
 }
 
 .MuiTablePagination-toolbar {
@@ -99,11 +118,13 @@ $teal-blue: #4AB0D9;
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: whitesmoke !important;
+  font-family: monospace !important;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  // color: #535bf2;
+  text-decoration: underline;
 }
 
 body {

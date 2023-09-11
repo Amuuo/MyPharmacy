@@ -39,11 +39,11 @@ namespace PharmacyApi.Utilities.Helpers
 
         public static async Task<IServiceResult<IPagedResult<Pharmacy>>> 
             BuildPagedResultAsync(IAsyncEnumerable<Pharmacy> pharmacyList, 
-                                  PharmacyPagedSearch pagedSearch, int totalCount)
+                                  PagedRequest pagedRequest, int totalCount)
         {
             var pagedResult = await BuildPagedResultAsync(pharmacyList, 
-                                                          pagedSearch.PageNumber, 
-                                                          pagedSearch.PageSize, 
+                                                          pagedRequest.PageNumber, 
+                                                          pagedRequest.PageSize, 
                                                           totalCount);
 
             return BuildSuccessServiceResult(pagedResult);

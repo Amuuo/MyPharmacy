@@ -36,15 +36,20 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<IServiceResult<IPagedResult<Pharmacy>>> SearchPharmacyListPagedAsync(PharmacyPagedSearch pagedSearch)
+    public async Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(PagedRequest pagedRequest)
     {
         try
         {
-            var pharmacyList = ExecutePharmacySearchProcedure(pagedSearch);
+            var startRow = (pagedRequest.PageNumber - 1) * pagedRequest.PageSize;
+
+            var pharmacyList = _pharmacyDbContext.PharmacyList
+                .Skip(startRow)
+                .Take(pagedRequest.PageSize)
+                .ToAsyncEnumerable();
 
             if (await pharmacyList.AnyAsync() is false)
             {
-                _logger.LogWarning("No pharmacies found with search criteria: {@searchCriteria}", pagedSearch);
+                _logger.LogWarning("No pharmacies found with search criteria: {@searchCriteria}", pagedRequest);
                 return ServiceHelper
                     .BuildNoContentResult<IPagedResult<Pharmacy>>("No pharmacies found with search criteria");
             }
@@ -53,12 +58,12 @@ public class PharmacyService : IPharmacyService
             
             return await ServiceHelper
                 .BuildPagedResultAsync(pharmacyList, 
-                                       pagedSearch, 
+                                       pagedRequest, 
                                        await _pharmacyDbContext.PharmacyList.CountAsync());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while searching for pharmacies with criteria: {@searchCriteria}", pagedSearch);
+            _logger.LogError(ex, "Error occurred while searching for pharmacies with criteria: {@searchCriteria}", pagedRequest);
             
             return ServiceHelper
                 .BuildErrorServiceResult<IPagedResult<Pharmacy>>(ex, "searching for pharmacies");
@@ -219,32 +224,6 @@ public class PharmacyService : IPharmacyService
 
     #region Private Methods
 
-
-    private IAsyncEnumerable<Pharmacy> ExecutePharmacySearchProcedure(PharmacyPagedSearch pagedSearch)
-    {
-        _logger.LogDebug("Attempting to query pharmacy table with {@pagedSearch}", pagedSearch);
-
-        var parameters = new SqlParameter[]
-        {
-            new("@SearchQuery",   pagedSearch.SearchCriteria.SearchQuery ?? (object)DBNull.Value),
-            new("@PageNumber",    pagedSearch.PageNumber),
-            new("@PageSize",      pagedSearch.PageSize),
-            new("@SortColumn",    pagedSearch.SortColumn),
-            new("@SortDirection", pagedSearch.SortDirection)
-        };
-
-        const string sql = @"EXEC 
-                                sp_SearchPharmacyList 
-                                    @SearchQuery, 
-                                    @PageNumber, 
-                                    @PageSize, 
-                                    @SortColumn, 
-                                    @SortDirection";
-
-        return _pharmacyDbContext.PharmacyList
-            .FromSqlRaw(sql, parameters)
-            .AsAsyncEnumerable();
-    }
 
 
     private static void UpdateExistingPharmacy(Pharmacy existingPharmacy, Pharmacy updatedPharmacy)

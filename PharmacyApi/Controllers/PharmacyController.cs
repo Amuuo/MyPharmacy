@@ -35,12 +35,12 @@ public class PharmacyController : ControllerBase
         (await _pharmacyService.GetPharmaciesByPharmacistIdAsync(id)).HandleResponse();
 
     [HttpPost]
-    [Route("search/paged")]
-    public async Task<IActionResult> SearchPagedPharmacyList(PharmacyPagedSearch? searchCriteria)
+    [Route("all/paged")]
+    public async Task<IActionResult> GetPagedPharmacyList(PagedRequest? pagedRequest)
     {
-        searchCriteria ??= new PharmacyPagedSearch();
+        pagedRequest ??= new PagedRequest();
         
-        return (await _pharmacyService.SearchPharmacyListPagedAsync(searchCriteria)).HandleResponse();
+        return (await _pharmacyService.GetPharmacyListPagedAsync(pagedRequest)).HandleResponse();
     }
     
     [HttpPut]

@@ -18,8 +18,8 @@ export const editPharmacy = createAsyncThunk(
 
 export const fetchPharmacyList = createAsyncThunk(
     'pharmacy/fetchPharmacyList',
-    async (paginationModel: GridPaginationModel, {}) => {        
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/pharmacy/search/paged`, {
+    async (paginationModel: GridPaginationModel) => {        
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/pharmacy/all/paged`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 

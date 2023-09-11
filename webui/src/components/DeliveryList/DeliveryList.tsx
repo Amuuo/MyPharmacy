@@ -45,7 +45,7 @@ export default function DeliveryList() {
         !selectedPharmacy?.id 
             ? null 
             : loading 
-                ? <LinearProgress/> 
+                ? <LinearProgress sx={{gridArea: 'order'}} /> 
                 : (deliveryList.length === 0) 
                     ? <h3 style={{textAlign: 'center'}} className="delivery-list">No deliveries found...</h3> 
                     : <div className="delivery-list">            

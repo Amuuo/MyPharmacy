@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { updatePharmacy, setPharmacySelection } from '../../store/slices/pharmacySlice';
+import { setPharmacySelection } from '../../store/slices/pharmacySlice';
 import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from '@mui/x-data-grid';
 import './PharmacyList.scss';
 import { Pharmacy } from '../../models/pharmacy';

@@ -1,9 +1,8 @@
 import { editPharmacy, fetchPharmacyList } from '../../services/pharmacyService';
 import { Pharmacy } from '../../models/pharmacy';
 import { createSlice } from '@reduxjs/toolkit';
-import { stat } from 'fs';
 
-export type PharmacyState = {
+type PharmacyState = {
     pharmacyList: Pharmacy[];
     loading: boolean;
     initialLoad: boolean;
@@ -58,6 +57,7 @@ export const pharmacySlice = createSlice({
             })
             .addCase(editPharmacy.rejected, (state, action) => {
                 console.error("Error updating Pharmacy", action.error);
+                state.pharmacyList = [];
             });
     }
 });

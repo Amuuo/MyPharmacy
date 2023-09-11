@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Pharmacist } from "../../models/pharmacist";
 import { fetchPharmacistList } from "../../services/pharmacistService";
 
-export type PharmacistState = {
+type PharmacistState = {
     pharmacistList: Pharmacist[];
     loading: boolean;
     selectedPharmacist: Pharmacist;
@@ -18,15 +18,6 @@ export const pharmacistSlice = createSlice({
     name: 'pharmacist',
     initialState,
     reducers: {
-        setPharmacistList: (state, action) => {
-            state.pharmacistList = action.payload;
-        },
-        resetPharmacistList: (state) => { 
-            state.pharmacistList = [];            
-        },
-        setLoadingPharmacist: (state, action) => { 
-            state.loading = action.payload 
-        },
         setPharmacistSelection: (state, action) => { 
             state.selectedPharmacist = action.payload 
         },
@@ -49,8 +40,5 @@ export const pharmacistSlice = createSlice({
 })
 
 export const {     
-    setPharmacistList, 
-    resetPharmacistList,
-    setLoadingPharmacist, 
     setPharmacistSelection    
 } = pharmacistSlice.actions;

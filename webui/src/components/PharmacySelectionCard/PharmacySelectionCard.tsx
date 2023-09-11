@@ -21,20 +21,22 @@ export default function PharamcySelectionCard() {
     
 
     return (
-        <div className="pharmacy-selection">
+        <>
             {!currentPharmacy?.name 
                 ? null 
-                : <Card className={isOutgoing ? 'pharmacy-card outgoing' : 'pharmacy-card incoming'}>
-                    <CardHeader title={currentPharmacy.name} />
-                    <CardContent>                
-                        <Typography> {currentPharmacy.address} </Typography>
-                        <Typography gutterBottom> 
-                            {`${currentPharmacy.city}, ${currentPharmacy.state} ${currentPharmacy.zip}`} 
-                        </Typography>
-                        <Typography variant="subtitle2" color="text.secondary"> RX Filled </Typography> 
-                        {currentPharmacy.prescriptionsFilled} 
-                    </CardContent>
-                  </Card>}
-        </div>
+                : <div className="pharmacy-selection">
+                    <Card className={isOutgoing ? 'pharmacy-card outgoing' : 'pharmacy-card incoming'}>
+                        <CardHeader title={currentPharmacy.name} />
+                        <CardContent>                
+                            <Typography> {currentPharmacy.address} </Typography>
+                            <Typography gutterBottom> 
+                                {`${currentPharmacy.city}, ${currentPharmacy.state} ${currentPharmacy.zip}`} 
+                            </Typography>
+                            <Typography variant="subtitle2" color="text.secondary"> RX Filled </Typography> 
+                            {currentPharmacy.prescriptionsFilled}                             
+                        </CardContent>
+                    </Card>
+                </div>}
+        </>
     );
 }

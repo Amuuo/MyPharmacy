@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Delivery } from "../../models/delivery"
 import { getDeliveryListByPharmacyId } from "../../services/deliveryService";
 
-export type DeliveryState = {
+type DeliveryState = {
     deliveryList: Delivery[];
     loading: boolean;
 }

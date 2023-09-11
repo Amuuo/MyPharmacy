@@ -48,7 +48,7 @@ public class PharmacistService : IPharmacistService
 
     public async Task<IServiceResult<Pharmacist>> GetPharmacistByIdAsync(int id)
     {
-        var pharmacist = await _dbContext.PharmacistList.Where(p => p.Id == id).FirstAsync();
+        var pharmacist = await _dbContext.PharmacistList.FindAsync(id);
 
         return ServiceHelper.BuildSuccessServiceResult(pharmacist);
     }
@@ -94,11 +94,7 @@ public class PharmacistService : IPharmacistService
                 return ServiceHelper.BuildNoContentResult<Pharmacist>($"No pharmacist found with ID {pharmacistToUpdate.Id}");
             }
 
-            existingPharmacist.FirstName = pharmacistToUpdate.FirstName ?? existingPharmacist.FirstName;
-            existingPharmacist.LastName  = pharmacistToUpdate.LastName  ?? existingPharmacist.LastName;
-            existingPharmacist.Age       = pharmacistToUpdate.Age       ?? existingPharmacist.Age;
-            existingPharmacist.HireDate  = pharmacistToUpdate.HireDate  ?? existingPharmacist.HireDate;
-            existingPharmacist.PrimaryRx = pharmacistToUpdate.PrimaryRx ?? existingPharmacist.PrimaryRx;
+            UpdateExistingPharmacist(existingPharmacist, pharmacistToUpdate);
 
             await _dbContext.SaveChangesAsync();
 
@@ -110,5 +106,15 @@ public class PharmacistService : IPharmacistService
             _logger.LogError(ex, "An error occurred while updating pharmacist with ID {PharmacistId}.", pharmacistToUpdate.Id);
             return ServiceHelper.BuildErrorServiceResult<Pharmacist>(ex, $"updating pharmacist with ID {pharmacistToUpdate.Id}");
         }
+    }
+
+    private static void UpdateExistingPharmacist(Pharmacist existingPharmacist,
+                                                 Pharmacist pharmacistToUpdate)
+    {
+        existingPharmacist.FirstName = pharmacistToUpdate.FirstName ?? existingPharmacist.FirstName;
+        existingPharmacist.LastName  = pharmacistToUpdate.LastName  ?? existingPharmacist.LastName;
+        existingPharmacist.Age       = pharmacistToUpdate.Age       ?? existingPharmacist.Age;
+        existingPharmacist.HireDate  = pharmacistToUpdate.HireDate  ?? existingPharmacist.HireDate;
+        existingPharmacist.PrimaryRx = pharmacistToUpdate.PrimaryRx ?? existingPharmacist.PrimaryRx;
     }
 }

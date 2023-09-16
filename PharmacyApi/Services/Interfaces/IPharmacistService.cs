@@ -9,4 +9,5 @@ public interface IPharmacistService
     Task<IServiceResult<Pharmacist>> GetPharmacistByIdAsync(int id);
     Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistListByPharmacyIdAsync(int pharmacyId);
     Task<IServiceResult<Pharmacist>> UpdatePharmacistAsync(Pharmacist pharmacist);
+    Task<IServiceResult<Pharmacist>> AddPharmacistAsync(Pharmacist pharmacist);
 }

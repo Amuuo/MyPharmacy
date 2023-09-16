@@ -1,14 +1,51 @@
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    font-family: 'monospace';
-  }
-  
-.menu-container {
-    display: flex;
-    grid-gap: 1.5rem;
-    align-items: center;
+@media screen and (min-width: 300px) and (max-width: 750px) {
+    .toolbar {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        padding: 15px;
+    }
+
+    .menu-container {
+        display: flex;
+        flex-direction: column;
+        grid-gap: 0.5rem;
+        align-items: start;
+        font-size: 10px;        
+    }
+
+    .menu-container-links {
+        display: none;
+    }
+
+    .env-text {
+        font-family: 'Roboto Mono' !important;
+        font-size: 12px;
+        text-align: end;
+        display: none;
+    }
 }
+
+@media screen and (min-width: 750px) {
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'monospace';
+    }
+    .menu-container {
+        transition: 300ms;
+        display: flex;
+        grid-gap: 1.5rem;
+        align-items: center;        
+    }
+
+    .menu-container-links {
+        display: flex;
+        grid-gap: 1rem;
+    }
+}
+  
+
 
 .brand-link {
     font-family: monospace !important;

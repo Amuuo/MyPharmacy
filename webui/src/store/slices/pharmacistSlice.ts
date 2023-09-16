@@ -1,16 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Pharmacist } from "../../models/pharmacist";
-import { fetchPharmacistList } from "../../services/pharmacistService";
+import { addPharmacist, fetchPharmacistList, fetchPharmacistListByPharmacyId } from "../../services/pharmacistService";
 
 type PharmacistState = {
     pharmacistList: Pharmacist[];
-    loading: boolean;
+    loadingPharmacistList: boolean;
+    addingPharmacist: boolean;
     selectedPharmacist: Pharmacist;
 };
 
 const initialState: PharmacistState = {
     pharmacistList: [],
-    loading: true,
+    loadingPharmacistList: false,
+    addingPharmacist: false,
     selectedPharmacist: {}
 }
 
@@ -24,17 +26,36 @@ export const pharmacistSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(fetchPharmacistList.pending, (state) => {
-                state.loading = true;
+            .addCase(fetchPharmacistListByPharmacyId.pending, (state) => {
+                state.loadingPharmacistList = true;
             })
-            .addCase(fetchPharmacistList.fulfilled, (state, action) => {
-                state.loading = false;
+            .addCase(fetchPharmacistListByPharmacyId.fulfilled, (state, action) => {
+                state.loadingPharmacistList = false;
                 state.pharmacistList = action.payload;
             })
-            .addCase(fetchPharmacistList.rejected, (state, action) => {
-                state.loading = false;
-                console.error('Error getting deliveries', action.error);
+            .addCase(fetchPharmacistListByPharmacyId.rejected, (state, action) => {
+                state.loadingPharmacistList = false;
+                console.error('Error getting pharmacists', action.error);
                 state.pharmacistList = [];
+            })
+            .addCase(fetchPharmacistList.pending, (state) => {
+                state.pharmacistList = [];
+                state.loadingPharmacistList = true;
+            })
+            .addCase(fetchPharmacistList.rejected, (state, action) => {
+                state.loadingPharmacistList = false;
+                console.error('Error getting pharmacists', action.error);
+                state.pharmacistList = [];
+            })
+            .addCase(fetchPharmacistList.fulfilled, (state, action) => {
+                state.loadingPharmacistList = false;
+                state.pharmacistList = action.payload;
+            })
+            .addCase(addPharmacist.pending, (state) => {
+                state.addingPharmacist = true;
+            })
+            .addCase(addPharmacist.rejected, () => {
+                console.error('Error adding pharmacist');
             })
     }
 })

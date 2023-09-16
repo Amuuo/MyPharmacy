@@ -1,76 +1,74 @@
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setPharmacySelection } from '../../store/slices/pharmacySlice';
-import { DataGrid, GridColDef, GridPaginationModel, GridRowSelectionModel } from '@mui/x-data-grid';
-import './PharmacyList.scss';
-import { Pharmacy } from '../../models/pharmacy';
-import _ from 'lodash';
-import { editPharmacy, fetchPharmacyList } from '../../services/pharmacyService';
-import { AppDispatch, useSelector } from '../../store/store';
+import { useEffect } from 'react';
+import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
+import _ from 'lodash';
+
+import { setPharmacySelection } from '../../store/slices/pharmacySlice';
+import { Pharmacy } from '../../models/pharmacy';
+import usePagination from '../../hooks/usePagination';
+
+import './PharmacyList.scss';
+import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore } from '../../store/pharmacyStore';
+import { useStore } from 'effector-react';
+
 
 
 export default function PharmacyList() {
     
-    const dispatch: AppDispatch = useDispatch();
+    //const dispatch: AppDispatch = useDispatch();
+    //const { pharmacyList, loading, initialLoad, totalCount } = useSelector(state => state.pharmacy);    
+    const { pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
+    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
-    const { pharmacyList, loading, initialLoad, totalCount } = useSelector(state => ({
-        pharmacyList: state.pharmacy.pharmacyList,
-        loading:      state.pharmacy.loading,
-        initialLoad:  state.pharmacy.initialLoad,
-        totalCount:   state.pharmacy.totalCount
-    }))
-    
-    
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-        page: 0,
-        pageSize: 15
-    });
-    
     useEffect(() => {                
-        dispatch(fetchPharmacyList(paginationModel));
+        fetchPharmacyListFx(paginationModel);
+        //dispatch(fetchPharmacyList(paginationModel));
     }, [paginationModel]);
 
-
     const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {                
-        const selectedPharmacy = 
-            pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);
-        
-        if (selectedPharmacy) dispatch(setPharmacySelection(selectedPharmacy)); 
-        else dispatch(setPharmacySelection({}));
+        const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);        
+        setPharmacySelection(selectedPharmacy || null);
+        //dispatch(setPharmacySelection(selectedPharmacy || {}));
     }
 
-
-    const handleEditCellChange = (updatedPharmacy: Pharmacy, 
-                                  originalPharmacy: Pharmacy) => {
-        if( !_.isEqual(updatedPharmacy, originalPharmacy) )
-            dispatch(editPharmacy(updatedPharmacy));
-
-        return updatedPharmacy;
+    const handleEditCellChange = (updatedPharmacy: Pharmacy, originalPharmacy: Pharmacy) => {
+        if (!_.isEqual(updatedPharmacy, originalPharmacy))
+            editPharmacyFx(updatedPharmacy);
+            //dispatch(editPharmacy(updatedPharmacy));    
+        return updatedPharmacy;    
     }
 
-
-    const handlePaginationModelChange = (newModel: GridPaginationModel) => {        
-        if (paginationModel.pageSize !== newModel.pageSize) 
-            newModel.page = 0;
-        
-        setPaginationModel(newModel);
-    };
-
-    const columns: GridColDef[] = [
-        { field: 'name',  headerName: 'Name',  width: 175, editable: true, flex: 2 },        
-        { field: 'city',  headerName: 'City',  width: 100, editable: true, flex: 1.5 },
-        { field: 'state', headerName: 'State', width: 50,  editable: true, flex: 0.5 },
-        { field: 'zip',   headerName: 'Zip',   width: 80,  editable: true, flex: 1, type: 'number' },        
+    const columns = [
+        { field: 'name', headerName: 'Name', width: 150, editable: true, flex: 1.5, hideable: true },
+        { field: 'city', headerName: 'City', width: 100, editable: true, flex: 1.5, hideable: true },
+        { field: 'state', headerName: 'State', width: 50, editable: true, flex: 1, hideable: true },
+        { field: 'zip', headerName: 'Zip', width: 80, editable: true, flex: 1, hideable: true },
+        { field: 'id', headerName: 'ID', width: 50, hideable: true },
+        { field: 'address', headerName: 'Address', width: 200, flex: 1, editable: true, hideable: true },
+        { field: 'prescriptionsFilled', headerName: 'RX Filled', width: 100, type: 'number', editable: true, hideable: true },
+        { field: 'createdDate', headerName: 'Created Date', width: 150, type: 'date', editable: true, hideable: true },
+        { field: 'updatedDate', headerName: 'Updated Date', width: 150, type: 'date', editable: true, hideable: true }
     ];
-
+    
 
     return  (              
         <div className="PharmacyGrid">  
             {initialLoad 
                 ? <LinearProgress/> 
                 : <DataGrid 
+                    initialState={{
+                        columns: {
+                            columnVisibilityModel: {
+                                id: false,
+                                address: false,
+                                prescriptionsFilled: false,
+                                createdDate: false,
+                                updatedDate: false,                        
+                            }
+                        }
+                    }}                       
                     rows={pharmacyList} 
+                    disableColumnMenu={false}
                     columns={columns}    
                     loading={loading}   
                     hideFooterSelectedRowCount={true}  
@@ -88,4 +86,4 @@ export default function PharmacyList() {
                 />}
         </div>    
     )
-};
+}

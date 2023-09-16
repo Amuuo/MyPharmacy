@@ -1,0 +1,7 @@
+.PharmacistManager {
+    display: grid;
+    grid-template-areas: 'pharmacist form';
+    grid-template-columns: 2fr 1fr;
+    padding: 3rem;
+    grid-gap: 3rem;
+}

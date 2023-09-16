@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from "../../store/store";
 import './PharmacySelectionCard.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { pharmacyStore } from '../../store/pharmacyStore';
+import { useStore } from 'effector-react';
 
 export default function PharamcySelectionCard() {
-    const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy);
+    //const selectedPharmacy = useSelector(state => state.pharmacy.selectedPharmacy);
+
+    const { selectedPharmacy } = useStore(pharmacyStore);
 
     const [isOutgoing, setIsOutgoing] = useState(false);
     const [currentPharmacy, setCurrentPharmacy] = useState(selectedPharmacy);

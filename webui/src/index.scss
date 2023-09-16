@@ -28,6 +28,18 @@ $teal-blue: #4AB0D9;
   -webkit-text-size-adjust: 100%;  
 }
 
+#root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+
+}
+
+
+
 .MuiDataGrid-virtualScroller {
   overflow-x: hidden !important;
   // scrollbar-width: thin !important;
@@ -104,13 +116,13 @@ $teal-blue: #4AB0D9;
   overflow: hidden;
 }
 
-.main-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-}
+// .main-container {
+//   display: flex;
+//   flex-direction: column;
+//   width: 100%;
+//   justify-content: center;
+//   align-items: center;
+// }
 
 *, *::before, *::after {
   box-sizing: border-box;

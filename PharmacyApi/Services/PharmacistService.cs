@@ -108,6 +108,28 @@ public class PharmacistService : IPharmacistService
         }
     }
 
+    public async Task<IServiceResult<Pharmacist>> AddPharmacistAsync(Pharmacist pharmacist)
+    {
+        _logger.LogDebug("Attempting to add new pharmacist {@pharmacist}", pharmacist);
+
+        try
+        {
+            var newPharmacist = await _dbContext.PharmacistList.AddAsync(pharmacist);
+
+            _logger.LogDebug("Successfully added pharmacist");
+
+            await _dbContext.SaveChangesAsync();
+
+            return ServiceHelper.BuildSuccessServiceResult(newPharmacist.Entity);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occured while attempting to add a new pharmacist");
+            return ServiceHelper.BuildErrorServiceResult<Pharmacist>(
+                ex, "Error occuered when attempting to add pharmacist");
+        }
+    }
+
     private static void UpdateExistingPharmacist(Pharmacist existingPharmacist,
                                                  Pharmacist pharmacistToUpdate)
     {

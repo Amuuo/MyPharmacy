@@ -1,8 +1,22 @@
-.delivery-list {
-    grid-area: order; 
-    height: 175px;   
-    transition: 300ms;
-    animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56);    
-    overflow: hidden;
+@media (max-width: 767.98px){
+    .delivery-list {
+        grid-area: order; 
+        height: 200px;   
+        transition: 300ms;
+        animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56);    
+        overflow: hidden;
+    }
 }
+
+@media (min-width: 768px){
+    .delivery-list {
+        grid-area: order; 
+        height: 100%;   
+        transition: 300ms;
+        animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56);    
+        overflow: hidden;
+    }
+}
+
+
 

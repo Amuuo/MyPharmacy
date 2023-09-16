@@ -7,22 +7,20 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Header from './components/Header/Header.tsx';
 import ReportManager from './pages/ReportManager/ReportManager.tsx';
+import PharmacistManager from './pages/PharmacistManager/PharmacistManager.tsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <div className="main-container">
-        <Header/>
-        <div style={{padding: '3rem'}}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<PharmacyManager/>}/>
-              <Route path="reports" element={<ReportManager/>}/>            
-            </Routes>
-          </BrowserRouter>        
-        </div>
-      </div>
+    <Provider store={store}>      
+      <Header/>        
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" Component={PharmacyManager} />
+          <Route path="/pharmacists" Component={PharmacistManager} />
+          <Route path="/reports" Component={ReportManager} />            
+        </Routes>
+      </BrowserRouter>                   
     </Provider>
   </React.StrictMode>,
 )

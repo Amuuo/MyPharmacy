@@ -13,10 +13,10 @@ public class PharmacyService : IPharmacyService
 {
     #region Members and Constructor
 
-    private readonly ILogger<PharmacyService> _logger;
+    private readonly ILogger<IPharmacyService> _logger;
     private readonly IPharmacyDbContext _pharmacyDbContext;
 
-    public PharmacyService(ILogger<PharmacyService> logger, 
+    public PharmacyService(ILogger<IPharmacyService> logger, 
                            IPharmacyDbContext pharmacyDbContext)
     {
         _logger = logger;
@@ -217,8 +217,6 @@ public class PharmacyService : IPharmacyService
     }
 
 
-
-
     #endregion
 
 
@@ -233,6 +231,7 @@ public class PharmacyService : IPharmacyService
         existingPharmacy.Address = updatedPharmacy.Address ?? existingPharmacy.Address;
         existingPharmacy.City = updatedPharmacy.City ?? existingPharmacy.City;
         existingPharmacy.State = updatedPharmacy.State ?? existingPharmacy.State;
+        existingPharmacy.Zip = updatedPharmacy.Zip ?? existingPharmacy.Zip;
         existingPharmacy.PrescriptionsFilled = updatedPharmacy.PrescriptionsFilled 
                                                ?? existingPharmacy.PrescriptionsFilled;
     }

@@ -1,23 +1,26 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch, useSelector } from "../../store/store";
-import { getDeliveryListByPharmacyId } from "../../services/deliveryService";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import './DeliveryList.scss';
 import { LinearProgress } from "@mui/material";
+import { useStore } from "effector-react";
+import { deliveryStore, getDeliveryListByPharmacyIdFx } from "../../store/deliveryStore";
+import { pharmacyStore } from "../../store/pharmacyStore";
 
 export default function DeliveryList() {
     
-    const dispatch: AppDispatch = useDispatch();
-    const { selectedPharmacy, deliveryList, loading } = useSelector(state => ({
-        selectedPharmacy: state.pharmacy.selectedPharmacy,
-        deliveryList: state.delivery.deliveryList,
-        loading: state.delivery.loading
-    }));
+    //const dispatch: AppDispatch = useDispatch();
+    //const { selectedPharmacy, deliveryList, loading } = useSelector(state => ({
+    //    selectedPharmacy: state.pharmacy.selectedPharmacy,
+    //    deliveryList: state.delivery.deliveryList,
+    //    loading: state.delivery.loading
+    //}));
+    const { deliveryList, loading } = useStore(deliveryStore);
+    const { selectedPharmacy } = useStore(pharmacyStore);
 
     useEffect(() => {   
-        if (selectedPharmacy.id)
-            dispatch(getDeliveryListByPharmacyId(selectedPharmacy.id));
+        if (selectedPharmacy?.id)
+            getDeliveryListByPharmacyIdFx(selectedPharmacy.id);
+            //dispatch(getDeliveryListByPharmacyId(selectedPharmacy.id));
 
     }, [selectedPharmacy]);
     

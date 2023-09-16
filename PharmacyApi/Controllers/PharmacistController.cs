@@ -43,7 +43,10 @@ public class PharmacistController : ControllerBase
     public async Task<IActionResult> UpdatePharmacist(Pharmacist pharmacist) =>
         (await _pharmacistService.UpdatePharmacistAsync(pharmacist)).HandleResponse();
 
-
+    [HttpPost]
+    [Route("add")]
+    public async Task<IActionResult> AddPharmacist(Pharmacist pharmacist) =>
+        (await _pharmacistService.AddPharmacistAsync(pharmacist)).HandleResponse();
 
 }
 

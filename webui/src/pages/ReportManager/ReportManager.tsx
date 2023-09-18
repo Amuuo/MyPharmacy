@@ -1,14 +1,16 @@
 import { LinearProgress } from "@mui/material";
 import PharmacyList from "../../components/PharmacyList/PharmacyList";
-import { useSelector } from "../../store/store";
+import { pharmacyStore } from "../../store/pharmacyStore";
+import { useStore } from "effector-react";
+
 
 export default function ReportManager() {
 
-    const pharmacyListLoading = useSelector(state => state.pharmacy.loading);
+    const { loading } = useStore(pharmacyStore);
 
     return (        
         <>
-        {pharmacyListLoading 
+        {loading 
             ? <LinearProgress/> 
             : <PharmacyList/> }        
         </>

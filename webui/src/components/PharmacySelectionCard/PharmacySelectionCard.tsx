@@ -20,7 +20,7 @@ export default function PharamcySelectionCard() {
             setIsOutgoing(false);
         }, 200);
         
-    }, [selectedPharmacy]);
+    }, [selectedPharmacy?.id]);
     
 
     return (

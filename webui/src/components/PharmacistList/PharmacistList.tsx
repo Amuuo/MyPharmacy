@@ -2,40 +2,27 @@ import { useEffect } from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import  './PharmacistList.scss';
 import { LinearProgress } from '@mui/material';
-import { Pharmacy } from '../../models/pharmacy';
 import _ from 'lodash';
 import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore } from '../../store/pharmacistStore';
 import { useStore } from 'effector-react';
 import { pharmacyStore } from '../../store/pharmacyStore';
 
-interface PharmacistListProps {
-    selectedPharmacy?: Pharmacy | null
-}
 
-export default function PharmacistList({ selectedPharmacy }: PharmacistListProps) {
 
-    //const dispatch: AppDispatch = useDispatch();
+export default function PharmacistList() {
 
-    //const { pharmacistList, loading, initialLoad} = useSelector(state => ({
-    //    // selectedPharmacy: state.pharmacy.selectedPharmacy,
-    //    pharmacistList:   state.pharmacist.pharmacistList,
-    //    loading:          state.pharmacist.loadingPharmacistList,
-    //    initialLoad:      state.pharmacy.initialLoad
-    //}));
     const { pharmacistList, loadingPharmacistList } = useStore(pharmacistStore);
-    const { initialLoad, loading } = useStore(pharmacyStore);
+    const { selectedPharmacy, initialLoad } = useStore(pharmacyStore);
 
     useEffect(() => {
-        if (!selectedPharmacy)
-            fetchPharmacistListFx();
-            //dispatch(fetchPharmacistList());        
+        // if (selectedPharmacy)
+            fetchPharmacistListFx();   
     }, []);
     
     useEffect(() => {                
-        if (selectedPharmacy?.id)
-            //dispatch(fetchPharmacistListByPharmacyId(selectedPharmacy.id));        
+        if (selectedPharmacy?.id)   
             fetchPharmacistListByPharmacyIdFx(selectedPharmacy.id);
-    }, [selectedPharmacy]);
+    }, [selectedPharmacy?.id]);
 
     const columns: GridColDef[] = [
         { 
@@ -84,9 +71,9 @@ export default function PharmacistList({ selectedPharmacy }: PharmacistListProps
     ];
         
     
-    if (initialLoad && !_.isEmpty(selectedPharmacy)) 
+    if (initialLoad || !selectedPharmacy?.id) 
         return null;    
-    else if (loading) 
+    else if (loadingPharmacistList) 
         return <div style={{gridArea: 'pharmacist'}}><LinearProgress /></div>;    
     else if (pharmacistList.length === 0) 
         return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;

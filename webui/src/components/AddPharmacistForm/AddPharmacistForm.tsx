@@ -1,15 +1,11 @@
 import { useState } from "react";
 import { Pharmacist } from "../../models/pharmacist";
 import "./AddPharmacistForm.scss";
-import { AppDispatch } from "../../store/store";
-import { useDispatch } from "react-redux";
-import { addPharmacist } from "../../services/pharmacistService";
+import { addPharmacistFx } from "../../store/pharmacistStore";
 
 
 
-export default function AddPharmacistForm() {
-
-    const dispatch: AppDispatch = useDispatch();
+export default function AddPharmacistForm() {    
 
     const [formData, setFormData] = useState<Pharmacist>({
         firstName: "",
@@ -28,7 +24,7 @@ export default function AddPharmacistForm() {
     };
 
     const handleOnSubmit = () => {
-        dispatch(addPharmacist(formData));
+        addPharmacistFx(formData);    
     }
 
     return (

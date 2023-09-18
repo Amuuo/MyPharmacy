@@ -2,39 +2,33 @@ import { useEffect } from 'react';
 import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
 import _ from 'lodash';
-
-import { setPharmacySelection } from '../../store/slices/pharmacySlice';
 import { Pharmacy } from '../../models/pharmacy';
 import usePagination from '../../hooks/usePagination';
 
 import './PharmacyList.scss';
-import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore } from '../../store/pharmacyStore';
+import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../store/pharmacyStore';
 import { useStore } from 'effector-react';
 
 
 
 export default function PharmacyList() {
-    
-    //const dispatch: AppDispatch = useDispatch();
-    //const { pharmacyList, loading, initialLoad, totalCount } = useSelector(state => state.pharmacy);    
+      
     const { pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
-    useEffect(() => {                
-        fetchPharmacyListFx(paginationModel);
-        //dispatch(fetchPharmacyList(paginationModel));
+    useEffect(() => {        
+        console.log("about to fetch pharmacy list");
+        fetchPharmacyListFx(paginationModel);        
     }, [paginationModel]);
 
     const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {                
         const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);        
-        setPharmacySelection(selectedPharmacy || null);
-        //dispatch(setPharmacySelection(selectedPharmacy || {}));
+        setPharmacySelection(selectedPharmacy || null);        
     }
 
     const handleEditCellChange = (updatedPharmacy: Pharmacy, originalPharmacy: Pharmacy) => {
         if (!_.isEqual(updatedPharmacy, originalPharmacy))
-            editPharmacyFx(updatedPharmacy);
-            //dispatch(editPharmacy(updatedPharmacy));    
+            editPharmacyFx(updatedPharmacy);               
         return updatedPharmacy;    
     }
 

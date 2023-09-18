@@ -1,4 +1,4 @@
-import { createStore, createEvent, createEffect } from 'effector';
+import { createStore, createEffect } from 'effector';
 import { Delivery } from '../models/delivery';
 
 
@@ -12,10 +12,6 @@ export const deliveryStore = createStore<DeliveryState>({
     loading: true,
 });
 
-export const setDeliveryList = createEvent<Delivery[]>();
-export const setDeliveryLoading = createEvent<boolean>();
-export const resetDeliveryList = createEvent<void>();
-
 export const getDeliveryListByPharmacyIdFx = createEffect<number, Delivery[], Error>();
 
 getDeliveryListByPharmacyIdFx.use(async (pharmacyId: number) => {
@@ -24,12 +20,18 @@ getDeliveryListByPharmacyIdFx.use(async (pharmacyId: number) => {
 });
 
 deliveryStore
-    .on(setDeliveryList, (state, payload) => ({ ...state, deliveryList: payload }))
-    .on(setDeliveryLoading, (state, payload) => ({ ...state, loading: payload }))
-    .on(resetDeliveryList, (state) => ({ ...state, deliveryList: [] }))
-    .on(getDeliveryListByPharmacyIdFx.pending, (state) => ({ ...state, loading: true }))
-    .on(getDeliveryListByPharmacyIdFx.done, (state, { result }) => ({ ...state, deliveryList: result, loading: false }))
-    .on(getDeliveryListByPharmacyIdFx.fail, (state) => {
-        console.error('Error getting deliveries');
-        return { ...state, loading: false, deliveryList: [] };
+    .on(getDeliveryListByPharmacyIdFx, (state) => {
+        console.log("pending handler triggered");
+        return { ...state, loading: true };
+    })
+    .on(getDeliveryListByPharmacyIdFx.done, (state, { result }) => {
+        console.log("done handler triggered with result:", result);
+        return { ...state, deliveryList: result, loading: false };
+    })
+    .on(getDeliveryListByPharmacyIdFx.fail, (state, { error }) => {
+        console.error("fail handler triggered with error:", error);
+        return { ...state, loading: false };
+    })
+    .watch(state => {
+        console.log("deliveryStore state:", state);
     });

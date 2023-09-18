@@ -8,21 +8,16 @@ import { pharmacyStore } from "../../store/pharmacyStore";
 
 export default function DeliveryList() {
     
-    //const dispatch: AppDispatch = useDispatch();
-    //const { selectedPharmacy, deliveryList, loading } = useSelector(state => ({
-    //    selectedPharmacy: state.pharmacy.selectedPharmacy,
-    //    deliveryList: state.delivery.deliveryList,
-    //    loading: state.delivery.loading
-    //}));
     const { deliveryList, loading } = useStore(deliveryStore);
     const { selectedPharmacy } = useStore(pharmacyStore);
 
     useEffect(() => {   
-        if (selectedPharmacy?.id)
-            getDeliveryListByPharmacyIdFx(selectedPharmacy.id);
-            //dispatch(getDeliveryListByPharmacyId(selectedPharmacy.id));
+        if (selectedPharmacy?.id){
+            console.log('useEffect triggered with selectedPharmacy.id:', selectedPharmacy?.id);
+            getDeliveryListByPharmacyIdFx(selectedPharmacy.id);            
+        }
 
-    }, [selectedPharmacy]);
+    }, [selectedPharmacy?.id]);
     
     const formatCurrency = (value: number) => 
         new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);    

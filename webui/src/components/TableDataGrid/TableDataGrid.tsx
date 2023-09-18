@@ -19,8 +19,7 @@ interface TableGridProps {
 
 const TableDataGrid: React.FC<TableGridProps> = ({
   columns,
-  data,
-  loading,
+  data,  
   onEditCellChange,
   onRowSelection
 }) => {

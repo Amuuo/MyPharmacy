@@ -19,8 +19,6 @@ export const pharmacyStore = createStore<PharmacyState>({
     totalCount       : 0
 });
 
-export const setPharmacyList      = createEvent<Pharmacy[]>();
-export const setLoading           = createEvent<boolean>();
 export const setPharmacySelection = createEvent<Pharmacy | null>();
 export const editPharmacyFx       = createEffect<Pharmacy, Pharmacy, Error>();
 export const fetchPharmacyListFx  = createEffect<GridPaginationModel, any, Error>();
@@ -54,20 +52,28 @@ fetchPharmacyListFx.use(async (paginationModel: GridPaginationModel) => {
 
 
 pharmacyStore
-    .on(setPharmacyList, (state, payload) => ({ ...state, pharmacyList: payload }))
-    .on(setLoading, (state, payload) => ({ ...state, loading: payload }))
     .on(setPharmacySelection, (state, payload) => ({ ...state, selectedPharmacy: payload }))
-    .on(fetchPharmacyListFx.pending, (state) => ({ ...state, loading: false }))
-    .on(fetchPharmacyListFx.done, (state, { result }) => ({
-        ...state,
-        loading: false,
-        initialLoad: false,
-        pharmacyList: result.data,
-        totalCount: result.totalCount
-    }))
+    .on(fetchPharmacyListFx, (state) => {
+        console.log("fetchPharmacyListFx pending");
+        return { ...state, loading: true }
+    })
+    .on(fetchPharmacyListFx.done, (state, { result }) => {
+        console.log("fetchPharmacyListFx done");
+        return {
+            ...state,
+            loading: false,
+            initialLoad: false,
+            pharmacyList: result.data,
+            totalCount: result.totalCount
+        }
+    })
     .on(fetchPharmacyListFx.fail, (state) => ({ ...state, loading: false, pharmacyList: [] }))
-    .on(editPharmacyFx.pending, (state) => ({ ...state, loading: true }))
+    .on(editPharmacyFx, (state) => { 
+        console.log("editPharmacy pending..");
+        return {...state, loading: true }
+    })
     .on(editPharmacyFx.done, (state, { result }) => {
+        console.log("editPharmacy done..");
         const updatedList = state.pharmacyList.map(pharmacy =>
             pharmacy.id === result.id ? result : pharmacy
         );

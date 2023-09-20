@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
+using PharmacyApi.Utilities;
 using PharmacyApi.Utilities.Helpers;
 
 namespace PharmacyApi.Controllers;
@@ -23,11 +24,11 @@ public class PharmacistController : ControllerBase
 
     #endregion
 
-    [HttpPost]
+    [HttpGet]
     [Route("")]
-    public async Task<IActionResult> GetPharmacistList() => 
-        (await _pharmacistService.GetPharmacistListAsync()).HandleResponse();
-    
+    public async Task<IActionResult> GetPagedPharmacistList(int pageNumber = 1, int pageSize = 10) => 
+        (await _pharmacistService.GetPagedPharmacistListAsync(pageNumber, pageSize)).HandleResponse();
+
     [HttpGet]
     [Route("by-pharmacy/{id}")]
     public async Task<IActionResult> GetPharmacistListByPharmacyId(int id) =>

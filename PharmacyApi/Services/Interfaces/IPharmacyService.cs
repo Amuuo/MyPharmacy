@@ -6,7 +6,7 @@ namespace PharmacyApi.Services.Interfaces;
 
 public interface IPharmacyService
 {
-    Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(PagedRequest pagedRequest);
+    Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(int pageNumber, int pageSize);
     Task<IServiceResult<Pharmacy>> UpdatePharmacyAsync(Pharmacy updatedPharmacy);
     Task<IServiceResult<Pharmacy>> GetPharmacyByIdAsync(int id);
     Task<IServiceResult<Pharmacy>> InsertPharmacyAsync(Pharmacy? newPharmacy);

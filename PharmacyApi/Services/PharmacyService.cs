@@ -36,20 +36,20 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(PagedRequest pagedRequest)
+    public async Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(int pageNumber, int pageSize)
     {
         try
         {
-            var startRow = (pagedRequest.PageNumber - 1) * pagedRequest.PageSize;
+            var startRow = (pageNumber - 1) * pageSize;
 
             var pharmacyList = _pharmacyDbContext.PharmacyList
                 .Skip(startRow)
-                .Take(pagedRequest.PageSize)
+                .Take(pageSize)
                 .ToAsyncEnumerable();
 
             if (await pharmacyList.AnyAsync() is false)
             {
-                _logger.LogWarning("No pharmacies found with search criteria: {@searchCriteria}", pagedRequest);
+                _logger.LogWarning("No pharmacies found with search criteria");
                 return ServiceHelper
                     .BuildNoContentResult<IPagedResult<Pharmacy>>("No pharmacies found with search criteria");
             }
@@ -57,13 +57,14 @@ public class PharmacyService : IPharmacyService
             _logger.LogDebug("Retrieved pharmacies.");
             
             return await ServiceHelper
-                .BuildPagedResultAsync(pharmacyList, 
-                                       pagedRequest, 
+                .BuildPagedServiceResultAsync(pharmacyList, 
+                                       pageNumber, 
+                                       pageSize, 
                                        await _pharmacyDbContext.PharmacyList.CountAsync());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error occurred while searching for pharmacies with criteria: {@searchCriteria}", pagedRequest);
+            _logger.LogError(ex, "Error occurred while searching for pharmacies");
             
             return ServiceHelper
                 .BuildErrorServiceResult<IPagedResult<Pharmacy>>(ex, "searching for pharmacies");

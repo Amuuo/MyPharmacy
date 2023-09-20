@@ -2,6 +2,7 @@
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
+using PharmacyApi.Utilities;
 using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
@@ -18,31 +19,9 @@ public class PharmacistService : IPharmacistService
         _logger = logger;
         _dbContext = dbContext;
     }
-    public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> GetPharmacistListAsync()
+    public async Task<IServiceResult<IPagedResult<Pharmacist>>> GetPagedPharmacistListAsync(int pageNumber, int pageSize)
     {
-        try
-        {
-            _logger.LogDebug("Attempting to retrieve all pharmacists.");
-
-            var pharmacists = _dbContext.PharmacistList.AsAsyncEnumerable();
-
-            if (await pharmacists.AnyAsync())
-            {
-                _logger.LogDebug("Successfully retrieved all pharmacists.");
-
-                return ServiceHelper.BuildSuccessServiceResult(pharmacists);
-            }
-
-            _logger.LogWarning("No pharmacists found.");
-            return ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Pharmacist>>("No pharmacists found.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occurred while retrieving all pharmacists.");
-
-            return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, 
-                "retrieving all pharmacists.");
-        }
+        return await ServiceHelper.GetPagedResultAsync(_logger, _dbContext.PharmacistList, pageNumber, pageSize);
     }
 
 

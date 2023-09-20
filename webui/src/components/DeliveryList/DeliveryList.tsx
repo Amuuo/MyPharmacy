@@ -3,8 +3,8 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import './DeliveryList.scss';
 import { LinearProgress } from "@mui/material";
 import { useStore } from "effector-react";
-import { deliveryStore, getDeliveryListByPharmacyIdFx } from "../../store/deliveryStore";
-import { pharmacyStore } from "../../store/pharmacyStore";
+import { deliveryStore, getDeliveryListByPharmacyIdFx } from "../../stores/deliveryStore";
+import { pharmacyStore } from "../../stores/pharmacyStore";
 
 export default function DeliveryList() {
     

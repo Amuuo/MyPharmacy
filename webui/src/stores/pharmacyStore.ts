@@ -52,7 +52,8 @@ fetchPharmacyListFx.use(async (paginationModel: GridPaginationModel) => {
 
 
 pharmacyStore
-    .on(setPharmacySelection, (state, payload) => ({ ...state, selectedPharmacy: payload }))
+    .on(setPharmacySelection, (state, payload) => 
+        ({ ...state, selectedPharmacy: payload }))
     .on(fetchPharmacyListFx, (state) => {
         console.log("fetchPharmacyListFx pending");
         return { ...state, loading: true }
@@ -67,7 +68,8 @@ pharmacyStore
             totalCount: result.totalCount
         }
     })
-    .on(fetchPharmacyListFx.fail, (state) => ({ ...state, loading: false, pharmacyList: [] }))
+    .on(fetchPharmacyListFx.fail, (state) => 
+        ({ ...state, loading: false, pharmacyList: [] }))
     .on(editPharmacyFx, (state) => { 
         console.log("editPharmacy pending..");
         return {...state, loading: true }
@@ -79,4 +81,5 @@ pharmacyStore
         );
         return { ...state, pharmacyList: updatedList, loading: false };
     })
-    .on(editPharmacyFx.fail, (state) => ({ ...state, loading: false, pharmacyList: [] }));
+    .on(editPharmacyFx.fail, (state) => 
+        ({ ...state, loading: false, pharmacyList: [] }));

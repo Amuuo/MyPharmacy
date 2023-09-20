@@ -36,7 +36,7 @@
     grid-template-areas: 'pharmacy pharmacyCard'                       
                         'order pharmacist';                       
     grid-template-columns: minmax(400px, 600px) minmax(325px, 350px);  
-    grid-template-rows: 280px 175px;// minmax(100px, auto) minmax(100px, auto);// minmax(auto, 200px) minmax(auto, 200px);  
+    grid-template-rows: 325px 200px;// minmax(100px, auto) minmax(100px, auto);// minmax(auto, 200px) minmax(auto, 200px);  
     padding: 3rem;
     justify-content: center;
     min-width: 450px;

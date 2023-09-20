@@ -1,7 +1,10 @@
 .PharmacistManager {
     display: grid;
-    grid-template-areas: 'pharmacist form';
-    grid-template-columns: 2fr 1fr;
+    grid-template-areas: 'pharmacist pharmacistCard'
+                         'pharmacist form' ;
+    grid-template-columns: 3fr 2fr;
+    grid-template-rows: 200px auto;
     padding: 3rem;
-    grid-gap: 3rem;
+    grid-gap: 2rem;
+    transition: 300ms;
 }

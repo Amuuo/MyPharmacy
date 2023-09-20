@@ -6,7 +6,7 @@ import { Pharmacy } from '../../models/pharmacy';
 import usePagination from '../../hooks/usePagination';
 
 import './PharmacyList.scss';
-import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../store/pharmacyStore';
+import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
 
 
@@ -71,7 +71,8 @@ export default function PharmacyList() {
                     paginationMode='server'    
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}                
-                    pageSizeOptions={[5, 10, 15]}                                                                          
+                    pageSizeOptions={[5, 10, 15]}                                
+                    // onFilterModelChange={}                                          
                     processRowUpdate={handleEditCellChange}
                     onRowSelectionModelChange={handlePharmacySelectionChange}     
                     rowHeight={30}    

@@ -25,12 +25,12 @@ deliveryStore
         return { ...state, loading: true };
     })
     .on(getDeliveryListByPharmacyIdFx.done, (state, { result }) => {
-        console.log("done handler triggered with result:", result);
+        console.log("done handler triggered with result:", result);        
         return { ...state, deliveryList: result, loading: false };
     })
     .on(getDeliveryListByPharmacyIdFx.fail, (state, { error }) => {
         console.error("fail handler triggered with error:", error);
-        return { ...state, loading: false };
+        return { ...state, loading: false, deliveryList: [] };
     })
     .watch(state => {
         console.log("deliveryStore state:", state);

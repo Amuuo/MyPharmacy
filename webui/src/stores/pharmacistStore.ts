@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createStore, createEffect } from 'effector';
+import { createStore, createEffect, createEvent } from 'effector';
 import { Pharmacist } from '../models/pharmacist';
 
 
@@ -21,7 +21,7 @@ export const pharmacistStore = createStore<PharmacistState>({
 export const addPharmacistFx = createEffect<Pharmacist, Pharmacist, Error>();
 export const fetchPharmacistListFx = createEffect<void, any, Error>();
 export const fetchPharmacistListByPharmacyIdFx = createEffect<number, any, Error>();
-
+export const setPharmacistSelection = createEvent<Pharmacist | null>();
 
 fetchPharmacistListByPharmacyIdFx.use(async (pharmacyId: number) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/pharmacist/by-pharmacy/${pharmacyId}`);
@@ -92,4 +92,7 @@ pharmacistStore
     .on(addPharmacistFx.fail, (state) => 
         ({ ...state, 
             addingPharmacist: false 
-        }));
+        }))
+    .on(setPharmacistSelection, (state, payload) => {
+        return { ...state, selectedPharmacist: payload }
+    });

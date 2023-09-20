@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './PharmacySelectionCard.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { pharmacyStore } from '../../store/pharmacyStore';
+import { pharmacyStore } from '../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
 
 export default function PharamcySelectionCard() {

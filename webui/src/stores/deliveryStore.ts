@@ -13,25 +13,39 @@ export const deliveryStore = createStore<DeliveryState>({
 });
 
 export const getDeliveryListByPharmacyIdFx = createEffect<number, Delivery[], Error>();
+export const getDeliveryList = createEffect<void, Delivery[], Error>();
 
 getDeliveryListByPharmacyIdFx.use(async (pharmacyId: number) => {
     const response = await fetch(`${import.meta.env.VITE_API_URL}/delivery/by-pharmacy/${pharmacyId}`);
     return await response.json();
 });
 
+getDeliveryList.use(async () => {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/delivery`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return await response.json();
+})
+
 deliveryStore
-    .on(getDeliveryListByPharmacyIdFx, (state) => {
-        console.log("pending handler triggered");
+    .on(getDeliveryListByPharmacyIdFx, (state) => {        
         return { ...state, loading: true };
     })
-    .on(getDeliveryListByPharmacyIdFx.done, (state, { result }) => {
-        console.log("done handler triggered with result:", result);        
+    .on(getDeliveryListByPharmacyIdFx.done, (state, { result }) => {        
         return { ...state, deliveryList: result, loading: false };
     })
-    .on(getDeliveryListByPharmacyIdFx.fail, (state, { error }) => {
-        console.error("fail handler triggered with error:", error);
+    .on(getDeliveryListByPharmacyIdFx.fail, (state, { }) => {        
         return { ...state, loading: false, deliveryList: [] };
     })
-    .watch(state => {
-        console.log("deliveryStore state:", state);
+    .on(getDeliveryList, (state) => {
+        return { ...state, loading: true };
+    })
+    .on(getDeliveryList.done, (state, { result }) => {
+        return { ...state, loading: false, deliveryList: result };
+    })
+    .on(getDeliveryList.fail, (state) => {
+        return { ...state, loading: false, deliveryList: []}
     });

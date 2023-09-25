@@ -1,64 +1,48 @@
-// #root {
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-//   /* max-width: 1280px; */
-//   margin: 0 auto;
-//   /* padding: 2rem; */
-//   /* text-align: center; */
-//   width: 100%;
-//   height: 100%;
-// }
+@keyframes slide-out {
+  from {
+    transform: translateY(-100%);
+  }
+}
 
 .PharmacyManager {
   transition: 300ms;
-}
+  grid-area: main;
+  display: grid;
+  will-change: transform;
+  animation: slide-out 700ms ease;// cubic-bezier(.04,.73,.77,1.13);
+  // justify-content: center;
+  min-width: 450px;
+  max-width: 1280px;
 
-@media screen and (min-width: 300px) and (max-width: 750px) {
-  .PharmacyManager {
-    display: grid;    
-    grid-template-areas: 'pharmacyCard' 'pharmacy'                       
-                        'order' 'pharmacist';                       
+  @media screen and (min-width: 300px) and (max-width: 750px) {
+    grid-template-areas: 
+      'pharmacyCard' 'pharmacy'                       
+      'order' 'pharmacist';
     grid-template-columns: minmax(300px, 600px);  
-    grid-template-rows: 225px 250px auto auto;//minmax(100px, 250px) minmax(100px, 250px);
+    grid-template-rows: 225px 250px minmax(0, 225px) minmax(0, 250px);
     padding: 1rem;
-    justify-content: center;
-    min-width: 450px;
-    // margin: 2rem ;
     grid-gap: 0.5rem;
-    max-width: 1280px;
   }
-}
 
-@media screen and (min-width: 750px) {
-  .PharmacyManager {
-    display: grid;    
-    grid-template-areas: 'pharmacy pharmacyCard'                       
-                        'order pharmacist';                       
+  @media screen and (min-width: 750px) {
+    grid-template-areas: 
+      'pharmacy pharmacyCard'                       
+      'order pharmacist';
     grid-template-columns: minmax(400px, 600px) minmax(325px, 350px);  
-    grid-template-rows: 325px 200px;// minmax(100px, auto) minmax(100px, auto);// minmax(auto, 200px) minmax(auto, 200px);  
-    padding: 3rem;
-    justify-content: center;
-    min-width: 450px;
-    // margin: 2rem ;
+    grid-template-rows: 325px 200px;
+    padding: 2rem;
     grid-gap: 2rem;
-    max-width: 1280px;
   }
 }
 
 
-
-.pharmacy-section {
+.pharmacy-section, .card-section {
   display: flex;
   flex-direction: column;
-  // width: 70%;
-  // max-width: 800px;
-  grid-gap: 2rem;
+  grid-gap: 2rem; // Default for .pharmacy-section
 }
 
 .card-section {
-  display: flex;
-  flex-direction: column;
   grid-gap: 1.5rem;
 }
 
@@ -67,12 +51,20 @@
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+
+  &:hover {
+    filter: drop-shadow(0 0 2em #646cffaa);
+
+    &.react {
+      filter: drop-shadow(0 0 2em #61dafbaa);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a:nth-of-type(2) & {
+      animation: logo-spin infinite 20s linear;
+    }
+  }
 }
 
 @keyframes logo-spin {
@@ -81,12 +73,6 @@
   }
   to {
     transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
   }
 }
 

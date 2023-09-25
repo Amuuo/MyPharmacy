@@ -1,0 +1,101 @@
+@keyframes grow-in {
+    from {
+        height: 0px;
+    }
+}
+
+@keyframes slide-in {
+    from {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes slide-out {
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+
+.pharmacist_selection {
+    // height: 225px;
+    justify-content: center;
+    grid-area: pharmacistCard;
+    // place-self: end;
+    // width: 100%; 
+    // height: 250px;
+    overflow: hidden;
+    background: linear-gradient(-20deg, rgb(98, 92, 214) 0%, rgb(50, 135, 193) 61%, rgba(26, 107, 228, 0.678) 100%);       
+    border: 8px ridge whitesmoke;
+    border-radius: 0.3rem;
+    position: relative;
+    animation: grow-in 200ms cubic-bezier(.63,-0.23,.53,1); 
+
+    button {        
+        font-size: 12px;
+        border: 2px solid whitesmoke;        
+        transition: 300ms;
+        width: 150px;
+
+        &:hover {
+            background-color:rgb(81, 196, 98);            
+            height: auto;
+            font-size: 13px;            
+        }
+        &.add_button {
+            background-color:rgb(24, 97, 186);
+        }
+        &.edit_button {
+            background-color:rgb(30, 122, 158);
+        }
+    }
+    
+    
+    .pharmacist_card {
+        display: grid !important;
+        grid-template-columns: 1fr auto;
+        grid-template-rows: auto 1fr;
+        background: inherit;
+        color: whitesmoke !important;
+        height: 100%;
+        
+
+        .card_body {
+            display: flex;
+            flex-direction: column;
+            grid-gap: 1rem;
+            justify-content: space-evenly;
+
+            .card_content {
+                display: flex;
+                flex-direction: column;
+                grid-gap: 0.5rem;
+            }
+
+            .card_buttons {
+                display: flex;
+                flex-direction: column;
+                grid-gap: 0.5rem;
+                justify-content: space-evenly;
+            }
+        }
+
+        // & > div:nth-child(2) {
+        //     display: flex;
+        //     flex-direction: column;
+        //     grid-gap: 0.5rem;
+        //     justify-content: space-evenly;
+        // }
+    
+    }
+    
+}
+
+.outgoing {
+    animation: slide-out 0.3s cubic-bezier(.63,-0.23,.53,1);
+}
+
+.incoming {
+    animation: slide-in 0.4s cubic-bezier(.04,.73,.77,1.13);//cubic-bezier(.64,.39,.68,1.21);   
+}
+

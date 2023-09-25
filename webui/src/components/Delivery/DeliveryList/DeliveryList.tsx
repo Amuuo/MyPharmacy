@@ -3,18 +3,25 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import './DeliveryList.scss';
 import { LinearProgress } from "@mui/material";
 import { useStore } from "effector-react";
-import { deliveryStore, getDeliveryListByPharmacyIdFx } from "../../stores/deliveryStore";
-import { pharmacyStore } from "../../stores/pharmacyStore";
+import { deliveryStore, getDeliveryList, getDeliveryListByPharmacyIdFx } from "../../../stores/deliveryStore";
+import { Pharmacy } from "../../../models/pharmacy";
 
-export default function DeliveryList() {
+interface DelieveryListProps {
+    selectedPharmacy?: Pharmacy | null
+}
+
+export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) {
     
     const { deliveryList, loading } = useStore(deliveryStore);
-    const { selectedPharmacy } = useStore(pharmacyStore);
+    //const { selectedPharmacy } = useStore(pharmacyStore);
 
     useEffect(() => {   
         if (selectedPharmacy?.id){
             console.log('useEffect triggered with selectedPharmacy.id:', selectedPharmacy?.id);
             getDeliveryListByPharmacyIdFx(selectedPharmacy.id);            
+        }
+        else {
+            getDeliveryList();
         }
 
     }, [selectedPharmacy?.id]);
@@ -32,15 +39,15 @@ export default function DeliveryList() {
             hour12: false}).replace(/\//g, '-');
                           
     const columns: GridColDef[] = [                    
-            { field: 'drugName', headerName: 'Drug Name', width: 150 },
+            { field: 'drugName', headerName: 'Drug Name', width: 120 },
             { field: 'unitCount', headerName: 'Count', width: 60, type: 'number'},
             { field: 'unitPrice', headerName: 'Price', width: 80,  type: 'number', valueFormatter: (params) => formatCurrency(params.value) },
-            { field: 'totalPrice', headerName: 'Total', width: 120,  type: 'number', valueFormatter: (params) => formatCurrency(params.value) },
+            { field: 'totalPrice', headerName: 'Total', width: 100,  type: 'number', valueFormatter: (params) => formatCurrency(params.value) },
             { field: 'deliveryDate', headerName: 'Delivery Date', width: 150, valueFormatter: (params) => formatDate(new Date(params.value))}
     ];
 
     return (
-        !selectedPharmacy?.id 
+        (!selectedPharmacy?.id && deliveryList.length === 0)
             ? null 
             : loading 
                 ? <LinearProgress sx={{gridArea: 'order'}} /> 

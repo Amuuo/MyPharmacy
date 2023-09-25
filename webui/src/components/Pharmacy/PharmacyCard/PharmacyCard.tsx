@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import './PharmacySelectionCard.scss';
+import styles from './PharmacyCard.module.scss';
 import { Card, CardContent, CardHeader, Typography } from "@mui/material";
-import { pharmacyStore } from '../../stores/pharmacyStore';
+import { pharmacyStore } from '../../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
 
 export default function PharamcySelectionCard() {
@@ -22,13 +22,15 @@ export default function PharamcySelectionCard() {
         
     }, [selectedPharmacy?.id]);
     
+    const outgoingStyle = `${styles.pharmacy_card} ${styles.outgoing}`
+    const incomingStyle = `${styles.pharmacy_card} ${styles.incoming}`
 
     return (
         <>
             {!currentPharmacy?.name 
                 ? null 
-                : <div className="pharmacy-selection">
-                    <Card className={isOutgoing ? 'pharmacy-card outgoing' : 'pharmacy-card incoming'}>
+                : <div className={styles.pharmacy_selection}>
+                    <Card className={isOutgoing ? outgoingStyle : incomingStyle}>
                         <CardHeader title={currentPharmacy.name} />
                         <CardContent>                
                             <Typography> {currentPharmacy.address} </Typography>

@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
 import _ from 'lodash';
-import { Pharmacy } from '../../models/pharmacy';
-import usePagination from '../../hooks/usePagination';
+import { Pharmacy } from '../../../models/pharmacy';
+import usePagination from '../../../hooks/usePagination';
 
-import './PharmacyList.scss';
-import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../stores/pharmacyStore';
+import styles from './PharmacyList.module.scss';
+import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
 
 
@@ -46,10 +46,10 @@ export default function PharmacyList() {
     
 
     return  (              
-        <div className="PharmacyGrid">  
+        <>        
             {initialLoad 
-                ? <LinearProgress/> 
-                : <DataGrid 
+                ? <LinearProgress className={styles.pharmacyGrid}/> 
+                : <DataGrid className={styles.pharmacyGrid}
                     initialState={{
                         columns: {
                             columnVisibilityModel: {
@@ -78,7 +78,7 @@ export default function PharmacyList() {
                     rowHeight={30}    
                     columnHeaderHeight={40}                       
                     keepNonExistentRowsSelected={true}  
-                />}
-        </div>    
+                />}        
+        </>
     )
 }

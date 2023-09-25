@@ -1,18 +1,18 @@
 import { useEffect } from 'react';
 import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import  './PharmacistList.scss';
+import styles from './PharmacistList.module.scss';
 import { LinearProgress } from '@mui/material';
 import _ from 'lodash';
-import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore, setPharmacistSelection } from '../../stores/pharmacistStore';
+import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore, setPharmacistSelection } from '../../../stores/pharmacistStore';
 import { useStore } from 'effector-react';
-import { pharmacyStore } from '../../stores/pharmacyStore';
+import { pharmacyStore } from '../../../stores/pharmacyStore';
 
 
 
 export default function PharmacistList() {
 
-    const { pharmacistList, loadingPharmacistList, selectedPharmacist } = useStore(pharmacistStore);
-    const { selectedPharmacy, initialLoad } = useStore(pharmacyStore);
+    const { pharmacistList, loadingPharmacistList } = useStore(pharmacistStore);
+    const { selectedPharmacy } = useStore(pharmacyStore);
 
     useEffect(() => {
         if (!selectedPharmacy)
@@ -42,7 +42,7 @@ export default function PharmacistList() {
     //if (initialLoad && !selectedPharmacy?.id) 
     //    return null;    
     if (loadingPharmacistList) 
-        return <div style={{gridArea: 'pharmacist'}}><LinearProgress /></div>;    
+        return <LinearProgress sx={{gridArea: 'pharmacist'}} />; 
     else if (pharmacistList.length === 0) 
         return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;
     
@@ -59,14 +59,14 @@ export default function PharmacistList() {
                     }
                 }
             }}    
-            className="pharmacistGrid"         
+            className={styles.pharmacistGrid}         
             hideFooter={true}                
             rows={pharmacistList}
             columns={columns}
             loading={loadingPharmacistList}                        
             rowHeight={30}        
             columnHeaderHeight={35}
-            onRowSelectionModelChange={handlePharmacistSelectionChange}
+            onRowSelectionModelChange={handlePharmacistSelectionChange}            
         />                       
     );         
 }

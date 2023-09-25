@@ -1,7 +1,7 @@
-import PharmacistList from '../../components/PharmacistList/PharmacistList';
-import AddPharmacistForm from '../../components/AddPharmacistForm/AddPharmacistForm';
+import PharmacistList from '../../components/Pharmacist/PharmacistList/PharmacistList';
+import AddPharmacistForm from '../../components/Pharmacist/AddPharmacistForm/AddPharmacistForm';
 import './PharmacistManager.scss';
-import PharmacistCard from '../../components/PharmacistCard/PharmacistCard';
+import PharmacistCard from '../../components/Pharmacist/PharmacistCard/PharmacistCard';
 
 export default function PharmacistManager() {
   return (

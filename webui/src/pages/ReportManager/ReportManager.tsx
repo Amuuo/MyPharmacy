@@ -1,5 +1,5 @@
 import { LinearProgress } from "@mui/material";
-import PharmacyList from "../../components/PharmacyList/PharmacyList";
+import PharmacyList from "../../components/Pharmacy/PharmacyList/PharmacyList";
 import { pharmacyStore } from "../../stores/pharmacyStore";
 import { useStore } from "effector-react";
 

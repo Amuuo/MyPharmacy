@@ -1,0 +1,24 @@
+.link {
+    background: white;
+}
+
+.sidebar {
+    background-color: transparent;    
+    grid-area: sidebar;
+    position: relative;
+
+    .ps-menuitem-root {
+        background-color: blue !important;
+    }
+
+    .ps-submenu-root {
+        background-color: green;
+    }
+}
+
+.menu {
+    color: rgb(224, 237, 245) !important;
+    font-family: monospace;
+    background-color: rgb(112, 156, 212);
+    height: 100%;
+}

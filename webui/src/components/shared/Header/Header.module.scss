@@ -1,0 +1,72 @@
+.toolbar {
+    z-index: 2;
+    a {
+      font-weight: 500;
+      color: whitesmoke !important;
+      font-family: monospace !important;
+      text-decoration: inherit;
+  
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  
+    @media screen and (min-width: 300px) and (max-width: 750px) {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      padding: 15px;
+    }
+  
+    @media screen and (min-width: 750px) {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'monospace';
+    }
+  }
+  
+  .menu_container {
+    @media screen and (min-width: 300px) and (max-width: 750px) {
+      display: flex;
+      flex-direction: column;
+      grid-gap: 0.5rem;
+      align-items: start;
+      font-size: 10px;        
+    }
+  
+    @media screen and (min-width: 750px) {
+      transition: 300ms;
+      display: flex;
+      grid-gap: 1.5rem;
+      align-items: center;        
+    }
+  }
+  
+  .menu_container_links {
+    @media screen and (min-width: 300px) and (max-width: 750px) {
+      display: none;
+    }
+  
+    @media screen and (min-width: 750px) {
+      display: flex;
+      grid-gap: 1rem;
+    }
+  }
+  
+  .env_text {
+    font-family: 'Roboto Mono' !important;
+    font-size: 12px;
+    text-align: end;
+  
+    @media screen and (min-width: 300px) and (max-width: 750px) {
+      display: none;
+    }
+  }
+  
+  .brand_link {
+    font-family: monospace !important;
+    font-weight: 400;
+    font-size: 1.5rem;
+    color: whitesmoke;
+  }
+  

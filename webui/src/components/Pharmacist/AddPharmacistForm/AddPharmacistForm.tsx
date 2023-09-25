@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Pharmacist } from "../../models/pharmacist";
+import { Pharmacist } from "../../../models/pharmacist";
 import "./AddPharmacistForm.scss";
-import { addPharmacistFx } from "../../stores/pharmacistStore";
+import { addPharmacistFx } from "../../../stores/pharmacistStore";
 
 
 

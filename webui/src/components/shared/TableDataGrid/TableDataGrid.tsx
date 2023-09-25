@@ -1,6 +1,6 @@
 // TableDataGrid.tsx
 import React from 'react';
-import { Pharmacy } from '../../models/pharmacy';
+import { Pharmacy } from '../../../models/pharmacy';
 export interface Column {
     field: string;
     headerName: string;

@@ -38,37 +38,7 @@ public class PharmacyService : IPharmacyService
     /// </returns>
     public async Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(int pageNumber, int pageSize)
     {
-        try
-        {
-            var startRow = (pageNumber - 1) * pageSize;
-
-            var pharmacyList = _pharmacyDbContext.PharmacyList
-                .Skip(startRow)
-                .Take(pageSize)
-                .ToAsyncEnumerable();
-
-            if (await pharmacyList.AnyAsync() is false)
-            {
-                _logger.LogWarning("No pharmacies found with search criteria");
-                return ServiceHelper
-                    .BuildNoContentResult<IPagedResult<Pharmacy>>("No pharmacies found with search criteria");
-            }
-
-            _logger.LogDebug("Retrieved pharmacies.");
-            
-            return await ServiceHelper
-                .BuildPagedServiceResultAsync(pharmacyList, 
-                                       pageNumber, 
-                                       pageSize, 
-                                       await _pharmacyDbContext.PharmacyList.CountAsync());
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error occurred while searching for pharmacies");
-            
-            return ServiceHelper
-                .BuildErrorServiceResult<IPagedResult<Pharmacy>>(ex, "searching for pharmacies");
-        }
+        return await ServiceHelper.GetPagedResultAsync(_logger, _pharmacyDbContext.PharmacyList, pageNumber, pageSize);
     }
     
 

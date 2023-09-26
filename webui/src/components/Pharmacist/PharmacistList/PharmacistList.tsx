@@ -60,7 +60,7 @@ export default function PharmacistList() {
                     }
                 }
             }}    
-            className={styles.pharmacistGrid + 'slide-in-from-top'}         
+            className={styles.pharmacistGrid}         
             hideFooter={true}                
             rows={pharmacistList}
             columns={columns}

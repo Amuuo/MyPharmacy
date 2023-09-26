@@ -3,7 +3,8 @@
 
 .pharmacistGrid {
     grid-area: pharmacist;    
-    animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56) ;
+    @include slide-in-from-top-animation(300ms);
+    //animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56) ;
     transition: all 300ms ease;    
     height: fit-content !important;
     max-height: 100% !important;    

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createStore, createEffect, createEvent } from 'effector';
 import { Pharmacist } from '../models/pharmacist';
+import { GridPaginationModel } from '@mui/x-data-grid';
 
 
 type PharmacistState = {
@@ -8,6 +9,7 @@ type PharmacistState = {
     loadingPharmacistList: boolean;
     addingPharmacist: boolean;
     selectedPharmacist: Pharmacist | null;
+    totalCount: number;
 };
 
 export const pharmacistStore = createStore<PharmacistState>({
@@ -15,11 +17,12 @@ export const pharmacistStore = createStore<PharmacistState>({
     loadingPharmacistList: false,
     addingPharmacist: false,
     selectedPharmacist: null,
+    totalCount: 0
 });
 
 
 export const addPharmacistFx = createEffect<Pharmacist, Pharmacist, Error>();
-export const fetchPharmacistListFx = createEffect<void, any, Error>();
+export const fetchPharmacistListFx = createEffect<GridPaginationModel, any, Error>();
 export const fetchPharmacistListByPharmacyIdFx = createEffect<number, any, Error>();
 export const setPharmacistSelection = createEvent<Pharmacist | null>();
 
@@ -28,9 +31,13 @@ fetchPharmacistListByPharmacyIdFx.use(async (pharmacyId: number) => {
     return await response.json();
 });
 
-fetchPharmacistListFx.use(async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/pharmacist`, {
-        method: 'POST'
+fetchPharmacistListFx.use(async (paginationModel : GridPaginationModel) => {
+    
+    const url = `${import.meta.env.VITE_API_URL}/pharmacist` + 
+                `?pageNumber=${paginationModel.page}&pageSize=${paginationModel.pageSize}`;
+    
+    const response = await fetch(url, {
+        method: 'GET'
     });
     return await response.json();
 });
@@ -53,7 +60,8 @@ pharmacistStore
     .on(fetchPharmacistListFx.done, (state, { result }) => 
         ({ ...state, 
             loadingPharmacistList: false, 
-            pharmacistList: result 
+            pharmacistList: result.data,
+            totalCount: result.totalCount 
         }))
     
     .on(fetchPharmacistListFx.fail, (state) => 

@@ -12,13 +12,14 @@ import usePagination from '../../../hooks/usePagination';
 
 export default function PharmacistList() {
 
-    const { pharmacistList, loadingPharmacistList } = useStore(pharmacistStore);
+    const { pharmacistList, loadingPharmacistList, totalCount } = useStore(pharmacistStore);
     const { selectedPharmacy } = useStore(pharmacyStore);
-    
+    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 1, pageSize: 15 });
+
     useEffect(() => {
         if (!selectedPharmacy)
-            fetchPharmacistListFx();   
-    }, []);
+            fetchPharmacistListFx(paginationModel);   
+    }, [paginationModel]);
     
     useEffect(() => {                
         if (selectedPharmacy?.id)   
@@ -60,13 +61,19 @@ export default function PharmacistList() {
                     }
                 }
             }}    
-            className={styles.pharmacistGrid + 'slide-in-from-top'}         
-            hideFooter={true}                
+            className={styles.pharmacistGrid + ' slide-in-from-top'}         
+            // hideFooter={true} 
+            pagination
+            paginationMode='server'    
+            paginationModel={paginationModel}
+            pageSizeOptions={[5,10,15]}               
+            rowCount={totalCount}
             rows={pharmacistList}
             columns={columns}
             loading={loadingPharmacistList}                        
             rowHeight={30}        
             columnHeaderHeight={35}
+            onPaginationModelChange={handlePaginationModelChange}
             onRowSelectionModelChange={handlePharmacistSelectionChange}            
         />                       
     );         

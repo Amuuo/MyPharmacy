@@ -13,8 +13,8 @@ interface DelieveryListProps {
 
 export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) {
     
-    const { deliveryList, loading } = useStore(deliveryStore);
-    //const { selectedPharmacy } = useStore(pharmacyStore);
+    const { deliveryList, loading, totalCount } = useStore(deliveryStore);
+    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 1, pageSize: 15 });
 
     useEffect(() => {   
         if (selectedPharmacy?.id){
@@ -22,7 +22,7 @@ export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) 
             getDeliveryListByPharmacyIdFx(selectedPharmacy.id);            
         }
         else {
-            getDeliveryList();
+            getDeliveryList(paginationModel);
         }
 
     }, [selectedPharmacy?.id]);
@@ -60,7 +60,13 @@ export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) 
                             columns={columns}
                             rows={deliveryList}
                             rowHeight={30}                
-                            hideFooter={true}
+                            // hideFooter={true}
+                            rowCount={totalCount}
+                            pagination
+                            paginationMode='server'    
+                            paginationModel={paginationModel}
+                            pageSizeOptions={[5,10,15]}
+                            onPaginationModelChange={handlePaginationModelChange}
                             columnHeaderHeight={35}/>                                      
     );    
 }

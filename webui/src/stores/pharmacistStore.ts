@@ -78,7 +78,8 @@ pharmacistStore
     .on(fetchPharmacistListByPharmacyIdFx.done, (state, { result }) => 
         ({ ...state, 
             loadingPharmacistList: false, 
-            pharmacistList: result 
+            pharmacistList: result,
+            totalCount: result.totalCount 
         }))
     
     .on(fetchPharmacistListByPharmacyIdFx.fail, (state) => 

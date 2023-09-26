@@ -14,7 +14,7 @@ export default function PharmacistList() {
 
     const { pharmacistList, loadingPharmacistList, totalCount } = useStore(pharmacistStore);
     const { selectedPharmacy } = useStore(pharmacyStore);
-    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 1, pageSize: 15 });
+    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
     useEffect(() => {
         if (!selectedPharmacy)

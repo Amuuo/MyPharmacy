@@ -42,7 +42,12 @@ deliveryStore
         return { ...state, loading: true };
     })
     .on(getDeliveryListByPharmacyIdFx.done, (state, { result }) => {        
-        return { ...state, deliveryList: result, loading: false };
+        return { 
+            ...state, 
+            deliveryList: result, 
+            loading: false,
+            totalCount: result.totalCount 
+        };
     })
     .on(getDeliveryListByPharmacyIdFx.fail, (state, { }) => {        
         return { ...state, loading: false, deliveryList: [] };

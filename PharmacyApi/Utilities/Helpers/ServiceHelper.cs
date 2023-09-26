@@ -62,7 +62,7 @@ namespace PharmacyApi.Utilities.Helpers
         {
             try
             {
-                var startRow = (pageNumber- 1) * pageSize;
+                var startRow = pageNumber * pageSize;
 
                 var entities = query
                     .Skip(startRow)

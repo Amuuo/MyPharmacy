@@ -14,7 +14,7 @@ interface DelieveryListProps {
 export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) {
     
     const { deliveryList, loading, totalCount } = useStore(deliveryStore);
-    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 1, pageSize: 15 });
+    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
     useEffect(() => {   
         if (selectedPharmacy?.id){
@@ -25,7 +25,7 @@ export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) 
             getDeliveryList(paginationModel);
         }
 
-    }, [selectedPharmacy?.id]);
+    }, [selectedPharmacy?.id, paginationModel]);
     
     const formatCurrency = (value: number) => 
         new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);    

@@ -1,28 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import store from './store/store.ts';
 import PharmacyManager  from './pages/PharmacyManager/PharmacyManager.tsx';
-import './index.scss';
-import { Provider } from 'react-redux';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Header from './components/Header/Header.tsx';
+import './styles/index.scss';
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
+import Header from './components/shared/Header/Header.tsx';
 import ReportManager from './pages/ReportManager/ReportManager.tsx';
+import PharmacistManager from './pages/PharmacistManager/PharmacistManager.tsx';
+import SidebarNav from './components/shared/Sidebar/SidebarNav.tsx';
+import WarehousePage from './pages/WarehousePage/WarehousePage.tsx';
+import DeliveryManager from './pages/DeliveryManager/DeliveryManager.tsx';
 
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" >
+      <Route index element={<PharmacyManager/>} />
+      <Route path="/pharmacists" Component={PharmacistManager} />
+      <Route path="/deliveries" Component={DeliveryManager} />
+      <Route path="/reports" Component={ReportManager} />   
+      <Route path="/warehouse" Component={WarehousePage} />
+    </Route>
+  )
+);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <div className="main-container">
-        <Header/>
-        <div style={{padding: '3rem'}}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<PharmacyManager/>}/>
-              <Route path="reports" element={<ReportManager/>}/>            
-            </Routes>
-          </BrowserRouter>        
-        </div>
-      </div>
-    </Provider>
+      <Header/>      
+      <SidebarNav/>  
+      <RouterProvider router={router}/>                     
   </React.StrictMode>,
 )

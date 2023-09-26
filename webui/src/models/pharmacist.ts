@@ -1,6 +1,5 @@
 export type Pharmacist = {
-    id?: number | undefined;
-    pharmacyId?: number | undefined;
+    id?: number | undefined;    
     firstName?: string | undefined;
     lastName?: string | undefined;
     age?: number | undefined;

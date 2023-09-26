@@ -1,0 +1,20 @@
+@import '../../../styles/animations.scss';
+
+
+.pharmacistGrid {
+    grid-area: pharmacist;    
+    @include slide-in-from-top-animation(300ms);
+    //animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56) ;
+    transition: all 300ms ease;    
+    height: fit-content !important;
+    max-height: 100% !important;    
+    overflow: hidden;
+    width:100%;    
+}
+
+.pharmacist-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-gap: 1rem;
+}

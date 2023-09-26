@@ -2,6 +2,7 @@
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
+using PharmacyApi.Utilities;
 using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
@@ -19,20 +20,21 @@ public class DeliveryService : IDeliveryService
         _dbContext = dbContext;
     }
 
-    public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryList()
+    public async Task<IServiceResult<IPagedResult<Delivery>>> GetPagedDeliveryList(int pageNumber, int pageSize)
     {
         try
         {
-            var deliveryList = _dbContext.DeliveryList.AsAsyncEnumerable();
+            return await ServiceHelper.GetPagedResultAsync(
+                    _logger,
+                    _dbContext.DeliveryList, 
+                    pageNumber, 
+                    pageSize);
 
-            return await deliveryList.AnyAsync()
-                ? ServiceHelper.BuildSuccessServiceResult(deliveryList)
-                : ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Delivery>>("No deliveries found");
         }
         catch (Exception ex)
         {
             return ServiceHelper
-                .BuildErrorServiceResult<IAsyncEnumerable<Delivery>>(ex, "searching for deliveries");
+                .BuildErrorServiceResult<IPagedResult<Delivery>>(ex, "searching for deliveries");
         }
     }
 

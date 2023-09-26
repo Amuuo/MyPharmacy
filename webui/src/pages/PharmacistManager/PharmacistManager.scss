@@ -1,0 +1,14 @@
+@import '../../styles/animations.scss';
+
+.PharmacistManager {
+    display: grid;
+    grid-template-areas: 'pharmacist pharmacistCard'
+                         'pharmacist form' ;
+    grid-template-columns: minmax(300px, 450px) minmax(300px, 350px);
+    grid-template-rows: auto 1fr;
+    max-width: 1000px;
+    min-width: 400px;
+    padding: 2rem;
+    grid-gap: 2rem;
+    transition: 300ms;
+}

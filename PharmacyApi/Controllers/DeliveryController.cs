@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
+using PharmacyApi.Utilities;
 using PharmacyApi.Utilities.Helpers;
 
 namespace PharmacyApi.Controllers;
@@ -23,11 +24,11 @@ public class DeliveryController : ControllerBase
 
     #endregion
 
-    [HttpPost]
+    [HttpGet]
     [Route("")]
-    public async Task<IActionResult> GetDeliveryList() =>
-        (await _deliveryService.GetDeliveryList()).HandleResponse();
-    
+    public async Task<IActionResult> GetDeliveryList(int pageNumber = 1, int pageSize = 10) =>
+        (await _deliveryService.GetPagedDeliveryList(pageNumber, pageSize)).HandleResponse();
+
     [HttpGet]
     [Route("by-pharmacy/{id}")]
     public async Task<IActionResult> GetDeliveryListByPharmacyId(int id) =>

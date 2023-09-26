@@ -1,16 +1,20 @@
-@keyframes fade-in { 
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        opacity: 100;
-    }
-}
+// @keyframes fade-in { 
+//     from {
+//         transform: translateY(-50px);
+//         opacity: 0;
+//     }
+//     to {
+//         opacity: 100;
+//     }
+// }
+
+@import '../../../styles/animations.scss';
 
 
 .PharmacyGrid {    
+    //@include slide-in-from-top-animation(800ms);
     animation: fade-in 0.5s ease-in-out;
     height: 100%;
     grid-area: pharmacy;
+    // z-index: 4;
 }

@@ -1,0 +1,47 @@
+@keyframes slide-in-from-top {
+    from {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes grow-in {
+    from {
+        height: 0px;
+    }
+}
+
+@keyframes slide-in-from-bottom {
+    from {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes slide-out-to-top {
+    to {
+        transform: translateY(-100%);
+    }
+}
+
+@keyframes fade-in { 
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        opacity: 100;
+    }
+}
+
+@keyframes grow-in {
+    from {
+        height: 0px;             
+    }
+  }
+  
+@mixin slide-in-from-top-animation($duration) {
+    animation: slide-in-from-top $duration ease;// cubic-bezier(.71, 0, .33, 1.56);
+}
+
+.slide-in-from-top {
+    animation: slide-in-from-top 500ms ease;
+}

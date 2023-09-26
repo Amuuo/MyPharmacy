@@ -1,26 +1,13 @@
-@keyframes grow-in {
-    from {
-        height: 0px;
-    }
-}
+@import '../../../styles/animations.scss';
 
-@keyframes slide-in {
-    from {
-        transform: translateY(100%);
-    }
+.pharmacy_selection {
+    z-index: 2;
 }
-
-@keyframes slide-out {
-    to {
-        transform: translateY(-100%);
-    }
-}
-
 
 @media (min-width: 768px){
     
     .pharmacy_selection {
-        height: 225px;
+        height: 375px;
         place-self: end;
         width: 100%; 
         grid-area: pharmacyCard;
@@ -50,11 +37,11 @@
 }
 
 .outgoing {
-    animation: slide-out 0.3s cubic-bezier(.63,-0.23,.53,1);
+    animation: slide-out-to-top 0.3s cubic-bezier(.63,-0.23,.53,1);
 }
 
 .incoming {
-    animation: slide-in 0.4s cubic-bezier(.04,.73,.77,1.13);//cubic-bezier(.64,.39,.68,1.21);   
+    animation: slide-in-from-bottom 0.4s cubic-bezier(.04,.73,.77,1.13);//cubic-bezier(.64,.39,.68,1.21);   
 }
 
 

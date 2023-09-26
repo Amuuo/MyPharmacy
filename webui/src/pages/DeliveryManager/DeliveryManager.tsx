@@ -3,7 +3,7 @@ import styles from "./DeliveryManager.module.scss";
 
 export default function DeliveryManager() {
     return (
-        <div className={styles.DeliveryManager}>
+        <div className={styles.DeliveryManager + ' slide-in-from-top'}>
             <DeliveryList />
         </div>
     )

@@ -5,7 +5,7 @@ import PharmacistCard from '../../components/Pharmacist/PharmacistCard/Pharmacis
 
 export default function PharmacistManager() {
   return (
-    <div className="PharmacistManager">
+    <div className="PharmacistManager slide-in-from-top">
       <PharmacistList />
       <AddPharmacistForm />
       <PharmacistCard/>

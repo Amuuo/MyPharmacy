@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import PharmacyManager  from './pages/PharmacyManager/PharmacyManager.tsx';
-import './index.scss';
+import './styles/index.scss';
 import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
 import Header from './components/shared/Header/Header.tsx';
 import ReportManager from './pages/ReportManager/ReportManager.tsx';

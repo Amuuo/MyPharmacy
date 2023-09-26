@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import styles from './PharmacyCard.module.scss';
-import { Card, CardContent, CardHeader, Typography } from "@mui/material";
+import { Card, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import { pharmacyStore } from '../../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
 
@@ -31,6 +31,7 @@ export default function PharamcySelectionCard() {
                 ? null 
                 : <div className={styles.pharmacy_selection}>
                     <Card className={isOutgoing ? outgoingStyle : incomingStyle}>
+                        <CardMedia component="img" height="150px" image='src\images\frostydog2_A_Walgreens_store_front_907b0e02-577c-44f6-aac7-2080df187234.png'/>
                         <CardHeader title={currentPharmacy.name} />
                         <CardContent>                
                             <Typography> {currentPharmacy.address} </Typography>

@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import './DeliveryList.scss';
+import styles from './DeliveryList.module.scss';
 import { LinearProgress } from "@mui/material";
 import { useStore } from "effector-react";
 import { deliveryStore, getDeliveryList, getDeliveryListByPharmacyIdFx } from "../../../stores/deliveryStore";
 import { Pharmacy } from "../../../models/pharmacy";
+import usePagination from "../../../hooks/usePagination";
 
 interface DelieveryListProps {
     selectedPharmacy?: Pharmacy | null
@@ -34,8 +35,8 @@ export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) 
             day: '2-digit', 
             month: '2-digit', 
             year: '2-digit', 
-            hour: 'numeric', 
-            minute: 'numeric', 
+            // hour: 'numeric', 
+            // minute: 'numeric', 
             hour12: false}).replace(/\//g, '-');
                           
     const columns: GridColDef[] = [                    
@@ -53,13 +54,13 @@ export default function DeliveryList({ selectedPharmacy } : DelieveryListProps) 
                 ? <LinearProgress sx={{gridArea: 'order'}} /> 
                 : (deliveryList.length === 0) 
                     ? <h3 style={{textAlign: 'center'}} className="delivery-list">No deliveries found...</h3> 
-                    : <div className="delivery-list">            
+                    : 
                         <DataGrid
+                            className={styles.delivery_list}
                             columns={columns}
                             rows={deliveryList}
                             rowHeight={30}                
                             hideFooter={true}
-                            columnHeaderHeight={35}/>                
-                      </div>        
+                            columnHeaderHeight={35}/>                                      
     );    
 }

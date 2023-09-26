@@ -11,7 +11,7 @@ export default function PharmacyManager() {
     const { selectedPharmacy } = useStore(pharmacyStore);
 
     return (
-        <div className='PharmacyManager'>                                    
+        <div className='PharmacyManager slide-in-from-top'>                                    
             <PharmacyList/>                            
             <PharmacistList/>            
             <PharamcySelectionCard/>  

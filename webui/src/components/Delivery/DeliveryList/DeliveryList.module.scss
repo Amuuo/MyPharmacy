@@ -1,0 +1,29 @@
+@import '../../../styles/animations.scss';
+
+.delivery_list {
+    grid-area: order;    
+    z-index: 1 !important;
+}
+
+@media (max-width: 767.98px){
+    .delivery_list {        
+        height: 225px;   
+        transition: 300ms;
+        animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56);    
+        // overflow: hidden;
+    }
+}
+
+@media (min-width: 768px){
+    .delivery_list {        
+        height: fit-content !important;
+        @include slide-in-from-top-animation(300ms);
+        max-height: 100% !important;   
+        transition: 300ms;
+        //animation: grow-in 0.4s cubic-bezier(.71,0,.33,1.56);    
+        overflow: hidden;
+    }
+}
+
+
+

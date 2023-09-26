@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore, setPharmacistSelection } from '../../../stores/pharmacistStore';
 import { useStore } from 'effector-react';
 import { pharmacyStore } from '../../../stores/pharmacyStore';
+import usePagination from '../../../hooks/usePagination';
 
 
 
@@ -13,7 +14,7 @@ export default function PharmacistList() {
 
     const { pharmacistList, loadingPharmacistList } = useStore(pharmacistStore);
     const { selectedPharmacy } = useStore(pharmacyStore);
-
+    
     useEffect(() => {
         if (!selectedPharmacy)
             fetchPharmacistListFx();   
@@ -59,7 +60,7 @@ export default function PharmacistList() {
                     }
                 }
             }}    
-            className={styles.pharmacistGrid}         
+            className={styles.pharmacistGrid + 'slide-in-from-top'}         
             hideFooter={true}                
             rows={pharmacistList}
             columns={columns}

@@ -6,12 +6,7 @@ $teal-blue: #4AB0D9;
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
-@keyframes grow-in {
-  from {
-      height: 0px;  
-      // opacity: 50;      
-  }
-}
+@import './animations.scss';
 
 :root {
   font-family: 'Inter', 'Merriweather', system-ui, Avenir, Helvetica, Arial, sans-serif !important;
@@ -33,13 +28,10 @@ $teal-blue: #4AB0D9;
   grid-template-areas: 'header header' 
                        'sidebar main' 
                        'sidebar footer';  
-  grid-template-rows: auto auto 1fr;  
+  grid-template-rows: auto 1fr 50px;  
   grid-template-columns: auto 1fr;
-  // grid-template-columns: auto auto;
   width: 100%;
-  // height: 100%;
-  // justify-content: center;
-  // align-items: center;
+  height: 100%;
 
 }
 
@@ -80,20 +72,15 @@ $teal-blue: #4AB0D9;
 }
 
 .MuiDataGrid-columnHeaders {
-  background-color: rgba(2, 32, 85, 0.349);
-  //background: linear-gradient(250deg, rgb(54, 87, 179) 0%, rgb(55, 92, 171) 51%, rgb(23, 91, 151) 100%);
+  background-color: rgba(2, 32, 85, 0.349);  
 }
 
 
 .MuiDataGrid-root {
-  // overflow: hidden !important;
-  // overflow-y: hidden !important;
-  // overflow-x: hidden !important;
   font-family: 'Roboto Mono', 'Inter', monospace !important;
   font-size: 13px !important;
   background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
-  color: whitesmoke !important;        
-  // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.548);    
+  color: whitesmoke !important;            
   box-shadow: 1px 1px 10px rgba(3, 16, 33, 0.363) !important;      
   z-index: 2; 
   white-space: nowrap;   
@@ -141,6 +128,8 @@ body {
   justify-content: center;
   min-width: 320px;  
   min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
 }
 
 h1 {

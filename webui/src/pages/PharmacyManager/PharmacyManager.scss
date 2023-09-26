@@ -1,18 +1,14 @@
-@keyframes slide-out {
-  from {
-    transform: translateY(-100%);
-  }
-}
+@import '../../styles/animations.scss';
+
 
 .PharmacyManager {
-  transition: 300ms;
+  transition: 300ms;    
   grid-area: main;
   display: grid;
   will-change: transform;
-  animation: slide-out 700ms ease;// cubic-bezier(.04,.73,.77,1.13);
-  // justify-content: center;
   min-width: 450px;
   max-width: 1280px;
+  max-height: 100% !important;
 
   @media screen and (min-width: 300px) and (max-width: 750px) {
     grid-template-areas: 
@@ -29,7 +25,7 @@
       'pharmacy pharmacyCard'                       
       'order pharmacist';
     grid-template-columns: minmax(400px, 600px) minmax(325px, 350px);  
-    grid-template-rows: 325px 200px;
+    grid-template-rows: 400px 400px;
     padding: 2rem;
     grid-gap: 2rem;
   }

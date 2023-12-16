@@ -7,9 +7,12 @@ namespace PharmacyApi.Controllers;
 [ApiController]
 [Route("reporting")]
 public class ReportingController(
-    IReportService _reportService, 
-    ILogger<ReportingController> _logger) : ControllerBase
+    IReportService reportService, 
+    ILogger<ReportingController> logger) : ControllerBase
 {
+    private readonly IReportService _reportService = reportService;
+    private readonly ILogger<ReportingController> _logger = logger;
+
     [HttpGet]
     [Route("warehouse-profits")]
     public async Task<IActionResult> GetWarehouseProfits() =>

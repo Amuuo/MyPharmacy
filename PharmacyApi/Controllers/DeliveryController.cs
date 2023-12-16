@@ -9,9 +9,12 @@ namespace PharmacyApi.Controllers;
 [ApiController]
 [Route("delivery")]
 public class DeliveryController(
-    ILogger<DeliveryController> _logger, 
-    IDeliveryService _deliveryService) : ControllerBase    
+    ILogger<DeliveryController> logger, 
+    IDeliveryService deliveryService) : ControllerBase    
 {
+    private readonly ILogger<DeliveryController> _logger = logger;
+    private readonly IDeliveryService _deliveryService = deliveryService;
+
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> GetDeliveryList(int pageNumber = 1, int pageSize = 10) =>

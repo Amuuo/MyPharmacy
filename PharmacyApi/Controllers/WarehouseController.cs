@@ -8,9 +8,12 @@ namespace PharmacyApi.Controllers;
 [ApiController]
 [Route("warehouse")]
 public class WarehouseController(
-    ILogger<WarehouseController> _logger, 
-    IWarehouseService _warehouseService) : ControllerBase
+    ILogger<WarehouseController> logger, 
+    IWarehouseService warehouseService) : ControllerBase
 {
+    private readonly ILogger<WarehouseController> _logger = logger;
+    private readonly IWarehouseService _warehouseService = warehouseService;
+
     [HttpPost]
     [Route("")]
     public async Task<IActionResult> GetWarehouseList() =>

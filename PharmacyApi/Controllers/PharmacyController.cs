@@ -9,9 +9,12 @@ namespace PharmacyApi.Controllers;
 [ApiController]
 [Route("pharmacy")]
 public class PharmacyController(
-    ILogger<PharmacyController> _logger, 
-    IPharmacyService _pharmacyService) : ControllerBase
+    ILogger<PharmacyController> logger, 
+    IPharmacyService pharmacyService) : ControllerBase
 {
+    private readonly ILogger<PharmacyController> _logger = logger;
+    private readonly IPharmacyService _pharmacyService = pharmacyService;
+
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> GetPagedPharmacyList(int pageNumber = 1, int pageSize = 10) =>

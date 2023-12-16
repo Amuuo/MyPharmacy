@@ -10,9 +10,12 @@ namespace PharmacyApi.Services;
 /// Represents a service for managing warehouses.
 /// </summary>
 public class WarehouseService(
-    ILogger<WarehouseService> _logger, 
-    IPharmacyDbContext _dbContext) : IWarehouseService
+    ILogger<WarehouseService> logger, 
+    IPharmacyDbContext dbContext) : IWarehouseService
 {
+    private readonly ILogger<WarehouseService> _logger = logger;
+    private readonly IPharmacyDbContext _dbContext = dbContext;
+    
     /// <summary>
     /// Retrieves a list of warehouses asynchronously.
     /// </summary>

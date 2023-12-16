@@ -8,9 +8,12 @@ using PharmacyApi.Utilities.Interfaces;
 namespace PharmacyApi.Services;
 
 public class PharmacyService(
-    ILogger<IPharmacyService> _logger, 
-    IPharmacyDbContext _pharmacyDbContext) : IPharmacyService
+    ILogger<IPharmacyService> logger, 
+    IPharmacyDbContext pharmacyDbContext) : IPharmacyService
 {
+    private readonly ILogger<IPharmacyService> _logger = logger;
+    private readonly IPharmacyDbContext _pharmacyDbContext = pharmacyDbContext;
+
     /// <summary>
     /// Asynchronously retrieves pharmacy records based on the search criteria.
     /// </summary>

@@ -13,9 +13,12 @@ namespace PharmacyApi.Services;
 /// Represents a service for managing pharmacists.
 /// </summary>
 public class PharmacistService(
-    ILogger<IPharmacistService> _logger, 
-    IPharmacyDbContext _dbContext) : IPharmacistService
+    ILogger<IPharmacistService> logger, 
+    IPharmacyDbContext dbContext) : IPharmacistService
 {
+    private readonly ILogger<IPharmacistService> _logger = logger;
+    private readonly IPharmacyDbContext _dbContext = dbContext;
+    
     /// <summary>
     /// Retrieves a paged list of pharmacists.
     /// </summary>

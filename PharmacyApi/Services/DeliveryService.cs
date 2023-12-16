@@ -9,10 +9,13 @@ using PharmacyApi.Utilities.Interfaces;
 namespace PharmacyApi.Services;
 
 public class DeliveryService(
-    ILogger<DeliveryService> _logger, 
-    IPharmacyDbContext _dbContext) : IDeliveryService
+    ILogger<DeliveryService> logger, 
+    IPharmacyDbContext dbContext) : IDeliveryService
 {    
-     /// <summary>
+    private readonly ILogger<DeliveryService> _logger = logger;
+    private readonly IPharmacyDbContext _dbContext = dbContext;
+    
+    /// <summary>
     /// Asynchronously retrieves a paginated list of deliveries.
     /// </summary>
     /// <param name="pageNumber">The page number for pagination.</param>

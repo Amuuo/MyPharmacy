@@ -13,9 +13,11 @@ namespace PharmacyApi.Services;
 /// Service class for generating reports.
 /// </summary>
 public class ReportingService(
-    ILogger<IReportService> _logger, 
-    IPharmacyDbContext _dbContext) : IReportService 
+    ILogger<IReportService> logger, 
+    IPharmacyDbContext dbContext) : IReportService 
 {
+    private readonly ILogger<IReportService> _logger = logger;
+    private readonly IPharmacyDbContext _dbContext = dbContext;
 
     /// <summary>
     /// Retrieves the warehouse profit data asynchronously.

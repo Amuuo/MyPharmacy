@@ -8,30 +8,44 @@ using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services;
 
-public class PharmacistService : IPharmacistService
-{
-    private readonly ILogger _logger;
-    private readonly IPharmacyDbContext _dbContext;
 
-    public PharmacistService(ILogger<IPharmacistService> logger,
-                             IPharmacyDbContext dbContext)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-    }
-    public async Task<IServiceResult<IPagedResult<Pharmacist>>> GetPagedPharmacistListAsync(int pageNumber, int pageSize)
+/// <summary>
+/// Represents a service for managing pharmacists.
+/// </summary>
+public class PharmacistService(
+    ILogger<IPharmacistService> _logger, 
+    IPharmacyDbContext _dbContext) : IPharmacistService
+{
+    /// <summary>
+    /// Retrieves a paged list of pharmacists.
+    /// </summary>
+    /// <param name="pageNumber">The page number.</param>
+    /// <param name="pageSize">The page size.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the paged list of pharmacists.</returns>
+    public async Task<IServiceResult<IPagedResult<Pharmacist>>> 
+        GetPagedPharmacistListAsync(int pageNumber, int pageSize)
     {
         return await ServiceHelper.GetPagedResultAsync(_logger, _dbContext.PharmacistList, pageNumber, pageSize);
     }
 
-
-    public async Task<IServiceResult<Pharmacist>> GetPharmacistByIdAsync(int id)
+    /// <summary>
+    /// Retrieves a pharmacist by ID.
+    /// </summary>
+    /// <param name="id">The ID of the pharmacist.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the pharmacist.</returns>
+    public async Task<IServiceResult<Pharmacist>> 
+        GetPharmacistByIdAsync(int id)
     {
         var pharmacist = await _dbContext.PharmacistList.FindAsync(id);
 
         return ServiceHelper.BuildSuccessServiceResult(pharmacist);
     }
 
+    /// <summary>
+    /// Retrieves a list of pharmacists by pharmacy ID.
+    /// </summary>
+    /// <param name="pharmacyId">The ID of the pharmacy.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the list of pharmacists.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> 
         GetPharmacistListByPharmacyIdAsync(int pharmacyId)
     {
@@ -45,7 +59,7 @@ public class PharmacistService : IPharmacistService
                 .Select(pp => pp.Pharmacist)
                 .AsAsyncEnumerable();
 
-            _logger.LogDebug("Retrieved pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
+            _logger.LogDebug("Retrieved {@pharmacists} for pharmacy with ID {PharmacyId}.", pharmacistList, pharmacyId);
             
             return ServiceHelper.BuildSuccessServiceResult(pharmacistList);
         }
@@ -54,13 +68,18 @@ public class PharmacistService : IPharmacistService
             _logger.LogError(ex, @"An error occurred while retrieving 
                                    pharmacists for pharmacy with ID {PharmacyId}.", pharmacyId);
 
-            return ServiceHelper
-                .BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(ex, 
-                    $"retrieving pharmacists for pharmacy with ID {pharmacyId}");
+            return ServiceHelper.BuildErrorServiceResult<IAsyncEnumerable<Pharmacist>>(
+                ex, $"retrieving pharmacists for pharmacy with ID {pharmacyId}");
         }
     }
 
-    public async Task<IServiceResult<Pharmacist>> UpdatePharmacistAsync(Pharmacist pharmacistToUpdate)
+    /// <summary>
+    /// Updates a pharmacist.
+    /// </summary>
+    /// <param name="pharmacistToUpdate">The pharmacist to update.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the updated pharmacist.</returns>
+    public async Task<IServiceResult<Pharmacist>> 
+        UpdatePharmacistAsync(Pharmacist pharmacistToUpdate)
     {
         try
         {
@@ -70,7 +89,10 @@ public class PharmacistService : IPharmacistService
             if (existingPharmacist is null)
             {
                 _logger.LogWarning("No pharmacist found with ID {PharmacistId}.", pharmacistToUpdate.Id);
-                return ServiceHelper.BuildNoContentResult<Pharmacist>($"No pharmacist found with ID {pharmacistToUpdate.Id}");
+                
+                return ServiceHelper
+                    .BuildNoContentResult<Pharmacist>(
+                        $"No pharmacist found with ID {pharmacistToUpdate.Id}");
             }
 
             UpdateExistingPharmacist(existingPharmacist, pharmacistToUpdate);
@@ -83,11 +105,19 @@ public class PharmacistService : IPharmacistService
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while updating pharmacist with ID {PharmacistId}.", pharmacistToUpdate.Id);
-            return ServiceHelper.BuildErrorServiceResult<Pharmacist>(ex, $"updating pharmacist with ID {pharmacistToUpdate.Id}");
+            
+            return ServiceHelper.BuildErrorServiceResult<Pharmacist>(
+                ex, $"updating pharmacist with ID {pharmacistToUpdate.Id}");
         }
     }
 
-    public async Task<IServiceResult<Pharmacist>> AddPharmacistAsync(Pharmacist pharmacist)
+    /// <summary>
+    /// Adds a new pharmacist.
+    /// </summary>
+    /// <param name="pharmacist">The pharmacist to add.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the added pharmacist.</returns>
+    public async Task<IServiceResult<Pharmacist>> 
+        AddPharmacistAsync(Pharmacist pharmacist)
     {
         _logger.LogDebug("Attempting to add new pharmacist {@pharmacist}", pharmacist);
 

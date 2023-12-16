@@ -8,18 +8,16 @@ using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services;
 
-public class DeliveryService : IDeliveryService
-{
-    private readonly ILogger<DeliveryService> _logger;
-    private readonly IPharmacyDbContext _dbContext;
-
-    public DeliveryService(ILogger<DeliveryService> logger,
-                           IPharmacyDbContext dbContext)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-    }
-
+public class DeliveryService(
+    ILogger<DeliveryService> _logger, 
+    IPharmacyDbContext _dbContext) : IDeliveryService
+{    
+     /// <summary>
+    /// Asynchronously retrieves a paginated list of deliveries.
+    /// </summary>
+    /// <param name="pageNumber">The page number for pagination.</param>
+    /// <param name="pageSize">The number of items per page.</param>
+    /// <returns>A service result containing a paged result of deliveries or an error if an exception occurs.</returns>
     public async Task<IServiceResult<IPagedResult<Delivery>>> GetPagedDeliveryList(int pageNumber, int pageSize)
     {
         try
@@ -37,7 +35,12 @@ public class DeliveryService : IDeliveryService
                 .BuildErrorServiceResult<IPagedResult<Delivery>>(ex, "searching for deliveries");
         }
     }
-
+    
+    /// <summary>
+    /// Asynchronously gets a list of deliveries for a specific pharmacy.
+    /// </summary>
+    /// <param name="pharmacyId">The ID of the pharmacy to retrieve deliveries for.</param>
+    /// <returns>A service result containing an asynchronous enumerable of deliveries or an error if an exception occurs.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByPharmacyId(int pharmacyId)
     {
         try
@@ -59,7 +62,11 @@ public class DeliveryService : IDeliveryService
         }
     }
 
-
+    /// <summary>
+    /// Asynchronously gets a list of deliveries for a specific warehouse.
+    /// </summary>
+    /// <param name="warehouseId">The ID of the warehouse to retrieve deliveries for.</param>
+    /// <returns>A service result containing an asynchronous enumerable of deliveries or an error if an exception occurs.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByWarehouseId(int warehouseId)
     {
         try
@@ -82,7 +89,11 @@ public class DeliveryService : IDeliveryService
         }
     }
 
-
+    /// <summary>
+    /// Asynchronously inserts a new delivery record.
+    /// </summary>
+    /// <param name="delivery">The delivery object to insert.</param>
+    /// <returns>A service result containing the inserted delivery or an error if an exception occurs.</returns>
     public async Task<IServiceResult<Delivery>> InsertDeliveryAsync(Delivery delivery)
     {
         try

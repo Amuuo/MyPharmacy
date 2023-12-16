@@ -9,17 +9,18 @@ using System.Linq;
 
 namespace PharmacyApi.Services; 
 
-public class ReportingService : IReportService 
+/// <summary>
+/// Service class for generating reports.
+/// </summary>
+public class ReportingService(
+    ILogger<IReportService> _logger, 
+    IPharmacyDbContext _dbContext) : IReportService 
 {
-    private readonly ILogger<IReportService> _logger;
-    private readonly IPharmacyDbContext _dbContext;
 
-    public ReportingService(ILogger<IReportService> logger, IPharmacyDbContext dbContext) 
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-    }
-
+    /// <summary>
+    /// Retrieves the warehouse profit data asynchronously.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the warehouse profit data.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<VwWarehouseProfit>>> GetWarehouseProfitAsync() 
     {
         try 
@@ -39,6 +40,10 @@ public class ReportingService : IReportService
         }
     }
 
+    /// <summary>
+    /// Retrieves the delivery detail data asynchronously.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the delivery detail data.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<VwDeliveryDetail>>> GetDeliveryDetailAsync() 
     {
         try 
@@ -58,6 +63,10 @@ public class ReportingService : IReportService
         }
     }
 
+    /// <summary>
+    /// Retrieves the pharmacist sales summary data asynchronously.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the pharmacist sales summary data.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<VwPharmacistSalesSummary>>> GetPharmacistSalesSummaryAsync() 
     {
         try 

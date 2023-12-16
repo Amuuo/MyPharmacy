@@ -1,33 +1,16 @@
-﻿using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PharmacyApi.Data;
 using PharmacyApi.Models;
 using PharmacyApi.Services.Interfaces;
-using PharmacyApi.Utilities;
 using PharmacyApi.Utilities.Helpers;
 using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services;
 
-public class PharmacyService : IPharmacyService
+public class PharmacyService(
+    ILogger<IPharmacyService> _logger, 
+    IPharmacyDbContext _pharmacyDbContext) : IPharmacyService
 {
-    #region Members and Constructor
-
-    private readonly ILogger<IPharmacyService> _logger;
-    private readonly IPharmacyDbContext _pharmacyDbContext;
-
-    public PharmacyService(ILogger<IPharmacyService> logger, 
-                           IPharmacyDbContext pharmacyDbContext)
-    {
-        _logger = logger;
-        _pharmacyDbContext = pharmacyDbContext;
-    }
-
-    #endregion
-
-    #region Public Methods
-    
-
     /// <summary>
     /// Asynchronously retrieves pharmacy records based on the search criteria.
     /// </summary>
@@ -36,7 +19,8 @@ public class PharmacyService : IPharmacyService
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public async Task<IServiceResult<IPagedResult<Pharmacy>>> GetPharmacyListPagedAsync(int pageNumber, int pageSize)
+    public async Task<IServiceResult<IPagedResult<Pharmacy>>> 
+        GetPharmacyListPagedAsync(int pageNumber, int pageSize)
     {
         return await ServiceHelper.GetPagedResultAsync(_logger, _pharmacyDbContext.PharmacyList, pageNumber, pageSize);
     }
@@ -186,9 +170,6 @@ public class PharmacyService : IPharmacyService
                 $"searching for pharmacies associated with pharmacist with id {pharmacistId}");
         }
     }
-
-
-    #endregion
 
 
     #region Private Methods

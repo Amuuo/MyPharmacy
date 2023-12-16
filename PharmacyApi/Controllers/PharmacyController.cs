@@ -8,22 +8,10 @@ namespace PharmacyApi.Controllers;
 
 [ApiController]
 [Route("pharmacy")]
-public class PharmacyController : ControllerBase
+public class PharmacyController(
+    ILogger<PharmacyController> _logger, 
+    IPharmacyService _pharmacyService) : ControllerBase
 {
-    #region Members and Constructor
-
-    private readonly ILogger<PharmacyController> _logger;
-    private readonly IPharmacyService _pharmacyService;
-
-    public PharmacyController(ILogger<PharmacyController> logger, 
-                              IPharmacyService pharmacyService)
-    {
-        _logger = logger;
-        _pharmacyService = pharmacyService;
-    }
-
-    #endregion
-
     [HttpGet]
     [Route("")]
     public async Task<IActionResult> GetPagedPharmacyList(int pageNumber = 1, int pageSize = 10) =>

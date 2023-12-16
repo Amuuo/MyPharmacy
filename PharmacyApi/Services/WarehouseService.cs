@@ -6,18 +6,17 @@ using PharmacyApi.Utilities.Interfaces;
 
 namespace PharmacyApi.Services;
 
-public class WarehouseService : IWarehouseService
+/// <summary>
+/// Represents a service for managing warehouses.
+/// </summary>
+public class WarehouseService(
+    ILogger<WarehouseService> _logger, 
+    IPharmacyDbContext _dbContext) : IWarehouseService
 {
-    private readonly ILogger<WarehouseService> _logger;
-    private readonly IPharmacyDbContext _dbContext;
-
-    public WarehouseService(ILogger<WarehouseService> logger,
-                            IPharmacyDbContext dbContext)
-    {
-        _logger = logger;
-        _dbContext = dbContext;
-    }
-
+    /// <summary>
+    /// Retrieves a list of warehouses asynchronously.
+    /// </summary>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the list of warehouses.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync()
     {
         try
@@ -38,11 +37,15 @@ public class WarehouseService : IWarehouseService
         }
     }
 
-
+    /// <summary>
+    /// Inserts a new warehouse asynchronously.
+    /// </summary>
+    /// <param name="newWarehouse">The new warehouse to insert.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the inserted warehouse.</returns>
     public async Task<IServiceResult<Warehouse>> InsertWarehouseAsync(Warehouse newWarehouse)
     {
         _logger.LogDebug("Initiating warehouse insert with {@newWarehouse}", newWarehouse);
-        
+
         if (await _dbContext.WarehouseList.FindAsync(newWarehouse.Id) is not null)
         {
             _logger.LogWarning("Warehouse with id {id} already exists", newWarehouse.Id);
@@ -65,7 +68,11 @@ public class WarehouseService : IWarehouseService
         }
     }
 
-
+    /// <summary>
+    /// Updates an existing warehouse asynchronously.
+    /// </summary>
+    /// <param name="updatedWarehouse">The updated warehouse.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the updated warehouse.</returns>
     public async Task<IServiceResult<Warehouse>> UpdateWarehouseAsync(Warehouse updatedWarehouse)
     {
         var searchResult = await GetWarehouseByIdAsync(updatedWarehouse.Id);
@@ -93,7 +100,11 @@ public class WarehouseService : IWarehouseService
         return ServiceHelper.BuildSuccessServiceResult(existingWarehouse);
     }
 
-
+    /// <summary>
+    /// Retrieves a warehouse by its ID asynchronously.
+    /// </summary>
+    /// <param name="id">The ID of the warehouse to retrieve.</param>
+    /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the retrieved warehouse.</returns>
     public async Task<IServiceResult<Warehouse>> GetWarehouseByIdAsync(int id)
     {
         _logger.LogDebug("Searching for warehouse with id {id}", id);

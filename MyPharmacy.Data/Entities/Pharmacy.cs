@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MyPharmacy.Data.Models;
+namespace MyPharmacy.Data.Entities;
 
 public class Pharmacy
 {
@@ -24,4 +24,9 @@ public class Pharmacy
 
     [JsonIgnore]
     public virtual ICollection<PharmacyPharmacist>? PharmacyPharmacists { get; set; }
+
+    //[JsonIgnore]
+    //public virtual ICollection<Delivery>? Deliveries { get; set; }
+    //[JsonIgnore]
+    //public virtual ICollection<Pharmacist>? Pharmacists { get; set; }
 }

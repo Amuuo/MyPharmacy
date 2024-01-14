@@ -2,7 +2,7 @@
 using MyPharmacy.Core.Helpers;
 using MyPharmacy.Core.Utilities.Interfaces;
 using MyPharmacy.Data;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Data.Entities;
 using MyPharmacy.Services.Interfaces;
 
 namespace MyPharmacy.Services;
@@ -14,16 +14,13 @@ public class WarehouseService(
     ILogger<WarehouseService> logger, 
     IPharmacyDbContext dbContext) : IWarehouseService
 {
-    private readonly ILogger<WarehouseService> _logger = logger;
-    private readonly IPharmacyDbContext _dbContext = dbContext;
-    
     /// <summary>
     /// Retrieves a list of warehouses asynchronously.
     /// </summary>
     /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the list of warehouses.</returns>
     public async Task<IServiceResult<IAsyncEnumerable<Warehouse>>> GetWarehouseListAsync()
     {
-        var warehouseList = _dbContext.WarehouseList.AsAsyncEnumerable();
+        var warehouseList = dbContext.WarehouseList.AsAsyncEnumerable();
 
         //var hasWarehouses = await warehouseList.AnyAsync();
 
@@ -41,19 +38,19 @@ public class WarehouseService(
     /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the inserted warehouse.</returns>
     public async Task<IServiceResult<Warehouse>> InsertWarehouseAsync(Warehouse newWarehouse)
     {
-        _logger.LogDebug("Initiating warehouse insert with {@newWarehouse}", newWarehouse);
+        logger.LogDebug("Initiating warehouse insert with {@newWarehouse}", newWarehouse);
 
-        if (await _dbContext.WarehouseList.FindAsync(newWarehouse.Id) is not null)
+        if (await dbContext.WarehouseList.FindAsync(newWarehouse.Id) is not null)
         {
-            _logger.LogWarning("Warehouse with id {id} already exists", newWarehouse.Id);
+            logger.LogWarning("Warehouse with id {id} already exists", newWarehouse.Id);
             return ServiceHelper.BuildErrorServiceResult<Warehouse>(new Exception(),
                 @$"Warehouse with id {newWarehouse.Id} already exists. Use update endpoint to modify an existing record");
         }
 
-        await _dbContext.WarehouseList.AddAsync(newWarehouse);
-        await _dbContext.SaveChangesAsync();
+        await dbContext.WarehouseList.AddAsync(newWarehouse);
+        await dbContext.SaveChangesAsync();
 
-        _logger.LogDebug("Inserted new warehouse record: {@warehouse}", newWarehouse);
+        logger.LogDebug("Inserted new warehouse record: {@warehouse}", newWarehouse);
         return ServiceHelper.BuildSuccessServiceResult(newWarehouse);
     }
 
@@ -74,9 +71,9 @@ public class WarehouseService(
         var existingWarehouse = searchResult.Result;
         UpdateExistingWarehouse(existingWarehouse, updatedWarehouse);
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
-        _logger.LogDebug("Updated warehouse record: {@warehouse} with changes from request {@updateContent}",
+        logger.LogDebug("Updated warehouse record: {@warehouse} with changes from request {@updateContent}",
             existingWarehouse, updatedWarehouse);
         return ServiceHelper.BuildSuccessServiceResult(existingWarehouse);
     }
@@ -88,16 +85,16 @@ public class WarehouseService(
     /// <returns>A task that represents the asynchronous operation. The task result contains the service result with the retrieved warehouse.</returns>
     public async Task<IServiceResult<Warehouse>> GetWarehouseByIdAsync(int id)
     {
-        _logger.LogDebug("Searching for warehouse with id {id}", id);
-        var warehouse = await _dbContext.WarehouseList.FindAsync(id);
+        logger.LogDebug("Searching for warehouse with id {id}", id);
+        var warehouse = await dbContext.WarehouseList.FindAsync(id);
 
         if (warehouse is null)
         {
-            _logger.LogWarning("No warehouse found with id {id}", id);
+            logger.LogWarning("No warehouse found with id {id}", id);
             return ServiceHelper.BuildNoContentResult<Warehouse>($"No warehouse found with id {id}");
         }
 
-        _logger.LogDebug("Found warehouse record {@warehouse} with id {id}", warehouse, id);
+        logger.LogDebug("Found warehouse record {@warehouse} with id {id}", warehouse, id);
         return ServiceHelper.BuildSuccessServiceResult(warehouse);
     }
 

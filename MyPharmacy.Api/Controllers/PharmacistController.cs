@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyPharmacy.Core.Helpers;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Core.Utilities;
+using MyPharmacy.Data.Entities;
 using MyPharmacy.Services.Interfaces;
 
 namespace PharmacyApi.Controllers;
@@ -12,32 +13,26 @@ public class PharmacistController(
     IPharmacistService pharmacistService) : ControllerBase
 {
     private readonly ILogger<PharmacistController> _logger = logger;
-    private readonly IPharmacistService _pharmacistService = pharmacistService;
 
     [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> GetPagedPharmacistList(int pageNumber = 0, int pageSize = 10) => 
-        (await _pharmacistService.GetPagedPharmacistListAsync(pageNumber, pageSize)).HandleResponse();
+    public async Task<IActionResult> GetPagedPharmacistList([FromQuery]PagingInfo pagingInfo) => 
+        (await pharmacistService.GetPagedPharmacistListAsync(pagingInfo)).HandleResponse();
 
-    [HttpGet]
-    [Route("by-pharmacy/{id}")]
+    [HttpGet("by-pharmacy/{id}")]
     public async Task<IActionResult> GetPharmacistListByPharmacyId(int id) =>
-        (await _pharmacistService.GetPharmacistListByPharmacyIdAsync(id)).HandleResponse();
+        (await pharmacistService.GetPharmacistListByPharmacyIdAsync(id)).HandleResponse();
 
-    [HttpGet]
-    [Route("{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetPharmacistById(int id) =>
-        (await _pharmacistService.GetPharmacistByIdAsync(id)).HandleResponse();
+        (await pharmacistService.GetPharmacistByIdAsync(id)).HandleResponse();
 
-    [HttpPut]
-    [Route("update")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdatePharmacist(Pharmacist pharmacist) =>
-        (await _pharmacistService.UpdatePharmacistAsync(pharmacist)).HandleResponse();
+        (await pharmacistService.UpdatePharmacistAsync(pharmacist)).HandleResponse();
 
-    [HttpPost]
-    [Route("add")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddPharmacist(Pharmacist pharmacist) =>
-        (await _pharmacistService.AddPharmacistAsync(pharmacist)).HandleResponse();
+        (await pharmacistService.AddPharmacistAsync(pharmacist)).HandleResponse();
 
 }
 

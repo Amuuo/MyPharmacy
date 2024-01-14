@@ -1,4 +1,4 @@
-﻿namespace MyPharmacy.Data.Models;
+﻿namespace MyPharmacy.Data.Entities;
 
 public class Warehouse
 {

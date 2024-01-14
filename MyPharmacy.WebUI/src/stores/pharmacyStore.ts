@@ -36,7 +36,7 @@ editPharmacyFx.use(async (pharmacy: Pharmacy) => {
 });
 
 fetchPharmacyListFx.use(async (paginationModel: GridPaginationModel) => {
-    const url = `${import.meta.env.VITE_API_URL}/pharmacy?pageNumber=${paginationModel.page}&pageSize=${paginationModel.pageSize}`;
+    const url = `${import.meta.env.VITE_API_URL}/pharmacy?page=${paginationModel.page}&take=${paginationModel.pageSize}`;
     const response = await fetch(url, {
         method: 'GET',
         headers: {

@@ -1,6 +1,8 @@
+using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using MyPharmacy.Core.Helpers;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Core.Utilities;
+using MyPharmacy.Data.Entities;
 using MyPharmacy.Services.Interfaces;
 
 namespace PharmacyApi.Controllers;
@@ -12,31 +14,36 @@ public class PharmacyController(
     IPharmacyService pharmacyService) : ControllerBase
 {
     private readonly ILogger<PharmacyController> _logger = logger;
-    private readonly IPharmacyService _pharmacyService = pharmacyService;
 
     [HttpGet]
-    [Route("")]
-    public async Task<IActionResult> GetPagedPharmacyList(int pageNumber = 0, int pageSize = 10) =>
-        (await _pharmacyService.GetPharmacyListPagedAsync(pageNumber, pageSize)).HandleResponse();
-    
-    [HttpGet]
-    [Route("{id}")]
+    public async Task<IActionResult> GetPagedPharmacyList([FromQuery]PagingInfo pagingInfo) =>
+        (await pharmacyService.GetPharmacyListPagedAsync(pagingInfo)).HandleResponse();
+
+    //[HttpGet]
+    //[Route("streaming")]
+    //public async Task<IActionResult> GetStreamedPagedPharmacyList(int pageNumber = 0, int pageSize = 10) =>
+    //    (await _pharmacyService.GetPharmacyListPagedAsync(pageNumber, pageSize)).HandlePagedStreamingResponse();
+
+    [HttpGet("streaming")]
+    public IAsyncEnumerable<Pharmacy> GetStreamedPagedPharmacyList()
+    {
+        return pharmacyService.GetPharmacyListAsync();
+    }
+
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetPharmacyById(int id) =>
-        (await _pharmacyService.GetPharmacyByIdAsync(id)).HandleResponse();
-    
-    [HttpGet]
-    [Route("by-pharmacist/{id}")]
-    public async Task<IActionResult> GetPharmaciesByPharmacistId(int id) =>
-        (await _pharmacyService.GetPharmaciesByPharmacistIdAsync(id)).HandleResponse();
+        (await pharmacyService.GetPharmacyByIdAsync(id)).HandleResponse();
 
-    [HttpPut]
-    [Route("update")]
+    [HttpGet("by-pharmacist/{id}")]
+    public async Task<IActionResult> GetPharmaciesByPharmacistId(int id) =>
+        (await pharmacyService.GetPharmaciesByPharmacistIdAsync(id)).HandleResponse();
+
+    [HttpPut("update")]
     public async Task<IActionResult> UpdatePharmacy(Pharmacy updatedPharmacy) =>
-        (await _pharmacyService.UpdatePharmacyAsync(updatedPharmacy)).HandleResponse();
+        (await pharmacyService.UpdatePharmacyAsync(updatedPharmacy)).HandleResponse();
     
-    [HttpPost]
-    [Route("add")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddPharmacy(Pharmacy newPharmacy) =>
-        (await _pharmacyService.InsertPharmacyAsync(newPharmacy)).HandleResponse();
+        (await pharmacyService.InsertPharmacyAsync(newPharmacy)).HandleResponse();
     
 }

@@ -1,32 +1,52 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import PharmacyManager  from './pages/PharmacyManager/PharmacyManager.tsx';
 import './styles/index.scss';
-import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider } from 'react-router-dom';
-import Header from './components/shared/Header/Header.tsx';
+import { Route, createBrowserRouter, createRoutesFromElements, RouterProvider, BrowserRouter, Routes } from 'react-router-dom';
 import ReportManager from './pages/ReportManager/ReportManager.tsx';
 import PharmacistManager from './pages/PharmacistManager/PharmacistManager.tsx';
-import SidebarNav from './components/shared/Sidebar/SidebarNav.tsx';
 import WarehousePage from './pages/WarehousePage/WarehousePage.tsx';
 import DeliveryManager from './pages/DeliveryManager/DeliveryManager.tsx';
+import Layout from './layout.tsx';
 
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path="/" >
-      <Route index element={<PharmacyManager/>} />
-      <Route path="/pharmacists" Component={PharmacistManager} />
-      <Route path="/deliveries" Component={DeliveryManager} />
-      <Route path="/reports" Component={ReportManager} />   
-      <Route path="/warehouse" Component={WarehousePage} />
-    </Route>
-  )
+// const router = createBrowserRouter(
+//   createRoutesFromElements(
+//     <Route path="/" element={<Layout/>}>
+//       <Route index element={<PharmacyManager/>} />
+//       <Route path="/pharmacists" element={<PharmacistManager/>} />
+//       <Route path="/deliveries" element={<DeliveryManager/>} />
+//       <Route path="/reports" element={<ReportManager/>} />   
+//       <Route path="/warehouse" element={<WarehousePage/>} />
+//     </Route>
+//   )
+// );
+
+const router = (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout/>}>
+        <Route index element={<PharmacyManager/>} />
+        <Route path="/pharmacists" element={<PharmacistManager/>} />
+        <Route path="/deliveries" element={<DeliveryManager/>} />
+        <Route path="/reports" element={<ReportManager/>} />   
+        <Route path="/warehouse" element={<WarehousePage/>} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
 );
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <Header/>      
-      <SidebarNav/>  
-      <RouterProvider router={router}/>                     
-  </React.StrictMode>,
+
+ReactDOM.createRoot(document.getElementById('root')!).render(                 
+    // <RouterProvider router={router}/>     
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Layout/>}>
+        <Route index element={<PharmacyManager/>} />
+        <Route path="/pharmacists" element={<PharmacistManager/>} />
+        <Route path="/deliveries" element={<DeliveryManager/>} />
+        <Route path="/reports" element={<ReportManager/>} />   
+        <Route path="/warehouse" element={<WarehousePage/>} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
 )

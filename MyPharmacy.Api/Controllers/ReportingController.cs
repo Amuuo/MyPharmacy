@@ -10,23 +10,19 @@ public class ReportingController(
     IReportService reportService, 
     ILogger<ReportingController> logger) : ControllerBase
 {
-    private readonly IReportService _reportService = reportService;
     private readonly ILogger<ReportingController> _logger = logger;
 
-    [HttpGet]
-    [Route("warehouse-profits")]
+    [HttpGet("warehouse-profits")]
     public async Task<IActionResult> GetWarehouseProfits() =>
-        (await _reportService.GetWarehouseProfitAsync()).HandleResponse();
+        (await reportService.GetWarehouseProfitAsync()).HandleResponse();
     
-    [HttpGet]
-    [Route("delivery-detail")]
+    [HttpGet("delivery-detail")]
     public async Task<IActionResult> GetDeliveryDetail() =>
-        (await _reportService.GetDeliveryDetailAsync()).HandleResponse();
+        (await reportService.GetDeliveryDetailAsync()).HandleResponse();
     
-    [HttpGet]
-    [Route("sales-summary")]
+    [HttpGet("sales-summary")]
     public async Task<IActionResult> GetPharmacistSalesSummary() =>
-        (await _reportService.GetPharmacistSalesSummaryAsync()).HandleResponse();
+        (await reportService.GetPharmacistSalesSummaryAsync()).HandleResponse();
     
 }
 

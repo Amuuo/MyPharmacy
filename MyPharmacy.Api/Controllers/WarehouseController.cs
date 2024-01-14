@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MyPharmacy.Core.Helpers;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Data.Entities;
 using MyPharmacy.Services.Interfaces;
 
 namespace PharmacyApi.Controllers;
@@ -12,28 +12,22 @@ public class WarehouseController(
     IWarehouseService warehouseService) : ControllerBase
 {
     private readonly ILogger<WarehouseController> _logger = logger;
-    private readonly IWarehouseService _warehouseService = warehouseService;
 
     [HttpPost]
-    [Route("")]
     public async Task<IActionResult> GetWarehouseList()
-        => (await _warehouseService.GetWarehouseListAsync()).HandleResponse();
+        => (await warehouseService.GetWarehouseListAsync()).HandleResponse();
     
-
-    [HttpGet]
-    [Route("{id}")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> GetWarehouseById(int id) =>
-        (await _warehouseService.GetWarehouseByIdAsync(id)).HandleResponse();
+        (await warehouseService.GetWarehouseByIdAsync(id)).HandleResponse();
 
-    [HttpPut]
-    [Route("update")]
+    [HttpPut("update")]
     public async Task<IActionResult> UpdateWarehouse(Warehouse updatedWarehouse) =>
-        (await _warehouseService.UpdateWarehouseAsync(updatedWarehouse)).HandleResponse();
+        (await warehouseService.UpdateWarehouseAsync(updatedWarehouse)).HandleResponse();
 
-    [HttpPost]
-    [Route("add")]
+    [HttpPost("add")]
     public async Task<IActionResult> AddWarehouse(Warehouse newWarehouse) =>
-        (await _warehouseService.InsertWarehouseAsync(newWarehouse)).HandleResponse();
+        (await warehouseService.InsertWarehouseAsync(newWarehouse)).HandleResponse();
 
 }
 

@@ -39,7 +39,15 @@
   }
   
 @mixin slide-in-from-top-animation($duration) {
-    animation: slide-in-from-top $duration ease;// cubic-bezier(.71, 0, .33, 1.56);
+    animation: slide-in-from-top $duration cubic-bezier(.57,.59,.48,1);//ease;// cubic-bezier(.71, 0, .33, 1.56);
+}
+
+@mixin slide-out-to-top-animation($duration) {
+    animation: slide-out-to-top $duration cubic-bezier(.46,-0.38,.43,1);//cubic-bezier(.28,-0.29,.07,.99);
+}
+
+@mixin slide-in-from-bottom-animation($duration) {
+    animation: slide-in-from-bottom $duration cubic-bezier(.46,-0.38,.43,1);//cubic-bezier(.28,-0.29,.07,.99);
 }
 
 .slide-in-from-top {

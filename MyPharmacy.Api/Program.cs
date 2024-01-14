@@ -33,11 +33,11 @@ builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options
     });
 });
 
-builder.Services.AddTransient<IPharmacyService, PharmacyService>();
-builder.Services.AddTransient<IDeliveryService, DeliveryService>();
-builder.Services.AddTransient<IPharmacistService, PharmacistService>();
-builder.Services.AddTransient<IWarehouseService, WarehouseService>();
-builder.Services.AddTransient<IReportService, ReportingService>();
+builder.Services.AddScoped<IPharmacyService, PharmacyService>();
+builder.Services.AddScoped<IDeliveryService, DeliveryService>();
+builder.Services.AddScoped<IPharmacistService, PharmacistService>();
+builder.Services.AddScoped<IWarehouseService, WarehouseService>();
+builder.Services.AddScoped<IReportService, ReportingService>();
 
 var app = builder.Build();
 

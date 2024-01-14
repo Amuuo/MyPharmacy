@@ -26,7 +26,7 @@ getDeliveryListByPharmacyIdFx.use(async (pharmacyId: number) => {
 getDeliveryList.use(async (paginationModel: GridPaginationModel) => {
     
     const url = `${import.meta.env.VITE_API_URL}/delivery` + 
-                `?pageNumber=${paginationModel.page}&pageSize=${paginationModel.pageSize}`;
+                `?page=${paginationModel.page}&take=${paginationModel.pageSize}`;
 
     const response = await fetch(url, {
         method: 'GET',

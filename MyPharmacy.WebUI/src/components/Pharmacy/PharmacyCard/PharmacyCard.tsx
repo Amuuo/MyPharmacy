@@ -6,10 +6,14 @@ import { useStore } from 'effector-react';
 
 export default function PharamcySelectionCard() {    
 
-    const { selectedPharmacy } = useStore(pharmacyStore);
+    const { selectedPharmacy, pharmacyList } = useStore(pharmacyStore);    
 
     const [isOutgoing, setIsOutgoing] = useState(false);
     const [currentPharmacy, setCurrentPharmacy] = useState(selectedPharmacy);
+
+    useEffect(()=> {
+        setCurrentPharmacy(pharmacyList[0]);
+    }, [pharmacyList]);
 
     useEffect(() => {
         setIsOutgoing(true);

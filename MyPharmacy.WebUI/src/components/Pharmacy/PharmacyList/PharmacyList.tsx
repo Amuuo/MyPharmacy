@@ -33,15 +33,15 @@ export default function PharmacyList() {
     }
 
     const columns = [
-        { field: 'name', headerName: 'Name', width: 150, editable: true, flex: 1.5, hideable: true },
-        { field: 'city', headerName: 'City', width: 100, editable: true, flex: 1.5, hideable: true },
-        { field: 'state', headerName: 'State', width: 50, editable: true, flex: 1, hideable: true },
-        { field: 'zip', headerName: 'Zip', width: 80, editable: true, flex: 1, hideable: true },
-        { field: 'id', headerName: 'ID', width: 50, hideable: true },
-        { field: 'address', headerName: 'Address', width: 200, flex: 1, editable: true, hideable: true },
-        { field: 'prescriptionsFilled', headerName: 'RX Filled', width: 100, type: 'number', editable: true, hideable: true },
-        { field: 'createdDate', headerName: 'Created Date', width: 150, type: 'date', editable: true, hideable: true },
-        { field: 'updatedDate', headerName: 'Updated Date', width: 150, type: 'date', editable: true, hideable: true }
+        { field: 'name',                headerName: 'Name',         width: 150, editable: true, flex: 1.5, hideable: true },
+        { field: 'city',                headerName: 'City',         width: 100, editable: true, flex: 1.5, hideable: true },
+        { field: 'state',               headerName: 'State',        width: 50,  editable: true, flex: 1, hideable: true },
+        { field: 'zip',                 headerName: 'Zip',          width: 80,  editable: true, flex: 1, hideable: true },
+        { field: 'id',                  headerName: 'ID',           width: 50,  hideable: true },
+        { field: 'address',             headerName: 'Address',      width: 200, flex: 1, editable: true, hideable: true },
+        { field: 'prescriptionsFilled', headerName: 'RX Filled',    width: 100, type: 'number', editable: true, hideable: true },
+        { field: 'createdDate',         headerName: 'Created Date', width: 150, type: 'date', editable: true, hideable: true },
+        { field: 'updatedDate',         headerName: 'Updated Date', width: 150, type: 'date', editable: true, hideable: true }
     ];
     
 
@@ -71,8 +71,7 @@ export default function PharmacyList() {
                     paginationMode='server'    
                     paginationModel={paginationModel}
                     onPaginationModelChange={handlePaginationModelChange}                
-                    pageSizeOptions={[5, 10, 15]}                                
-                    // onFilterModelChange={}                                          
+                    pageSizeOptions={[5, 10, 15]}                                                                   
                     processRowUpdate={handleEditCellChange}
                     onRowSelectionModelChange={handlePharmacySelectionChange}     
                     rowHeight={30}    

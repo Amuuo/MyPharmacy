@@ -1,5 +1,5 @@
 ﻿using MyPharmacy.Core.Utilities.Interfaces;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Data.Entities;
 
 namespace MyPharmacy.Services.Interfaces;
 

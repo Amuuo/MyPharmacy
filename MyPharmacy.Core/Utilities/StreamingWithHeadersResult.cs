@@ -1,7 +1,8 @@
 ﻿using System.Net.Http.Headers;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using MyPharmacy.Core.Utilities;
 using MyPharmacy.Core.Utilities.Interfaces;
-using Newtonsoft.Json;
 
 public class StreamingWithHeadersResult<T>(
     IPagedResult<T> pagedResult,
@@ -22,8 +23,9 @@ public class StreamingWithHeadersResult<T>(
         await using var writer = new StreamWriter(response.Body);
         await foreach (var item in pagedResult.Data)
         {
-            var json = JsonConvert.SerializeObject(item);
-            await writer.WriteAsync(json);
+            var json = JsonSerializer.Serialize(item);
+            await Task.Delay(200);
+            await writer.WriteAsync(json + "\n");
             await writer.FlushAsync();
         }
     }

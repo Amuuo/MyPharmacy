@@ -1,11 +1,12 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Http.Headers;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MyPharmacy.Core.Utilities;
 using MyPharmacy.Core.Utilities.Interfaces;
-using Newtonsoft.Json;
 
 namespace MyPharmacy.Core.Helpers;
 
@@ -23,7 +24,7 @@ public static class ServiceHelper
         {
             IsSuccess    = false,
             ErrorMessage = message,
-            StatusCode   = HttpStatusCode.OK
+            StatusCode   = HttpStatusCode.NotFound
         };
     }
 
@@ -74,13 +75,15 @@ public static class ServiceHelper
         var streamData = serviceResponse.Result;
 
         return new FileCallbackResult(
-            new MediaTypeHeaderValue("application/json"), 
+            new MediaTypeHeaderValue("application/stream+json"), 
             async (outputStream, context) =>
             {
               await using var writer = new StreamWriter(outputStream);
+              Debug.Assert(streamData != null, nameof(streamData) + " != null");
               await foreach (var item in streamData)
               {
-                  await writer.WriteAsync(JsonConvert.SerializeObject(item));
+                  var json = JsonSerializer.Serialize(item);
+                  await writer.WriteAsync(json);
                   await writer.FlushAsync();
               }
             });
@@ -100,7 +103,7 @@ public static class ServiceHelper
             };
         }
 
-        contentType ??= new MediaTypeHeaderValue("application/json");
+        contentType ??= new MediaTypeHeaderValue("application/stream+json");
 
         return new StreamingWithHeadersResult<T>(serviceResult.Result, contentType);
     }

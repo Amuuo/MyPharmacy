@@ -1,30 +1,51 @@
-import { useEffect } from 'react';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import styles from './PharmacistList.module.scss';
 import { LinearProgress } from '@mui/material';
-import _ from 'lodash';
-import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore, setPharmacistSelection } from '../../../stores/pharmacistStore';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import classnames from 'classnames';
 import { useStore } from 'effector-react';
-import { pharmacyStore } from '../../../stores/pharmacyStore';
+import _ from 'lodash';
+import { useEffect, useState } from 'react';
 import usePagination from '../../../hooks/usePagination';
+import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore, setPharmacistSelection } from '../../../stores/pharmacistStore';
+import { pharmacyStore } from '../../../stores/pharmacyStore';
+import styles from './PharmacistList.module.scss';
+import { Pharmacy } from '../../../models/pharmacy';
 
 
 
 export default function PharmacistList() {
 
+    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 10 });
     const { pharmacistList, loadingPharmacistList, totalCount } = useStore(pharmacistStore);
-    const { selectedPharmacy } = useStore(pharmacyStore);
-    const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
+    const { selectedPharmacy, initialLoad } = useStore(pharmacyStore);
+    const [ isOutgoing, setIsOutgoing ] = useState(false);
+    const [ currentPharmacistList, setCurrentPharmacistList] = useState(pharmacistList);
 
     useEffect(() => {
-        if (!selectedPharmacy)
+        if (!selectedPharmacy) 
             fetchPharmacistListFx(paginationModel);   
     }, [paginationModel]);
     
     useEffect(() => {                
-        if (selectedPharmacy?.id)   
-            fetchPharmacistListByPharmacyIdFx(selectedPharmacy.id);
+        if (selectedPharmacy?.id) {            
+            setIsOutgoing(true);
+            
+            setTimeout(() => {
+                fetchPharmacistListByPharmacyIdFx(selectedPharmacy.id);
+                // setCurrentPharmacistList(pharmacistList);
+                setIsOutgoing(false);
+            }, 200)
+        }
     }, [selectedPharmacy?.id]);
+
+    // useEffect(() => {
+    //     setIsOutgoing(true);
+        
+    //     setTimeout(() => {
+    //         setCurrentPharmacistList(pharmacistList);            
+    //         setIsOutgoing(false);
+    //     }, 200);
+        
+    // }, [selectedPharmacy?.id]);
 
     const columns: GridColDef[] = [
         { field: 'fullName',  headerName: 'Pharmacist', width: 150, valueGetter: (params) => `${params.row.firstName} ${params.row.lastName}`},
@@ -41,12 +62,16 @@ export default function PharmacistList() {
         setPharmacistSelection(selectedPharmacist || null);        
     }
     
-    //if (initialLoad && !selectedPharmacy?.id) 
+    // if (initialLoad && !selectedPharmacy?.id) 
     //    return null;    
+    const outgoingStyle = `${styles.pharmacistGrid} ${styles.outgoing}`;
+    const incomingStyle = `${styles.pharmacistGrid} ${styles.incoming}`;        
+    
     if (loadingPharmacistList) 
-        return <LinearProgress sx={{gridArea: 'pharmacist'}} />; 
+        return <LinearProgress className={isOutgoing ? outgoingStyle : incomingStyle } sx={{gridArea: 'pharmacist'}} />; 
     else if (pharmacistList.length === 0) 
         return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;
+
     
         
     return (                   
@@ -60,9 +85,8 @@ export default function PharmacistList() {
                         id: false,                        
                     }
                 }
-            }}    
-            className={styles.pharmacistGrid}         
-            // hideFooter={true} 
+            }}                
+            className={ isOutgoing ? outgoingStyle : incomingStyle }
             pagination
             paginationMode='server'    
             paginationModel={paginationModel}

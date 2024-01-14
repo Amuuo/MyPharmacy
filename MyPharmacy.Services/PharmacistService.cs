@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MyPharmacy.Core.Helpers;
+using MyPharmacy.Core.Utilities;
 using MyPharmacy.Core.Utilities.Interfaces;
 using MyPharmacy.Data;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Data.Entities;
 using MyPharmacy.Services.Interfaces;
 
 namespace MyPharmacy.Services;
@@ -16,9 +17,6 @@ public class PharmacistService(
     ILogger<IPharmacistService> logger, 
     IPharmacyDbContext dbContext) : IPharmacistService
 {
-    private readonly ILogger<IPharmacistService> _logger = logger;
-    private readonly IPharmacyDbContext _dbContext = dbContext;
-    
     /// <summary>
     /// Retrieves a paged list of pharmacists.
     /// </summary>
@@ -26,9 +24,9 @@ public class PharmacistService(
     /// <param name="pageSize">The page size.</param>
     /// <returns>A task that represents the asynchronous operation. The task result contains the paged list of pharmacists.</returns>
     public async Task<IServiceResult<IPagedResult<Pharmacist>>> 
-        GetPagedPharmacistListAsync(int pageNumber, int pageSize)
+        GetPagedPharmacistListAsync(PagingInfo pagingInfo)
     {
-        return await ServiceHelper.GetPagedResultAsync(_logger, _dbContext.PharmacistList, pageNumber, pageSize);
+        return await ServiceHelper.GetPagedResultAsync(logger, dbContext.PharmacistList.Include(p => p.PharmacyPharmacists).ThenInclude(pp => pp.Pharmacy), pagingInfo.Page, pagingInfo.Take);
     }
 
     /// <summary>
@@ -39,7 +37,7 @@ public class PharmacistService(
     public async Task<IServiceResult<Pharmacist>> 
         GetPharmacistByIdAsync(int id)
     {
-        var pharmacist = await _dbContext.PharmacistList.FindAsync(id);
+        var pharmacist = await dbContext.PharmacistList.FindAsync(id);
 
         return pharmacist is not null 
             ? ServiceHelper.BuildSuccessServiceResult(pharmacist)
@@ -54,15 +52,15 @@ public class PharmacistService(
     public Task<IServiceResult<IAsyncEnumerable<Pharmacist>>> 
         GetPharmacistListByPharmacyIdAsync(int pharmacyId)
     {
-        _logger.LogDebug(@"Attempting to retrieve pharmacists 
+        logger.LogDebug(@"Attempting to retrieve pharmacists 
                             for pharmacy with ID {Id}", pharmacyId);
 
-        var pharmacistList = _dbContext.PharmacyPharmacists
+        var pharmacistList = dbContext.PharmacyPharmacists
             .Where(pp => pp.PharmacyId == pharmacyId)
             .Select(pp => pp.Pharmacist)
             .AsAsyncEnumerable();
 
-        _logger.LogDebug("Retrieved {@pharmacists} for pharmacy with ID {Id}.", pharmacistList, pharmacyId);
+        logger.LogDebug("Retrieved {@pharmacists} for pharmacy with ID {Id}.", pharmacistList, pharmacyId);
         
         return Task.FromResult(ServiceHelper.BuildSuccessServiceResult(pharmacistList));
     }
@@ -75,12 +73,12 @@ public class PharmacistService(
     public async Task<IServiceResult<Pharmacist>> 
         UpdatePharmacistAsync(Pharmacist pharmacistToUpdate)
     {
-        _logger.LogDebug("Attempting to update pharmacist with ID {Id}.", pharmacistToUpdate.Id);
+        logger.LogDebug("Attempting to update pharmacist with ID {Id}.", pharmacistToUpdate.Id);
 
-        var existingPharmacist = await _dbContext.PharmacistList.FindAsync(pharmacistToUpdate.Id);
+        var existingPharmacist = await dbContext.PharmacistList.FindAsync(pharmacistToUpdate.Id);
         if (existingPharmacist is null)
         {
-            _logger.LogWarning("No pharmacist found with ID {Id}.", pharmacistToUpdate.Id);
+            logger.LogWarning("No pharmacist found with ID {Id}.", pharmacistToUpdate.Id);
             
             return ServiceHelper
                 .BuildNoContentResult<Pharmacist>(
@@ -89,9 +87,9 @@ public class PharmacistService(
 
         UpdateExistingPharmacist(existingPharmacist, pharmacistToUpdate);
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
-        _logger.LogDebug("Successfully updated pharmacist with ID {Id}.", pharmacistToUpdate.Id);
+        logger.LogDebug("Successfully updated pharmacist with ID {Id}.", pharmacistToUpdate.Id);
         return ServiceHelper.BuildSuccessServiceResult(existingPharmacist);
     }
 
@@ -103,13 +101,13 @@ public class PharmacistService(
     public async Task<IServiceResult<Pharmacist>> 
         AddPharmacistAsync(Pharmacist pharmacist)
     {
-        _logger.LogDebug("Attempting to add new pharmacist {@pharmacist}", pharmacist);
+        logger.LogDebug("Attempting to add new pharmacist {@pharmacist}", pharmacist);
 
-        var newPharmacist = await _dbContext.PharmacistList.AddAsync(pharmacist);
+        var newPharmacist = await dbContext.PharmacistList.AddAsync(pharmacist);
 
-        _logger.LogDebug("Successfully added pharmacist");
+        logger.LogDebug("Successfully added pharmacist");
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
         return ServiceHelper.BuildSuccessServiceResult(newPharmacist.Entity);
     }

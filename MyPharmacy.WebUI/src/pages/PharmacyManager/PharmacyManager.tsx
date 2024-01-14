@@ -3,7 +3,7 @@ import PharmacistList from '../../components/Pharmacist/PharmacistList/Pharmacis
 import PharmacyList from '../../components/Pharmacy/PharmacyList/PharmacyList';
 import PharamcySelectionCard from '../../components/Pharmacy/PharmacyCard/PharmacyCard';
 import './PharmacyManager.scss';
-import { pharmacyStore } from '../../stores/pharmacyStore';
+import AddDeliveryForm from '../../components/Delivery/AddDeliveryForm/AddDeliveryForm';
 
 export default function PharmacyManager() {    
     
@@ -12,7 +12,10 @@ export default function PharmacyManager() {
             <PharmacyList/>                            
             <PharmacistList/>            
             <PharamcySelectionCard/>  
-            <DeliveryList/>                         
+            <div>
+                <DeliveryList height="300px"/>    
+                <AddDeliveryForm/>                     
+            </div>
         </div>
     );        
 }

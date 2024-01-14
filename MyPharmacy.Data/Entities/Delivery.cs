@@ -1,7 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace MyPharmacy.Data.Models;
+namespace MyPharmacy.Data.Entities;
 
 public class Delivery
 {

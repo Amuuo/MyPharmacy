@@ -2,9 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MyPharmacy.Core.Helpers;
+using MyPharmacy.Core.Utilities;
 using MyPharmacy.Core.Utilities.Interfaces;
 using MyPharmacy.Data;
-using MyPharmacy.Data.Models;
+using MyPharmacy.Data.Entities;
 using MyPharmacy.Services.Interfaces;
 
 namespace MyPharmacy.Services;
@@ -12,23 +13,20 @@ namespace MyPharmacy.Services;
 public class DeliveryService(
     ILogger<DeliveryService> logger, 
     IPharmacyDbContext dbContext) : IDeliveryService
-{    
-    private readonly ILogger<DeliveryService> _logger = logger;
-    private readonly IPharmacyDbContext _dbContext = dbContext;
-    
+{
     /// <summary>
     /// Asynchronously retrieves a paginated list of deliveries.
     /// </summary>
     /// <param name="pageNumber">The page number for pagination.</param>
     /// <param name="pageSize">The number of items per page.</param>
     /// <returns>A service result containing a paged result of deliveries or an error if an exception occurs.</returns>
-    public async Task<IServiceResult<IPagedResult<Delivery>>> GetPagedDeliveryList(int pageNumber, int pageSize)
+    public async Task<IServiceResult<IPagedResult<Delivery>>> GetPagedDeliveryList(PagingInfo pagingInfo)
     {
         return await ServiceHelper.GetPagedResultAsync(
-                _logger,
-                _dbContext.DeliveryList, 
-                pageNumber, 
-                pageSize);        
+                logger,
+                dbContext.DeliveryList, 
+                pagingInfo.Page, 
+                pagingInfo.Take);
     }
     
     /// <summary>
@@ -39,7 +37,7 @@ public class DeliveryService(
     public Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByPharmacyId(int pharmacyId)
     {
 
-        var deliveryListByPharmacy = _dbContext.DeliveryList
+        var deliveryListByPharmacy = dbContext.DeliveryList
             .Where(d => d.Pharmacy.Id == pharmacyId)
             .AsAsyncEnumerable();
 
@@ -60,7 +58,7 @@ public class DeliveryService(
     public Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByWarehouseId(int warehouseId)
     {
 
-        var deliveryListByWarehouse = _dbContext.DeliveryList
+        var deliveryListByWarehouse = dbContext.DeliveryList
             .Where(d => d.Warehouse.Id == warehouseId)
             .AsAsyncEnumerable();
 
@@ -81,21 +79,21 @@ public class DeliveryService(
     /// <returns>A service result containing the inserted delivery or an error if an exception occurs.</returns>
     public async Task<IServiceResult<Delivery>> InsertDeliveryAsync(Delivery delivery)
     {
-        var warehouseExists = await _dbContext.WarehouseList.FindAsync(delivery.WarehouseId);
-        var pharmacyExists = await _dbContext.PharmacyList.FindAsync(delivery.PharmacyId);
+        var warehouseExists = await dbContext.WarehouseList.FindAsync(delivery.WarehouseId);
+        var pharmacyExists = await dbContext.PharmacyList.FindAsync(delivery.PharmacyId);
 
         if (warehouseExists is null || pharmacyExists is null)
         {
-            _logger.LogWarning("Either pharmacy: {pharmacyId} or warehouse: {warehouseId} does not exist", 
+            logger.LogWarning("Either pharmacy: {pharmacyId} or warehouse: {warehouseId} does not exist", 
                                 delivery.PharmacyId, delivery.WarehouseId);
 
             return ServiceHelper.BuildErrorServiceResult<Delivery>(null, "inserting delievery");
         }
 
-        _dbContext.DeliveryList.Add(delivery);
-        await _dbContext.SaveChangesAsync();
+        dbContext.DeliveryList.Add(delivery);
+        await dbContext.SaveChangesAsync();
 
-        _logger.LogDebug($"Successfully inserted delivery with ID: {delivery.Id}");
+        logger.LogDebug($"Successfully inserted delivery with ID: {delivery.Id}");
         return ServiceHelper.BuildSuccessServiceResult(delivery);
     }
 }

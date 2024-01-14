@@ -1,8 +1,8 @@
-﻿namespace MyPharmacy.Data.Models;
+﻿namespace MyPharmacy.Data.Entities;
 
 public partial class VwDeliveryDetail
 {
-    public int VwDeliveryDetailId { get; set; }
+    //public int VwDeliveryDetailId { get; set; }
     
     public string WarehouseFrom { get; set; } = null!;
 

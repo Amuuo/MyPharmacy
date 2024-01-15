@@ -1,5 +1,5 @@
 import { LinearProgress } from '@mui/material';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridEventListener, GridRowSelectionModel } from '@mui/x-data-grid';
 import classnames from 'classnames';
 import { useStore } from 'effector-react';
 import _ from 'lodash';
@@ -9,16 +9,22 @@ import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistSto
 import { pharmacyStore } from '../../../stores/pharmacyStore';
 import styles from './PharmacistList.module.scss';
 import { Pharmacy } from '../../../models/pharmacy';
+import { useNavigate } from 'react-router-dom';
 
 
+interface PharmacistListProps {
+    selectForPharmacy?: boolean;
+    enablePagination?: boolean;
+}
 
-export default function PharmacistList() {
+export default function PharmacistList({selectForPharmacy = false, enablePagination = true}: PharmacistListProps) {
 
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 10 });
     const { pharmacistList, loadingPharmacistList, totalCount } = useStore(pharmacistStore);
-    const { selectedPharmacy, initialLoad } = useStore(pharmacyStore);
+    const { selectedPharmacy, pharmacyList, initialLoad } = useStore(pharmacyStore);
     const [ isOutgoing, setIsOutgoing ] = useState(false);
     const [ currentPharmacistList, setCurrentPharmacistList] = useState(pharmacistList);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!selectedPharmacy) 
@@ -26,7 +32,7 @@ export default function PharmacistList() {
     }, [paginationModel]);
     
     useEffect(() => {                
-        if (selectedPharmacy?.id) {            
+        if (selectedPharmacy?.id && selectForPharmacy) {            
             setIsOutgoing(true);
             
             setTimeout(() => {
@@ -72,9 +78,15 @@ export default function PharmacistList() {
     else if (pharmacistList.length === 0) 
         return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;
 
+    const handleRowDoubleClick: GridEventListener<'rowDoubleClick'> = (params, event, details) => {
+        console.log("handle row double click");
+        console.log(params);        
+        setPharmacistSelection(params.row);
+        navigate('/pharmacists');
+    }
     
         
-    return (                   
+    return (  
         <DataGrid   
             initialState={{
                 columns: {
@@ -87,18 +99,20 @@ export default function PharmacistList() {
                 }
             }}                
             className={ isOutgoing ? outgoingStyle : incomingStyle }
-            pagination
-            paginationMode='server'    
-            paginationModel={paginationModel}
-            pageSizeOptions={[5,10,15]}               
+            pagination={enablePagination ? true: undefined}
+            paginationMode={enablePagination ? 'server' : undefined}
+            paginationModel={enablePagination ? paginationModel : undefined}
+            hideFooter={!enablePagination}
+            pageSizeOptions={[5,10,15]}                           
             rowCount={totalCount}
             rows={pharmacistList}
+            onRowDoubleClick={handleRowDoubleClick} 
             columns={columns}
-            loading={loadingPharmacistList}                        
+            loading={loadingPharmacistList}            
             rowHeight={30}        
             columnHeaderHeight={35}
             onPaginationModelChange={handlePaginationModelChange}
             onRowSelectionModelChange={handlePharmacistSelectionChange}            
-        />                       
+        />                                      
     );         
 }

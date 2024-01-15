@@ -1,25 +1,46 @@
-import { useEffect } from 'react';
-import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
 import { LinearProgress } from '@mui/material';
+import { DataGrid, GridEventListener, GridRowSelectionModel } from '@mui/x-data-grid';
 import _ from 'lodash';
-import { Pharmacy } from '../../../models/pharmacy';
+import { useEffect } from 'react';
 import usePagination from '../../../hooks/usePagination';
+import { Pharmacy } from '../../../models/pharmacy';
 
-import styles from './PharmacyList.module.scss';
-import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
+import { pharmacistStore } from '../../../stores/pharmacistStore';
+import { editPharmacyFx, fetchPharmacyListByPharmacistIdFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
+import styles from './PharmacyList.module.scss';
 
+interface PharmacyListProps {
+    selectForPharmacist?: boolean;
+    selectAll?: boolean;
+    hasAnimation?: boolean;
+    maxHeight?: number;
+    enablePagination?: boolean;
+    enableFilters?: boolean;
+    columnHeaderHeight?: number;
+}
 
-
-export default function PharmacyList() {
+export default function PharmacyList({ selectForPharmacist, 
+                                       selectAll, 
+                                       hasAnimation, 
+                                       maxHeight, 
+                                       enablePagination = true,
+                                       enableFilters = true,
+                                       columnHeaderHeight = 40 }: PharmacyListProps) {
       
     const { pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
+    const { selectedPharmacist } = useStore(pharmacistStore);
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
     useEffect(() => {        
         console.log("about to fetch pharmacy list");
-        fetchPharmacyListFx(paginationModel);        
+        fetchPharmacyListFx(paginationModel);                
     }, [paginationModel]);
+
+    useEffect(() => {
+        if (selectForPharmacist && selectedPharmacist?.id)
+            fetchPharmacyListByPharmacistIdFx(selectedPharmacist?.id)
+    }, [selectedPharmacist]);
 
     const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {                
         const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);        
@@ -31,6 +52,7 @@ export default function PharmacyList() {
             editPharmacyFx(updatedPharmacy);               
         return updatedPharmacy;    
     }
+
 
     const columns = [
         { field: 'name',                headerName: 'Name',         width: 150, editable: true, flex: 1.5, hideable: true },
@@ -48,8 +70,9 @@ export default function PharmacyList() {
     return  (              
         <>        
             {initialLoad 
-                ? <LinearProgress className={styles.pharmacyGrid}/> 
-                : <DataGrid className={styles.pharmacyGrid}
+                ? <LinearProgress className={styles.PharmacyGrid}/> 
+                : <DataGrid className={styles.PharmacyGrid}
+                    sx={{maxHeight: maxHeight, height: 'auto'}}
                     initialState={{
                         columns: {
                             columnVisibilityModel: {
@@ -60,22 +83,27 @@ export default function PharmacyList() {
                                 updatedDate: false,                        
                             }
                         }
-                    }}                       
+                    }}              
+                    disableColumnFilter={!enableFilters}         
+                    disableColumnSelector={!enableFilters}
+                    disableDensitySelector={!enableFilters}
                     rows={pharmacyList} 
                     disableColumnMenu={false}
                     columns={columns}    
                     loading={loading}   
                     hideFooterSelectedRowCount={true}  
                     rowCount={totalCount}   
-                    pagination
-                    paginationMode='server'    
-                    paginationModel={paginationModel}
-                    onPaginationModelChange={handlePaginationModelChange}                
+                    // hideFooterPagination={!enablePagination}
+                    hideFooter={!enablePagination}
+                    pagination={enablePagination ? true : undefined}
+                    paginationMode={enablePagination ? 'server' : undefined}
+                    paginationModel={enablePagination ? paginationModel : undefined}
+                    onPaginationModelChange={enablePagination ? handlePaginationModelChange : undefined}       
                     pageSizeOptions={[5, 10, 15]}                                                                   
                     processRowUpdate={handleEditCellChange}
                     onRowSelectionModelChange={handlePharmacySelectionChange}     
                     rowHeight={30}    
-                    columnHeaderHeight={40}                       
+                    columnHeaderHeight={columnHeaderHeight}                       
                     keepNonExistentRowsSelected={true}  
                 />}        
         </>

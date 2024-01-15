@@ -2,7 +2,7 @@
 
 
 .pharmacist_selection {
-    height: 275px;
+    height: auto;
     justify-content: center;
     grid-area: pharmacistCard;
     overflow: hidden;
@@ -33,9 +33,10 @@
     
     
     .pharmacist_card {
-        display: grid !important;
-        grid-template-columns: 1fr auto;
-        grid-template-rows: auto 1fr;
+        display: flex !important;
+        flex-direction: row;
+        // grid-template-columns: 1fr;
+        // grid-template-rows: auto;
         background: inherit;
         color: whitesmoke !important;
         height: 100%;
@@ -51,14 +52,15 @@
                 display: flex;
                 flex-direction: column;
                 grid-gap: 0.5rem;
+                white-space: nowrap;
             }
-
-            .card_buttons {
-                display: flex;
-                flex-direction: column;
-                grid-gap: 0.5rem;
-                justify-content: space-evenly;
-            }
+            
+        }
+        .card_buttons {
+            display: flex;
+            flex-direction: column;
+            grid-gap: 0.5rem;
+            justify-content: space-evenly;
         }
     }
 }

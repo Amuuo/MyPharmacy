@@ -22,6 +22,7 @@ export const pharmacyStore = createStore<PharmacyState>({
 export const setPharmacySelection = createEvent<Pharmacy | null>();
 export const editPharmacyFx       = createEffect<Pharmacy, Pharmacy, Error>();
 export const fetchPharmacyListFx  = createEffect<GridPaginationModel, any, Error>();
+export const fetchPharmacyListByPharmacistIdFx = createEffect<number, any, Error>();
 
 
 editPharmacyFx.use(async (pharmacy: Pharmacy) => {
@@ -45,6 +46,17 @@ fetchPharmacyListFx.use(async (paginationModel: GridPaginationModel) => {
     });
     return await response.json();
 });
+
+fetchPharmacyListByPharmacistIdFx.use(async (pharmacistId: number) => {
+    const url = `${import.meta.env.VITE_API_URL}/pharmacy/by-pharmacist/${pharmacistId}`
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    return await response.json();
+})
 
 
 
@@ -84,4 +96,22 @@ pharmacyStore
         };
     })
     .on(editPharmacyFx.fail, (state) => 
-        ({ ...state, loading: false, pharmacyList: [] }));
+        ({ ...state, loading: false, pharmacyList: [] }))
+    
+    .on(fetchPharmacyListByPharmacistIdFx, (state) => {
+        return {...state,loading: true }
+    })
+    .on(fetchPharmacyListByPharmacistIdFx.done, (state, { result }) => {
+        return {
+            ...state,
+            pharmacyList: result,
+            loading: false
+        }
+    })
+    .on(fetchPharmacyListByPharmacistIdFx.fail, (state) => {
+        return {
+            ...state,
+            loading: false,
+            pharmacyList: []
+        }
+    })

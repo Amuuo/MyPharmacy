@@ -1,22 +1,29 @@
 import PharmacistList from '../../components/Pharmacist/PharmacistList/PharmacistList';
-import AddPharmacistForm from '../../components/Pharmacist/AddPharmacistForm/AddPharmacistForm';
 import './PharmacistManager.scss';
 import PharmacistCard from '../../components/Pharmacist/PharmacistCard/PharmacistCard';
 import { useStore } from 'effector-react';
 import { pharmacyStore } from '../../stores/pharmacyStore';
+import usePagination from '../../hooks/usePagination';
+import { useNavigate } from 'react-router-dom';
 
 export default function PharmacistManager() {
 
-  const { selectedPharmacy } = useStore(pharmacyStore);
+  useStore(pharmacyStore);
+  // const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
-  return (
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate('/')
+  }
+
+  return (    
     <div className="PharmacistManager slide-in-from-top">
-      <div style={{gridColumn: 1, gridRow: 2}}>
-        {selectedPharmacy?.name}
-      </div>
-      <PharmacistList />
-      <AddPharmacistForm />
+      <button onClick={handleClick} title='click me' type='button' style={{height: '40px', width: '150px'}}>Click Me</button>
+      <PharmacistList enablePagination={false}/>
+      {/* <AddPharmacistForm /> */}
       <PharmacistCard/>
-    </div>
+      {/* <PharmacyList selectForPharmacist={true}/> */}
+    </div>    
   );
 }

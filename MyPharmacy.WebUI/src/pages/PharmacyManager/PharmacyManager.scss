@@ -23,10 +23,9 @@
   @media screen and (min-width: 750px) {
     grid-template-areas: 
       'pharmacy pharmacyCard'                       
-      'order pharmacist'
-      'pharmacistCard pharmacistCard';
+      'order pharmacist';
     grid-template-columns: minmax(400px, 600px) minmax(325px, 350px);  
-    grid-template-rows: 400px 200px 300px;
+    grid-template-rows: 400px 400px;
     padding: 2rem;
     grid-gap: 2rem;
   }

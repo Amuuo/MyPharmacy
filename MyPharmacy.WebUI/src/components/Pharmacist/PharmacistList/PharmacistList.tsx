@@ -1,5 +1,6 @@
-import { Button, LinearProgress } from '@mui/material';
-import { DataGrid, GridColDef, GridEventListener, GridRowSelectionModel } from '@mui/x-data-grid';
+import { LinearProgress } from '@mui/material';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import classnames from 'classnames';
 import { useStore } from 'effector-react';
 import _ from 'lodash';
 import { useEffect, useMemo, useState } from 'react';
@@ -7,28 +8,17 @@ import usePagination from '../../../hooks/usePagination';
 import { fetchPharmacistListByPharmacyIdFx, fetchPharmacistListFx, pharmacistStore, setPharmacistSelection } from '../../../stores/pharmacistStore';
 import { pharmacyStore } from '../../../stores/pharmacyStore';
 import styles from './PharmacistList.module.scss';
-import { useNavigate } from 'react-router-dom';
-import LaunchIcon from '@mui/icons-material/Launch';
-import { Pharmacist } from '../../../models/pharmacist';
+import { Pharmacy } from '../../../models/pharmacy';
 
 
-interface PharmacistListProps {
-    selectForPharmacy?: boolean;
-    enablePagination?: boolean;
-    enableAnimation?: boolean;
-}
 
-export default function PharmacistList({
-    selectForPharmacy = false, 
-    enablePagination = true, 
-    enableAnimation = true}: PharmacistListProps) {
+export default function PharmacistList() {
 
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 10 });
     const { pharmacistList, loadingPharmacistList, totalCount } = useStore(pharmacistStore);
-    const { selectedPharmacy } = useStore(pharmacyStore);
+    const { selectedPharmacy, initialLoad } = useStore(pharmacyStore);
     const [ isOutgoing, setIsOutgoing ] = useState(false);
-        
-    const navigate = useNavigate();
+    const [ currentPharmacistList, setCurrentPharmacistList] = useState(pharmacistList);
 
     useEffect(() => {
         if (!selectedPharmacy) 
@@ -36,7 +26,7 @@ export default function PharmacistList({
     }, [paginationModel]);
     
     useEffect(() => {                
-        if (selectedPharmacy?.id && selectForPharmacy) {            
+        if (selectedPharmacy?.id) {            
             setIsOutgoing(true);
             
             setTimeout(() => {
@@ -88,9 +78,10 @@ export default function PharmacistList({
     else if (pharmacistList.length === 0) 
     {
         return <h3 style={{textAlign: 'center', gridArea: 'pharmacist'}}>No pharmacists found...</h3>;
-    }       
+
+    
         
-    return (  
+    return (                   
         <DataGrid   
             initialState={{
                 columns: {
@@ -104,20 +95,18 @@ export default function PharmacistList({
                 }
             }}                
             className={ isOutgoing ? outgoingStyle : incomingStyle }
-            pagination={enablePagination ? true: undefined}
-            paginationMode={enablePagination ? 'server' : undefined}
-            paginationModel={enablePagination ? paginationModel : undefined}
-            hideFooter={!enablePagination}
-            pageSizeOptions={[5,10,15]}                           
+            pagination
+            paginationMode='server'    
+            paginationModel={paginationModel}
+            pageSizeOptions={[5,10,15]}               
             rowCount={totalCount}
             rows={pharmacistList}
-            onRowDoubleClick={handleRowDoubleClick} 
             columns={columns}
-            loading={loadingPharmacistList}            
+            loading={loadingPharmacistList}                        
             rowHeight={30}        
             columnHeaderHeight={35}
             onPaginationModelChange={handlePaginationModelChange}
             onRowSelectionModelChange={handlePharmacistSelectionChange}            
-        />                                      
+        />                       
     );         
 }

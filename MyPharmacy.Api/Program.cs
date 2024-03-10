@@ -21,7 +21,6 @@ builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
 builder.Services.AddMemoryCache();
-
 builder.Services.AddCors();
 
 builder.Services.AddSwaggerDocument();

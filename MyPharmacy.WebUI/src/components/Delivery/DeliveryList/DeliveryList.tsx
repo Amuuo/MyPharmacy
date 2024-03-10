@@ -8,13 +8,8 @@ import usePagination from "../../../hooks/usePagination";
 import { pharmacyStore } from "../../../stores/pharmacyStore";
 import { Delivery } from "../../../models/delivery";
 
-interface DeliveryListProps {
-    height?: string;
-    maxHeight?: string;
-    enablePagination?: boolean;
-}
 
-export default function DeliveryList({ height = '150px', maxHeight, enablePagination = true }: DeliveryListProps) {
+export default function DeliveryList(height: string) {
 
     const { selectedPharmacy } = useStore(pharmacyStore);
     const { deliveryList, loading, totalCount } = useStore(deliveryStore);
@@ -57,19 +52,18 @@ export default function DeliveryList({ height = '150px', maxHeight, enablePagina
                 : (deliveryList.length === 0) 
                     ? <h3 style={{textAlign: 'center'}} className="delivery-list">No deliveries found...</h3> 
                     : 
-                        <DataGrid                        
-                            sx={{height: height, maxHeight: maxHeight}}                        
+                        <DataGrid
+                            sx={{height: height}}                        
                             className={styles.delivery_list}
                             columns={columns}
                             rows={deliveryList}
                             rowHeight={30}                                            
                             rowCount={totalCount}
-                            pagination={enablePagination ? true : undefined}
-                            paginationMode={enablePagination ? 'server' : undefined}    
-                            paginationModel={enablePagination ? paginationModel : undefined}
+                            pagination
+                            paginationMode='server'    
+                            paginationModel={paginationModel}
                             pageSizeOptions={[5,10,15]}
-                            onPaginationModelChange={enablePagination ? handlePaginationModelChange : undefined}
-                            hideFooter={!enablePagination}                            
+                            onPaginationModelChange={handlePaginationModelChange}
                             columnHeaderHeight={35}/>                                      
     );    
 }

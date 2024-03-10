@@ -3,24 +3,18 @@ import styles from './PharmacyCard.module.scss';
 import { Card, CardContent, CardHeader, CardMedia, Typography } from "@mui/material";
 import { pharmacyStore } from '../../../stores/pharmacyStore';
 import { useStore } from 'effector-react';
-import LaunchIcon from '@mui/icons-material/Launch';
 
 interface PharamcySelectionCardProps {
     enableAnimation?: boolean
 }
 
-export default function PharamcySelectionCard({ enableAnimation = true }: PharamcySelectionCardProps) {    
-
-    const { selectedPharmacy, pharmacyList, initialLoad } = useStore(pharmacyStore);    
+    const { selectedPharmacy, pharmacyList } = useStore(pharmacyStore);    
 
     const [isOutgoing, setIsOutgoing] = useState(false);
     const [currentPharmacy, setCurrentPharmacy] = useState(selectedPharmacy);
 
-    const cardStyle = ""
-    
     useEffect(()=> {
-        if (selectedPharmacy == null)
-            setCurrentPharmacy(pharmacyList[0]);
+        setCurrentPharmacy(pharmacyList[0]);
     }, [pharmacyList]);
 
     useEffect(() => {
@@ -33,10 +27,8 @@ export default function PharamcySelectionCard({ enableAnimation = true }: Pharam
         
     }, [selectedPharmacy?.id]);
     
-    const outgoingStyle = enableAnimation ? `${styles.pharmacy_card} ${styles.outgoing}` : `${styles.pharmacy_card}`;
-    const incomingStyle = initialLoad || !enableAnimation
-        ? `${styles.pharmacy_card}` 
-        : `${styles.pharmacy_card} ${styles.incoming}`
+    const outgoingStyle = `${styles.pharmacy_card} ${styles.outgoing}`
+    const incomingStyle = `${styles.pharmacy_card} ${styles.incoming}`
 
     return (
         <>
@@ -45,11 +37,7 @@ export default function PharamcySelectionCard({ enableAnimation = true }: Pharam
                 : <div className={styles.pharmacy_selection}>
                     <Card className={isOutgoing ? outgoingStyle : incomingStyle}>
                         <CardMedia component="img" height="150px" image='src\images\frostydog2_A_Walgreens_store_front_907b0e02-577c-44f6-aac7-2080df187234.png'/>
-                        <CardHeader 
-                            title={currentPharmacy.name} 
-                            action={
-                                <LaunchIcon style={{ cursor: 'pointer'}}/>
-                            }/>
+                        <CardHeader title={currentPharmacy.name} />
                         <CardContent>                
                             <Typography> {currentPharmacy.address} </Typography>
                             <Typography gutterBottom> 

@@ -1,49 +1,27 @@
-import { Button, LinearProgress } from '@mui/material';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import HomeIcon from '@mui/icons-material/Home';
+import { useEffect } from 'react';
+import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
+import { LinearProgress } from '@mui/material';
 import _ from 'lodash';
-import { useEffect, useMemo } from 'react';
+import { useEffect } from 'react';
 import usePagination from '../../../hooks/usePagination';
 import { Pharmacy } from '../../../models/pharmacy';
-import { useStore } from 'effector-react';
-import { pharmacistStore } from '../../../stores/pharmacistStore';
-import { editPharmacyFx, fetchPharmacyListByPharmacistIdFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
+import usePagination from '../../../hooks/usePagination';
+
 import styles from './PharmacyList.module.scss';
-import LaunchIcon from '@mui/icons-material/Launch';
+import { editPharmacyFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
+import { useStore } from 'effector-react';
 
-interface PharmacyListProps {
-    selectForPharmacist?: boolean;
-    selectAll?: boolean;
-    hasAnimation?: boolean;
-    maxHeight?: number;
-    enablePagination?: boolean;
-    enableFilters?: boolean;
-    columnHeaderHeight?: number;
-}
 
-export default function PharmacyList({ selectForPharmacist, 
-                                       selectAll, 
-                                       hasAnimation, 
-                                       maxHeight, 
-                                       enablePagination = true,
-                                       enableFilters = true,
-                                       columnHeaderHeight = 40 }: PharmacyListProps) {
+
+export default function PharmacyList() {
       
-    const { selectedPharmacistPharmacies, pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
-    const { selectedPharmacist } = useStore(pharmacistStore);
+    const { pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
     useEffect(() => {        
         console.log("about to fetch pharmacy list");
-        if (!selectForPharmacist) {
-            fetchPharmacyListFx(paginationModel);                
-        }
+        fetchPharmacyListFx(paginationModel);        
     }, [paginationModel]);
-
-    useEffect(() => {
-        if (selectForPharmacist && selectedPharmacist?.id)
-            fetchPharmacyListByPharmacistIdFx(selectedPharmacist?.id)
-    }, [selectedPharmacist]);
 
     const handlePharmacySelectionChange = (newSelectedPharmacy: GridRowSelectionModel) => {                
         const selectedPharmacy = pharmacyList.find(pharmacy => pharmacy.id === newSelectedPharmacy[0]);        
@@ -56,9 +34,8 @@ export default function PharmacyList({ selectForPharmacist,
         return updatedPharmacy;    
     }
 
-
-    const columns = useMemo<GridColDef<Pharmacy>[]>(() => [
-        { field: 'name',                headerName: 'Name',         width: 200, editable: true, flex: 2, hideable: true, resizable: true },
+    const columns = [
+        { field: 'name',                headerName: 'Name',         width: 150, editable: true, flex: 1.5, hideable: true },
         { field: 'city',                headerName: 'City',         width: 100, editable: true, flex: 1.5, hideable: true },
         { field: 'state',               headerName: 'State',        width: 50,  editable: true, flex: 0.75, hideable: true },
         { field: 'zip',                 headerName: 'Zip',          width: 80,  editable: true, flex: 0.75, hideable: true },
@@ -74,9 +51,8 @@ export default function PharmacyList({ selectForPharmacist,
     return  (              
         <>                    
             {initialLoad 
-                ? <LinearProgress className={styles.PharmacyGrid}/> 
-                : <DataGrid className={styles.PharmacyGrid}
-                    sx={{maxHeight: maxHeight, height: 'auto'}}
+                ? <LinearProgress className={styles.pharmacyGrid}/> 
+                : <DataGrid className={styles.pharmacyGrid}
                     initialState={{
                         columns: {
                             columnVisibilityModel: {
@@ -87,27 +63,22 @@ export default function PharmacyList({ selectForPharmacist,
                                 updatedDate: false,                        
                             }
                         }
-                    }}              
-                    disableColumnFilter={!enableFilters}         
-                    disableColumnSelector={!enableFilters}
-                    disableDensitySelector={!enableFilters}
-                    rows={selectForPharmacist ? selectedPharmacistPharmacies : pharmacyList} 
+                    }}                       
+                    rows={pharmacyList} 
                     disableColumnMenu={false}
                     columns={columns}    
                     loading={loading}   
                     hideFooterSelectedRowCount={true}  
                     rowCount={totalCount}   
-                    // hideFooterPagination={!enablePagination}
-                    hideFooter={!enablePagination}
-                    pagination={enablePagination ? true : undefined}
-                    paginationMode={enablePagination ? 'server' : undefined}
-                    paginationModel={enablePagination ? paginationModel : undefined}
-                    onPaginationModelChange={enablePagination ? handlePaginationModelChange : undefined}       
+                    pagination
+                    paginationMode='server'    
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={handlePaginationModelChange}                
                     pageSizeOptions={[5, 10, 15]}                                                                   
                     processRowUpdate={handleEditCellChange}
                     onRowSelectionModelChange={handlePharmacySelectionChange}     
                     rowHeight={30}    
-                    columnHeaderHeight={columnHeaderHeight}                       
+                    columnHeaderHeight={40}                       
                     keepNonExistentRowsSelected={true}  
                 />}        
         </>

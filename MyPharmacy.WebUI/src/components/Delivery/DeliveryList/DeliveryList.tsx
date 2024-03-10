@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import styles from './DeliveryList.module.scss';
 import { LinearProgress } from "@mui/material";
@@ -6,6 +6,7 @@ import { useStore } from "effector-react";
 import { deliveryStore, getDeliveryList, getDeliveryListByPharmacyIdFx } from "../../../stores/deliveryStore";
 import usePagination from "../../../hooks/usePagination";
 import { pharmacyStore } from "../../../stores/pharmacyStore";
+import { Delivery } from "../../../models/delivery";
 
 interface DeliveryListProps {
     height?: string;
@@ -20,13 +21,14 @@ export default function DeliveryList({ height = '150px', maxHeight, enablePagina
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
     useEffect(() => {   
-        if (selectedPharmacy?.id){
+        if (selectedPharmacy?.id)
+        {
             getDeliveryListByPharmacyIdFx(selectedPharmacy.id);            
         }
-        else {
+        else 
+        {
             getDeliveryList(paginationModel);
         }
-
     }, [selectedPharmacy?.id]);
     
     const formatCurrency = (value: number) => 
@@ -39,13 +41,13 @@ export default function DeliveryList({ height = '150px', maxHeight, enablePagina
             year: '2-digit', 
             hour12: false}).replace(/\//g, '-');
                           
-    const columns: GridColDef[] = [                    
+    const columns = useMemo<GridColDef<Delivery>[]>(() => [                    
             { field: 'drugName',     headerName: 'Drug Name',     width: 120 },
             { field: 'unitCount',    headerName: 'Count',         width: 60,  type: 'number'},
             { field: 'unitPrice',    headerName: 'Price',         width: 80,  type: 'number', valueFormatter: (params) => formatCurrency(params.value) },
             { field: 'totalPrice',   headerName: 'Total',         width: 100, type: 'number', valueFormatter: (params) => formatCurrency(params.value) },
             { field: 'deliveryDate', headerName: 'Delivery Date', width: 150, valueFormatter: (params) => formatDate(new Date(params.value))}
-    ];
+    ], []);
 
     return (
         (!selectedPharmacy?.id && deliveryList.length === 0)

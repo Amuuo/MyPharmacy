@@ -11,4 +11,7 @@
     <BuildOutputFolder>$(MSBuildProjectDirectory)\dist</BuildOutputFolder>
     <StartupCommandWorkingDirectory>/src</StartupCommandWorkingDirectory>
   </PropertyGroup>
+    <Target Name="RunNpmInstall" BeforeTargets="Build">
+        <Exec Command="npm run dev" WorkingDirectory="C:\Projects\MyPharmacy\MyPharmacy.WebUI"/>
+    </Target>
 </Project>

@@ -12,6 +12,7 @@
 }
 
 .incoming {
+    
     @include slide-in-from-top-animation(200ms);
 }
 

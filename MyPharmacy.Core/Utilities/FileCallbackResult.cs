@@ -12,11 +12,11 @@ public class FileCallbackResult(
     private readonly MediaTypeHeaderValue _contentType = contentType ?? throw new ArgumentNullException(nameof(contentType));
     private readonly Func<Stream, ActionContext, Task> _callback = callback ?? throw new ArgumentNullException(nameof(callback));
 
-    public async Task ExecuteResultAsync(ActionContext context)
+    public Task ExecuteResultAsync(ActionContext context)
     {
         var response = context.HttpContext.Response;
         response.ContentType = _contentType.ToString();
 
-        await _callback(context.HttpContext.Response.Body, context);
+        return _callback(context.HttpContext.Response.Body, context);
     }
 }

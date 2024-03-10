@@ -1,9 +1,14 @@
+using System.Data;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MyPharmacy.Core.Utilities;
 using MyPharmacy.Data;
+using MyPharmacy.Data.Repository;
+using MyPharmacy.Data.Repository.Interfaces;
 using MyPharmacy.Services;
 using MyPharmacy.Services.Interfaces;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerUI;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,13 +20,15 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddMemoryCache();
-builder.Services.AddOpenApiDocument();
+
 builder.Services.AddCors();
 
+builder.Services.AddSwaggerDocument();
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+builder.Services.AddScoped<IDbConnection>(sp => new SqlConnection(connectionString));
 
 builder.Services.AddDbContextPool<IPharmacyDbContext, PharmacyDbContext>(options =>
 {
@@ -39,6 +46,12 @@ builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<IPharmacistService, PharmacistService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
 builder.Services.AddScoped<IReportService, ReportingService>();
+builder.Services.AddScoped<IPharmacyRepository, PharmacyRepository>();
+builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+builder.Services.AddScoped<IPharmacistRepository, PharmacistRepository>();
+builder.Services.AddHttpContextAccessor();
+//builder.Services.AddScoped<IWarehouseRepository, WarehouseRepository>();
+//builder.Services.AddScoped<IReportRepository, ReportRepository>();
 
 var app = builder.Build();
 
@@ -46,7 +59,23 @@ if (app.Environment.IsDevelopment())
 {
     //app.UseSwagger();
     app.UseOpenApi();
-    app.UseSwaggerUi();
+    app.UseSwaggerUI(c =>
+    {
+        //c.DisplayRequestDuration();
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "MyPharmacy API V1");
+        c.ConfigObject = new ConfigObject
+        {
+            DeepLinking = true,
+            DefaultModelsExpandDepth = 5,
+            DefaultModelExpandDepth = 5,
+            DefaultModelRendering = Swashbuckle.AspNetCore.SwaggerUI.ModelRendering.Model,
+            DisplayOperationId = true,
+            DisplayRequestDuration = true,
+            DocExpansion = Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List,
+            ShowExtensions = true
+        };
+    });
+
 }
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

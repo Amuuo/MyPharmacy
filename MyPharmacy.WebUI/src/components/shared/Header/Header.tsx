@@ -1,4 +1,4 @@
-import { AppBar, Toolbar } from '@mui/material';
+import { AppBar, Avatar, Toolbar } from '@mui/material';
 import styles from './Header.module.scss';
 import { NavLink, Navigate } from 'react-router-dom';
 import { pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
@@ -39,7 +39,10 @@ export default function Header()  {
               {pharmacyList.map(p => <option key={p.id}>{p.name}</option>)}
             </select>
         </div>
-        <span className={styles.env_text}>{import.meta.env.MODE}</span>
+        <div style={{display: 'flex', alignItems: 'center', gap: '15px'}}>
+          <Avatar ></Avatar>
+          <span className={styles.env_text}>{import.meta.env.MODE}</span>
+        </div>
       </Toolbar>
     </AppBar>
   );

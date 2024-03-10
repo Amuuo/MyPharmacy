@@ -7,6 +7,7 @@ import PharmacistManager from './pages/PharmacistManager/PharmacistManager.tsx';
 import WarehousePage from './pages/WarehousePage/WarehousePage.tsx';
 import DeliveryManager from './pages/DeliveryManager/DeliveryManager.tsx';
 import Layout from './layout.tsx';
+import PharmacyTestPage from './pages/PharmacyTestPage/PharmacyTestPage.tsx';
 
 
 // const router = createBrowserRouter(
@@ -46,6 +47,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Route path="/deliveries" element={<DeliveryManager/>} />
         <Route path="/reports" element={<ReportManager/>} />   
         <Route path="/warehouse" element={<WarehousePage/>} />
+        <Route path="/pharmaciesTest" element={<PharmacyTestPage/>} />
       </Route>
     </Routes>
   </BrowserRouter>

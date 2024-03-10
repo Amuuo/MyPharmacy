@@ -1,0 +1,13 @@
+@import '../../../styles/animations.scss';
+
+.pharmacy_list_test {
+    @include slide-in-from-top-animation(0.3s);
+    font-family: 'Roboto Mono', 'Inter', monospace !important;
+    font-size: 13px !important;
+    background: linear-gradient(140deg, rgba(98,93,196,1) 0%, rgba(61,107,205,1) 51%, rgba(77,145,203,1) 100%);
+    color: whitesmoke !important;            
+    box-shadow: 1px 1px 10px rgba(3, 16, 33, 0.363) !important;      
+    z-index: 2; 
+    white-space: nowrap;   
+    border: 4px outset whitesmoke !important;
+}

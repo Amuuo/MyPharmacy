@@ -20,7 +20,10 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 builder.Services.AddControllers();
-builder.Services.AddMemoryCache();
+builder.Services.AddMemoryCache(c =>
+{
+    c.TrackStatistics = true;
+});
 
 builder.Services.AddCors();
 
@@ -45,7 +48,7 @@ builder.Services.AddScoped<IPharmacyService, PharmacyService>();
 builder.Services.AddScoped<IDeliveryService, DeliveryService>();
 builder.Services.AddScoped<IPharmacistService, PharmacistService>();
 builder.Services.AddScoped<IWarehouseService, WarehouseService>();
-builder.Services.AddScoped<IReportService, ReportingService>();
+builder.Services.AddScoped<IReportingService, ReportingService>();
 builder.Services.AddScoped<IPharmacyRepository, PharmacyRepository>();
 builder.Services.AddScoped<IDeliveryRepository, DeliveryRepository>();
 builder.Services.AddScoped<IPharmacistRepository, PharmacistRepository>();

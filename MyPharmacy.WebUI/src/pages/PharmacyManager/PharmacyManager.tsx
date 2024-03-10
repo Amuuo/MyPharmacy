@@ -15,7 +15,7 @@ export default function PharmacyManager() {
             <PharmacistList selectForPharmacy={true} enablePagination={false}/>            
             <PharamcySelectionCard/>              
             <DeliveryList height={'100px'} maxHeight={'100px'} enablePagination={false}/>   
-            <PharmacistCard/> 
+            {/* <PharmacistCard/>  */}
                 {/* <AddDeliveryForm/>                      */}            
         </div>
     );        

@@ -18,9 +18,9 @@ public static class ServiceHelper
     /// <typeparam name="T">The type of the result.</typeparam>
     /// <param name="message">The error message.</param>
     /// <returns>The service result with no content.</returns>
-    public static IServiceResult<T> BuildNoContentResult<T>(string message)
+    public static IServiceResult<T?> BuildNoContentResult<T>(string message)
     {
-        return new ServiceResult<T>
+        return new ServiceResult<T?>
         {
             IsSuccess    = false,
             ErrorMessage = message,
@@ -35,9 +35,9 @@ public static class ServiceHelper
     /// <param name="ex">The exception that occurred.</param>
     /// <param name="operation">The operation being performed.</param>
     /// <returns>The error service result.</returns>
-    public static IServiceResult<T> BuildErrorServiceResult<T>(Exception ex, string operation)
+    public static IServiceResult<T?> BuildErrorServiceResult<T>(Exception ex, string operation)
     {
-        return new ServiceResult<T>
+        return new ServiceResult<T?>
         {
             IsSuccess    = false,
             ErrorMessage = $"An error occurred while {operation}, ex: {ex}",
@@ -51,9 +51,9 @@ public static class ServiceHelper
     /// <typeparam name="T">The type of the result.</typeparam>
     /// <param name="result">The result.</param>
     /// <returns>The success service result.</returns>
-    public static IServiceResult<T> BuildSuccessServiceResult<T>(T result)
+    public static IServiceResult<T?> BuildSuccessServiceResult<T>(T? result)
     {
-        return new ServiceResult<T>
+        return new ServiceResult<T?>
         {
             IsSuccess  = true,
             Result     = result,

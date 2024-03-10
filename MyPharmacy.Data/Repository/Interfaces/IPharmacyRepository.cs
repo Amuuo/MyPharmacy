@@ -10,4 +10,5 @@ public interface IPharmacyRepository
     Task<Pharmacy?> GetByIdAsync(int id);
     Task<Pharmacy?> InsertPharmacyAsync(Pharmacy pharmacy);
     Task<Pharmacy?> UpdatePharmacyAsync(Pharmacy pharmacy);
+    Task<IEnumerable<Pharmacy>?> GetPharmaciesByPharmacistIdAsync(int pharmacistId);
 }

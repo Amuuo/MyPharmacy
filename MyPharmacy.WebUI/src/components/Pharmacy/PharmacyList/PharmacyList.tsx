@@ -94,7 +94,7 @@ export default function PharmacyList({ selectForPharmacist,
                     rows={selectForPharmacist ? selectedPharmacistPharmacies : pharmacyList} 
                     disableColumnMenu={false}
                     columns={columns}    
-                    loading={loading}   
+                    loading={loading}                                       
                     hideFooterSelectedRowCount={true}  
                     rowCount={totalCount}   
                     // hideFooterPagination={!enablePagination}

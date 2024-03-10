@@ -114,4 +114,18 @@ public class PharmacyRepository(
 
         return updatedPharmacy;
     }
+
+    public async Task<IEnumerable<Pharmacy>?> GetPharmaciesByPharmacistIdAsync(int pharmacistId)
+    {
+        var pharmacyList = await dbConnection.QueryAsync<Pharmacy>(
+            "spGetPharmaciesByPharmacistId", 
+            new
+            {
+                pharmacistId
+            }, 
+            commandType: CommandType.StoredProcedure
+        );
+
+        return pharmacyList;
+    }
 }

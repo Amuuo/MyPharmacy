@@ -140,23 +140,21 @@ public static class ServiceHelper
     public static async Task<IServiceResult<IPagedResult<T>>> GetPagedResultAsync<T>(
         ILogger logger,
         IQueryable<T> query, 
-        int pageNumber, 
-        int pageSize) where T : class
+        PagingInfo pagingInfo) where T : class
     {
-        var startRow = pageNumber * pageSize;
+        var startRow = pagingInfo.Page * pagingInfo.Take;
 
         var entities = query
             .AsQueryable()
             .AsNoTracking()
             .Skip(startRow)
-            .Take(pageSize)
-            .AsAsyncEnumerable();
+            .Take(pagingInfo.Take)
+            .AsEnumerable();
 
 
         return await BuildPagedServiceResultAsync<T>(
             entities,
-            pageNumber, 
-            pageSize,
+            pagingInfo,
             await query.CountAsync());
     }
 
@@ -169,19 +167,17 @@ public static class ServiceHelper
     /// <param name="pageSize">The page size.</param>
     /// <param name="totalCount">The total count of items.</param>
     /// <returns>The paged service result.</returns>
-    private static Task<IServiceResult<IPagedResult<T>>> BuildPagedServiceResultAsync<T>(
-        IAsyncEnumerable<T> data, 
-        int currentPage, 
-        int pageSize, 
+    public static Task<IServiceResult<IPagedResult<T>>> BuildPagedServiceResultAsync<T>(
+        IEnumerable<T> data, 
+        PagingInfo pagingInfo, 
         int totalCount) where T : class
     {
         var pagedResult = new PagedResult<T>
         {
-            CurrentPage = currentPage,
-            PageSize    = pageSize,
-            TotalCount  = totalCount,
-            TotalPages  = (int)Math.Ceiling(totalCount / (double)pageSize),
-            Data        = data
+            PagingInfo = pagingInfo,
+            Total      = totalCount,
+            Pages      = (int)Math.Ceiling(totalCount / (double)pagingInfo.Take),
+            Data       = data
         };
 
         return Task.FromResult(BuildSuccessServiceResult<IPagedResult<T>>(pagedResult));

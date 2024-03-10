@@ -20,7 +20,9 @@ public class Pharmacy
 
     public DateTime CreatedDate { get; set; }
 
-    public DateTime? UpdatedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
+
+    public string? ModifiedBy { get; set; }
 
     [JsonIgnore]
     public virtual ICollection<PharmacyPharmacist>? PharmacyPharmacists { get; set; }

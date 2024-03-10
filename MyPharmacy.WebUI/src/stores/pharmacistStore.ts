@@ -2,6 +2,7 @@
 import { createStore, createEffect, createEvent } from 'effector';
 import { Pharmacist } from '../models/pharmacist';
 import { GridPaginationModel } from '@mui/x-data-grid';
+import { Pharmacy } from '../models/pharmacy';
 
 
 type PharmacistState = {
@@ -9,6 +10,7 @@ type PharmacistState = {
     loadingPharmacistList: boolean;
     addingPharmacist: boolean;
     selectedPharmacist: Pharmacist | null;
+    activePharmacies: Pharmacy[];
     totalCount: number;
 };
 
@@ -17,6 +19,7 @@ export const pharmacistStore = createStore<PharmacistState>({
     loadingPharmacistList: false,
     addingPharmacist: false,
     selectedPharmacist: null,
+    activePharmacies: [],
     totalCount: 0
 });
 

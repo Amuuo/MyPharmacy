@@ -1,14 +1,15 @@
-import { LinearProgress } from '@mui/material';
-import { DataGrid, GridEventListener, GridRowSelectionModel } from '@mui/x-data-grid';
+import { Button, LinearProgress } from '@mui/material';
+import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
+import HomeIcon from '@mui/icons-material/Home';
 import _ from 'lodash';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import usePagination from '../../../hooks/usePagination';
 import { Pharmacy } from '../../../models/pharmacy';
-
 import { useStore } from 'effector-react';
 import { pharmacistStore } from '../../../stores/pharmacistStore';
 import { editPharmacyFx, fetchPharmacyListByPharmacistIdFx, fetchPharmacyListFx, pharmacyStore, setPharmacySelection } from '../../../stores/pharmacyStore';
 import styles from './PharmacyList.module.scss';
+import LaunchIcon from '@mui/icons-material/Launch';
 
 interface PharmacyListProps {
     selectForPharmacist?: boolean;
@@ -28,13 +29,15 @@ export default function PharmacyList({ selectForPharmacist,
                                        enableFilters = true,
                                        columnHeaderHeight = 40 }: PharmacyListProps) {
       
-    const { pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
+    const { selectedPharmacistPharmacies, pharmacyList, loading, initialLoad, totalCount } = useStore(pharmacyStore);
     const { selectedPharmacist } = useStore(pharmacistStore);
     const { paginationModel, handlePaginationModelChange } = usePagination({ page: 0, pageSize: 15 });
 
     useEffect(() => {        
         console.log("about to fetch pharmacy list");
-        fetchPharmacyListFx(paginationModel);                
+        if (!selectForPharmacist) {
+            fetchPharmacyListFx(paginationModel);                
+        }
     }, [paginationModel]);
 
     useEffect(() => {
@@ -54,21 +57,22 @@ export default function PharmacyList({ selectForPharmacist,
     }
 
 
-    const columns = [
-        { field: 'name',                headerName: 'Name',         width: 150, editable: true, flex: 1.5, hideable: true },
+    const columns = useMemo<GridColDef<Pharmacy>[]>(() => [
+        { field: 'name',                headerName: 'Name',         width: 200, editable: true, flex: 2, hideable: true, resizable: true },
         { field: 'city',                headerName: 'City',         width: 100, editable: true, flex: 1.5, hideable: true },
-        { field: 'state',               headerName: 'State',        width: 50,  editable: true, flex: 1, hideable: true },
-        { field: 'zip',                 headerName: 'Zip',          width: 80,  editable: true, flex: 1, hideable: true },
+        { field: 'state',               headerName: 'State',        width: 50,  editable: true, flex: 0.75, hideable: true },
+        { field: 'zip',                 headerName: 'Zip',          width: 80,  editable: true, flex: 0.75, hideable: true },
         { field: 'id',                  headerName: 'ID',           width: 50,  hideable: true },
         { field: 'address',             headerName: 'Address',      width: 200, flex: 1, editable: true, hideable: true },
+        { field: 'actions', headerName: '', width: 25, flex:0.75, renderCell: () => { return <Button sx={{color: 'white'}}><LaunchIcon sx={{height: '15px', color: 'cyan'}}/></Button>} },
         { field: 'prescriptionsFilled', headerName: 'RX Filled',    width: 100, type: 'number', editable: true, hideable: true },
         { field: 'createdDate',         headerName: 'Created Date', width: 150, type: 'date', editable: true, hideable: true },
         { field: 'updatedDate',         headerName: 'Updated Date', width: 150, type: 'date', editable: true, hideable: true }
-    ];
+    ], []);
     
 
     return  (              
-        <>        
+        <>                    
             {initialLoad 
                 ? <LinearProgress className={styles.PharmacyGrid}/> 
                 : <DataGrid className={styles.PharmacyGrid}
@@ -87,7 +91,7 @@ export default function PharmacyList({ selectForPharmacist,
                     disableColumnFilter={!enableFilters}         
                     disableColumnSelector={!enableFilters}
                     disableDensitySelector={!enableFilters}
-                    rows={pharmacyList} 
+                    rows={selectForPharmacist ? selectedPharmacistPharmacies : pharmacyList} 
                     disableColumnMenu={false}
                     columns={columns}    
                     loading={loading}   

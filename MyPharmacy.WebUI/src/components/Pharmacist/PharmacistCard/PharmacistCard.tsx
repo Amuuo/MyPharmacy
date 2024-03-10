@@ -5,7 +5,10 @@ import { pharmacistStore } from '../../../stores/pharmacistStore';
 import { useStore } from 'effector-react';
 import moment from 'moment';
 import PharmacyList from '../../Pharmacy/PharmacyList/PharmacyList';
-import { red } from '@mui/material/colors';
+
+interface PharmacistCardProps {
+    
+}
 
 export default function PharmacistCard() {
 

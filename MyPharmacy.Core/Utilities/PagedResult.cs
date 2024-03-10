@@ -4,9 +4,8 @@ namespace MyPharmacy.Core.Utilities;
 
 public class PagedResult<T> : IPagedResult<T>
 {
-    public int CurrentPage { get; set; }
-    public int TotalPages { get; set; }
-    public int PageSize { get; set; }
-    public int TotalCount { get; set; }
-    public IAsyncEnumerable<T> Data { get; set; }
+    public PagingInfo? PagingInfo { get; init; }
+    public int Pages { get; init; }
+    public int Total { get; init; }
+    public IEnumerable<T>? Data { get; init; }
 }

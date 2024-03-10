@@ -3,14 +3,14 @@ import PharmacistList from '../../components/Pharmacist/PharmacistList/Pharmacis
 import PharmacyList from '../../components/Pharmacy/PharmacyList/PharmacyList';
 import PharamcySelectionCard from '../../components/Pharmacy/PharmacyCard/PharmacyCard';
 import './PharmacyManager.scss';
-import AddDeliveryForm from '../../components/Delivery/AddDeliveryForm/AddDeliveryForm';
-import AddPharmacistForm from '../../components/Pharmacist/AddPharmacistForm/AddPharmacistForm';
 import PharmacistCard from '../../components/Pharmacist/PharmacistCard/PharmacistCard';
+import PharmacyListTest from '../../components/Pharmacy/PharmacyListTest/PharmacyListTest';
 
 export default function PharmacyManager() {    
     
     return (
         <div className='PharmacyManager slide-in-from-top'>                                    
+            {/* <PharmacyListTest/> */}
             <PharmacyList selectForPharmacist={false}/>                            
             <PharmacistList selectForPharmacy={true} enablePagination={false}/>            
             <PharamcySelectionCard/>              

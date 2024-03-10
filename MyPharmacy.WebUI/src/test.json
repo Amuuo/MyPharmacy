@@ -1,0 +1,101 @@
+{
+    "Id": 1,
+    "Name": "HealthCare Pharmacy",
+    "Address": "123 Main Street",
+    "City": "Anytown",
+    "State": "CA",
+    "Zip": "12345",
+    "PrescriptionsFilled": 500,
+    "CreatedDate": "2023-08-13T00:00:00",
+    "UpdatedDate": "2023-08-13T00:00:00"
+}{
+    "Id": 2,
+    "Name": "QuickMed Pharmacy",
+    "Address": "456 Elm Avenue",
+    "City": "Cityville",
+    "State": "NY",
+    "Zip": "54321",
+    "PrescriptionsFilled": 750,
+    "CreatedDate": "2023-08-13T00:00:00",
+    "UpdatedDate": "2023-08-13T00:00:00"
+}{
+    "Id": 3,
+    "Name": "CarePlus Drugstore",
+    "Address": "789 Oak Lane",
+    "City": "Villagetown ",
+    "State": "TX",
+    "Zip": "67890",
+    "PrescriptionsFilled": 300,
+    "CreatedDate": "2023-08-13T00:00:00",
+    "UpdatedDate": "2023-12-28T19:08:56.5719148"
+}{
+    "Id": 4,
+    "Name": "RxRelief Pharmacy",
+    "Address": "234 Maple Road",
+    "City": "Hamletsville",
+    "State": "IL",
+    "Zip": "45678",
+    "PrescriptionsFilled": 600,
+    "CreatedDate": "2023-08-13T00:00:00",
+    "UpdatedDate": "2023-12-29T13:03:30.6873431"
+}{
+    "Id": 5,
+    "Name": "WellScript Chemist",
+    "Address": "567 Pine Street",
+    "City": "Countryside",
+    "State": "FL",
+    "Zip": "34567",
+    "PrescriptionsFilled": 450,
+    "CreatedDate": "2023-08-13T00:00:00",
+    "UpdatedDate": "2023-12-28T20:38:49.7077104"
+}{
+    "Id": 6,
+    "Name": "MediCare Pharmacy",
+    "Address": "890 Cedar Lane",
+    "City": "Townsvillee",
+    "State": "OH",
+    "Zip": "56789",
+    "PrescriptionsFilled": 400,
+    "CreatedDate": "2023-08-14T00:00:00",
+    "UpdatedDate": "2023-12-28T20:39:01.6887721"
+}{
+    "Id": 7,
+    "Name": "LifeSaver Drugs 2",
+    "Address": "123 Oakwood Avenue",
+    "City": "Metroville 2",
+    "State": "MI",
+    "Zip": "23456",
+    "PrescriptionsFilled": 550,
+    "CreatedDate": "2023-08-14T00:00:00",
+    "UpdatedDate": "2023-12-28T20:38:05.8061024"
+}{
+    "Id": 8,
+    "Name": "SwiftRx Pharmacy",
+    "Address": "456 Birch Street",
+    "City": "Suburbia",
+    "State": "PA",
+    "Zip": "67890",
+    "PrescriptionsFilled": 700,
+    "CreatedDate": "2023-08-14T00:00:00",
+    "UpdatedDate": "2023-08-14T00:00:00"
+}{
+    "Id": 9,
+    "Name": "FamilyCare Chemist",
+    "Address": "789 Willow Road",
+    "City": "Ruraltown",
+    "State": "GA",
+    "Zip": "12345",
+    "PrescriptionsFilled": 350,
+    "CreatedDate": "2023-08-14T00:00:00",
+    "UpdatedDate": "2023-08-14T00:00:00"
+}{
+    "Id": 10,
+    "Name": "EliteHealth Pharmacy",
+    "Address": "345 Cedar Avenue",
+    "City": "Hamletville",
+    "State": "CA",
+    "Zip": "54321",
+    "PrescriptionsFilled": 800,
+    "CreatedDate": "2023-08-14T00:00:00",
+    "UpdatedDate": "2023-08-14T00:00:00"
+}

@@ -3,7 +3,6 @@ import './PharmacistManager.scss';
 import PharmacistCard from '../../components/Pharmacist/PharmacistCard/PharmacistCard';
 import { useStore } from 'effector-react';
 import { pharmacyStore } from '../../stores/pharmacyStore';
-import usePagination from '../../hooks/usePagination';
 import { useNavigate } from 'react-router-dom';
 
 export default function PharmacistManager() {

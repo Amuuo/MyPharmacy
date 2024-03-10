@@ -19,6 +19,10 @@
 .menu {
     color: rgb(224, 237, 245) !important;
     font-family: monospace;
-    background-color: rgb(112, 156, 212);
+    background-color: rgb(64, 124, 202);
     height: 100%;
+}
+
+.ps-menu-button:hover {
+    background-color: rgb(23, 72, 135) !important;
 }

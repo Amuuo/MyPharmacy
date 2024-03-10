@@ -4,6 +4,6 @@ namespace MyPharmacy.Core.Utilities;
 
 public class PagingInfo : IPagedRequest
 {
-    public int Page { get; set; } = 0;
-    public int Take { get; set; } = int.MaxValue;
+    public int Page { get; set; }
+    public int Take { get; set; } = 10;
 }

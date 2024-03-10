@@ -1,40 +1,51 @@
-﻿using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using MyPharmacy.Core.Helpers;
 using MyPharmacy.Core.Utilities;
 using MyPharmacy.Core.Utilities.Interfaces;
 using MyPharmacy.Data;
 using MyPharmacy.Data.Entities;
+using MyPharmacy.Data.Repository.Interfaces;
 using MyPharmacy.Services.Interfaces;
 
 namespace MyPharmacy.Services;
 
 public class PharmacyService(
     ILogger<IPharmacyService> logger, 
-    IPharmacyDbContext pharmacyDbContext) : IPharmacyService
+    IPharmacyDbContext pharmacyDbContext, 
+    IPharmacyRepository pharmacyRepository, 
+    IMemoryCache cache) : IPharmacyService
 {
     /// <summary>
     /// Asynchronously retrieves pharmacy records based on the search criteria.
     /// </summary>
     /// <param name="pagedSearch">The search criteria object.</param>
+    /// <param name="pagingInfo"></param>
     /// <returns>
     /// A ServiceResult containing IAsyncEnumerable of Pharmacy objects if any match the search criteria,
     /// or an error message if no matching pharmacies are found or if an exception occurs during retrieval.
     /// </returns>
-    public Task<IServiceResult<IPagedResult<Pharmacy>>> 
-        GetPharmacyListPagedAsync(PagingInfo pagingInfo)
+    public async Task<IServiceResult<IPagedResult<Pharmacy>?>> GetPharmacyListPagedAsync(PagingInfo pagingInfo)
     {
-        return ServiceHelper.GetPagedResultAsync(logger, pharmacyDbContext.PharmacyList.Include(p => p.PharmacyPharmacists).ThenInclude(pp => pp.Pharmacist), pagingInfo.Page, pagingInfo.Take);
-    }
+        var cacheKey = $"PharmacyList_{pagingInfo.Page}_{pagingInfo.Take}";
 
-    public async IAsyncEnumerable<Pharmacy> GetPharmacyListAsync()
-    {
-        await foreach (var item in pharmacyDbContext.PharmacyList.AsAsyncEnumerable())
+        var stats = cache.GetCurrentStatistics();
+        //logger.LogDebug("Cache stats: {@stats} for {@cache}", stats, cache);
+
+        if (cache.TryGetValue(cacheKey, out IPagedResult<Pharmacy>? pharmacyListPaged))
         {
-            //await Task.Delay(200);
-            yield return item;
+            //logger.LogDebug("Retrieved pharmacy list from cache {@pharmacyList}", pharmacyListPaged);
+            return ServiceHelper.BuildSuccessServiceResult(pharmacyListPaged);
         }
+
+        pharmacyListPaged = await pharmacyRepository.GetPharmacyListPagedAsync(pagingInfo);
+        var cacheEntryOptions = new MemoryCacheEntryOptions().SetSlidingExpiration(TimeSpan.FromMinutes(5));
+        cache.Set(cacheKey, pharmacyListPaged, cacheEntryOptions);
+
+        //logger.LogDebug("Pharmacy list was cached {@pharmacyList}", pharmacyListPaged);
+
+        return ServiceHelper.BuildSuccessServiceResult(pharmacyListPaged);
     }
     
     /// <summary>
@@ -47,16 +58,7 @@ public class PharmacyService(
     /// </returns>
     public async Task<IServiceResult<Pharmacy>> UpdatePharmacyAsync(Pharmacy updatedPharmacy)
     {
-        var searchResult = await GetPharmacyByIdAsync(updatedPharmacy.Id);
-
-        if (searchResult.IsSuccess is false)        
-            return searchResult;
-                
-        var existingPharmacy = searchResult.Result;
-
-        UpdateExistingPharmacy(existingPharmacy, updatedPharmacy);
-        
-        await pharmacyDbContext.SaveChangesAsync();
+        var existingPharmacy = await pharmacyRepository.UpdatePharmacyAsync(updatedPharmacy);
 
         logger.LogDebug("Updated pharmacy record: {@pharmacy} with changes from request {@updateContent}", 
                          existingPharmacy, updatedPharmacy);
@@ -76,7 +78,24 @@ public class PharmacyService(
     {
         logger.LogDebug("Searching for pharmacy with id {id}", id);
 
-        var pharmacy = await pharmacyDbContext.PharmacyList.FindAsync(id);
+        var pharmacy = await pharmacyRepository.GetByIdAsync(id);
+
+        if (pharmacy is not null)
+        {
+            logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
+            return ServiceHelper.BuildSuccessServiceResult(pharmacy);
+        }
+
+        logger.LogWarning("No pharmacy found with id {id}", id);
+        return ServiceHelper.BuildNoContentResult<Pharmacy>($"No pharmacy found with id {id}");
+    }
+
+    public async Task<IServiceResult<Pharmacy>> GetPharmacyByIdAsync2(int id)
+    {
+        logger.LogDebug("Searching for pharmacy with id {id}", id);
+
+        //var pharmacy = await pharmacyDbContext.PharmacyList.FindAsync(id);
+        var pharmacy = await pharmacyRepository.GetByIdAsync(id);
 
         if (pharmacy is null)
         {
@@ -85,7 +104,7 @@ public class PharmacyService(
         }
 
         logger.LogDebug("Found pharmacy record {@pharmacy} with id {id}", pharmacy, id);
-        
+
         return ServiceHelper.BuildSuccessServiceResult(pharmacy);
     }
 
@@ -101,24 +120,9 @@ public class PharmacyService(
     {
         logger.LogDebug("Initiating pharmacy insert with {@newPharmacy}", newPharmacy);
 
-        if (await pharmacyDbContext.PharmacyList.FindAsync(newPharmacy.Id) is not null)
-        {
-            logger.LogWarning("pharmacy with id {id} already exists", newPharmacy.Id);
-            
-            return ServiceHelper.BuildErrorServiceResult<Pharmacy>(new Exception(), 
-                @$"pharmacy with id {newPharmacy.Id} already exists. 
-                   Use update endpoint to modify an existing record");
-        }
+        var resultPharmacy = await pharmacyRepository.InsertPharmacyAsync(newPharmacy);
 
-        newPharmacy.CreatedDate = DateTime.Now;
-        newPharmacy.UpdatedDate = DateTime.Now;
-
-        await pharmacyDbContext.PharmacyList.AddAsync(newPharmacy);
-        await pharmacyDbContext.SaveChangesAsync();
-
-        logger.LogDebug("Inserted new pharmacy record: {@pharmacy}", newPharmacy);
-
-        return ServiceHelper.BuildSuccessServiceResult(newPharmacy);
+        return ServiceHelper.BuildSuccessServiceResult(resultPharmacy);
     }
 
     /// <summary>
@@ -140,15 +144,6 @@ public class PharmacyService(
 
         logger.LogDebug("Found pharmacies associated with {pharmacistId}: {@pharmacyList}", pharmacistId, pharmacyList);
         return Task.FromResult(ServiceHelper.BuildSuccessServiceResult(pharmacyList));
-
-        //if (await pharmacyList.AnyAsync())
-        //{
-            
-        //}
-
-        //_logger.LogWarning("No pharmacies found associated with pharmacist with ID: {Id}", pharmacistId);
-        //return ServiceHelper.BuildNoContentResult<IAsyncEnumerable<Pharmacy>>(
-        //    $"No pharmacies found associated with pharmacist with id {pharmacistId}");
     }
 
 
@@ -158,7 +153,7 @@ public class PharmacyService(
 
     private static void UpdateExistingPharmacy(Pharmacy existingPharmacy, Pharmacy updatedPharmacy)
     {
-        existingPharmacy.UpdatedDate = DateTime.Now;
+        existingPharmacy.ModifiedDate = DateTime.Now;
         existingPharmacy.Name = updatedPharmacy.Name ?? existingPharmacy.Name;
         existingPharmacy.Address = updatedPharmacy.Address ?? existingPharmacy.Address;
         existingPharmacy.City = updatedPharmacy.City ?? existingPharmacy.City;

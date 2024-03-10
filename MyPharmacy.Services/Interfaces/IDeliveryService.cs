@@ -7,7 +7,7 @@ namespace MyPharmacy.Services.Interfaces;
 public interface IDeliveryService
 {
     Task<IServiceResult<IPagedResult<Delivery>>> GetPagedDeliveryList(PagingInfo pagingInfo);
-    Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByPharmacyId(int pharmacyId);
-    Task<IServiceResult<IAsyncEnumerable<Delivery>>> GetDeliveryListByWarehouseId(int warehouseId);
+    Task<IServiceResult<IEnumerable<Delivery>>> GetDeliveryListByPharmacyId(int pharmacyId);
+    Task<IServiceResult<IEnumerable<Delivery>>> GetDeliveryListByWarehouseId(int warehouseId);
     Task<IServiceResult<Delivery>> InsertDeliveryAsync(Delivery delivery);
 }

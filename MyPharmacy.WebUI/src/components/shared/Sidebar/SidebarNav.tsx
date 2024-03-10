@@ -24,6 +24,7 @@ import {
 } from "@mui/icons-material";
 import { sidebarStore, toggleCollapsed } from "../../../stores/sidebarStore";
 import { useStore } from "effector-react";
+import { NavLink } from "react-router-dom";
 
 
 
@@ -44,15 +45,13 @@ export default function SidebarNav() {
     >
       <Menu className={styles.menu}>
         <MenuItem icon={<MenuRounded />}
-                  onClick={handleCollapsedChange}/>
-        <MenuItem icon={<GridViewRounded />}>Dashboard</MenuItem>
-        <MenuItem icon={<LocalPharmacy />}>Pharmacy</MenuItem>
-        <SubMenu label="Drug" icon={<Medication />}>
-          <MenuItem icon={<AccountBalanceRounded />}>
-            Most Demanded
+                  onClick={ ()=> toggleCollapsed() }/>
+        <MenuItem icon={<GridViewRounded /> }>Dashboard</MenuItem>
+        <MenuItem icon={<NavLink to="/"><LocalPharmacy /></NavLink>}><NavLink to="/"> Pharmacy</NavLink> </MenuItem>        
+          <MenuItem icon={<NavLink  to="pharmacists"><Medication  /></NavLink>}>
+            <NavLink  to="pharmacists">Pharmacists</NavLink>
           </MenuItem>
-          <MenuItem icon={<SavingsRounded />}>Most Profitable</MenuItem>
-        </SubMenu>
+          <MenuItem icon={<NavLink to="/pharmaciesTest"><SavingsRounded /></NavLink>}><NavLink to="/pharmaciesTest">Most Profitable</NavLink></MenuItem>        
         <MenuItem icon={<LocalShipping />}>Delivery</MenuItem>
         <SubMenu label="Charts" icon={<BarChartRounded />}>
           <MenuItem icon={<TimelineRounded />}>Monthly Sales</MenuItem>

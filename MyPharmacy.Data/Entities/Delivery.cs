@@ -2,26 +2,32 @@
 
 namespace MyPharmacy.Data.Entities;
 
-public class Delivery
+public sealed class Delivery
 {
-    public int Id { get; set; }
+    public int Id { get; init; }
 
-    public int WarehouseId { get; set; }
+    public int WarehouseId { get; init; }
 
-    public int PharmacyId { get; set; }
+    public int PharmacyId { get; init; }
      
-    public string DrugName { get; set; } = null!;
+    public string DrugName { get; init; }
 
-    public int UnitCount { get; set; }
+    public int UnitCount { get; init; }
 
-    public decimal UnitPrice { get; set; }
+    public decimal UnitPrice { get; init; }
 
-    public decimal? TotalPrice { get; set; }
+    public decimal? TotalPrice { get; init; }
 
-    public DateTime DeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; init; }
+
+    public DateTime? CreatedDate { get; init; }
+
+    public DateTime? ModifiedDate { get; init; }
+
+    public string? ModifiedBy { get; init; }
 
     [JsonIgnore]
-    public virtual Pharmacy? Pharmacy { get; set; }
+    public Pharmacy? Pharmacy { get; init; }
     [JsonIgnore]
-    public virtual Warehouse? Warehouse { get; set; } 
+    public Warehouse? Warehouse { get; init; } 
 }

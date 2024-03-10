@@ -8,6 +8,7 @@ type PharmacyState = {
     loading          : boolean;
     initialLoad      : boolean;
     selectedPharmacy : Pharmacy | null;
+    selectedPharmacistPharmacies: Pharmacy[];
     totalCount       : number;
 };
 
@@ -16,7 +17,8 @@ export const pharmacyStore = createStore<PharmacyState>({
     loading          : false,
     initialLoad      : true,
     selectedPharmacy : null,
-    totalCount       : 0
+    totalCount       : 0,
+    selectedPharmacistPharmacies: []
 });
 
 export const setPharmacySelection = createEvent<Pharmacy | null>();
@@ -74,7 +76,7 @@ pharmacyStore
             loading: false,
             initialLoad: false,
             pharmacyList: result.data,
-            totalCount: result.totalCount
+            totalCount: result.total
         }
     })
     .on(fetchPharmacyListFx.fail, (state) => 
@@ -99,12 +101,13 @@ pharmacyStore
         ({ ...state, loading: false, pharmacyList: [] }))
     
     .on(fetchPharmacyListByPharmacistIdFx, (state) => {
-        return {...state,loading: true }
+        return { ...state }
+        // return {...state,loading: true }
     })
     .on(fetchPharmacyListByPharmacistIdFx.done, (state, { result }) => {
         return {
             ...state,
-            pharmacyList: result,
+            selectedPharmacistPharmacies: result,
             loading: false
         }
     })
@@ -112,6 +115,6 @@ pharmacyStore
         return {
             ...state,
             loading: false,
-            pharmacyList: []
+            selectedPharmacistPharmacies: []
         }
     })

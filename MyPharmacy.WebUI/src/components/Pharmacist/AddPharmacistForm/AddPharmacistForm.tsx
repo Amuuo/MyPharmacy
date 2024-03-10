@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Pharmacist } from "../../../models/pharmacist";
-import "./AddPharmacistForm.scss";
+import styles from "./AddPharmacistForm.module.scss";
 import { addPharmacistFx } from "../../../stores/pharmacistStore";
 
 
@@ -28,7 +28,7 @@ export default function AddPharmacistForm() {
     }
 
     return (
-        <form className="add-pharmacist-form" onSubmit={handleOnSubmit}>
+        <form className={styles.add_pharmacist_form} onSubmit={handleOnSubmit}>
           
             <label htmlFor="firstName">First Name:</label>
             <input
@@ -50,6 +50,7 @@ export default function AddPharmacistForm() {
               onChange={handleInputChange}
               placeholder="Last Name"
               required/>
+            
             <label htmlFor="age">Age:</label>
             <input
               type="number"
